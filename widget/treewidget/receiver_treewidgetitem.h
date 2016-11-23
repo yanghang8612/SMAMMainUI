@@ -9,7 +9,7 @@
 class ReceiverTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	ReceiverTreeWidgetItem(Receiver* receiver, QTreeWidgetItem* parent);
+	ReceiverTreeWidgetItem(QTreeWidgetItem* parent = 0, Receiver* receiver = 0);
 	~ReceiverTreeWidgetItem();
 
 private:

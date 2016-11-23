@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "user/base_user.h"
+
 namespace Ui {
 	class AddUserDialog;
 }
@@ -14,6 +16,14 @@ class AddUserDialog : public QDialog
 public:
 	explicit AddUserDialog(QWidget *parent = 0);
 	~AddUserDialog();
+
+signals:
+	void confirmButtonClicked(BaseUser* user);
+
+private slots:
+	void on_confirmButton_clicked();
+
+	void on_cancelButton_clicked();
 
 private:
 	Ui::AddUserDialog *ui;

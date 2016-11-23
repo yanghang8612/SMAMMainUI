@@ -1,9 +1,10 @@
 #ifndef SMAMTREEWIDGET_H
 #define SMAMTREEWIDGET_H
 
-#include <QtCore>
+#include <QString>
 #include <QTreeWidget>
-#include <QtXml/QDomDocument>
+#include <QVBoxLayout>
+#include <QDomDocument>
 
 #include "common.h"
 #include "standard_treewidgetitem.h"
@@ -16,24 +17,46 @@ class SMAMTreeWidget : public QObject
 	Q_OBJECT
 
 public:
-	SMAMTreeWidget(QTreeWidget* tree, DeploymentType::Value type);
+	SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type);
 
 signals:
 
 private slots:
 	void showRightMenuAtBJ(QPoint pos);
 	void showRightMenuAtXJ(QPoint pos);
+	void addWidgetToContainer(QTreeWidgetItem* item);
+
+	void showAddNewStandardStationDialog();
+	void addNewStandardStation(StandardStation* station);
+
+	void showModifyStandardStationDialog();
+	void modifyStandardStation(StandardStation* station);
+
+	void deleteStandardStation();
+
+	void showAddNewReceiverDialog();
+	void addNewReceiver(Receiver* receiver);
+
+	void showModifyReceiverDialog();
+	void modifyReceiver(Receiver* receiver);
+
+	void deleteReceiver();
 
 private:
 	QTreeWidget* tree;
+	QTreeWidgetItem* stationTreeRoot;
+	QTreeWidgetItem* userTreeRoot;
+
+	QVBoxLayout* container;
+	QWidget* currentContentWidget = 0;
 	DeploymentType::Value type;
-	QList<StandardStation*> standardStations;
-	QList<IGMASStation*> iGMASStations;
-	QList<IGSSTation*> iGSStations;
+
+	QDomDocument root;
 
 	void initAtBJ();
 	void initAtXJ();
-	QDomElement getRootFromXMLFile(const QString& filePath);
+	QDomDocument getRootFromXMLFile(const QString& filePath);
+	void writeConfigFile();
 };
 
 #endif // SMAMTREEWIDGET_H

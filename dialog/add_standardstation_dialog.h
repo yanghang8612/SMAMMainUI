@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "station/standard_station.h"
+
 namespace Ui {
 	class AddStandardStationDialog;
 }
@@ -14,6 +16,13 @@ class AddStandardStationDialog : public QDialog
 public:
 	explicit AddStandardStationDialog(QWidget *parent = 0);
 	~AddStandardStationDialog();
+
+signals:
+	void confirmButtonClicked(StandardStation* station);
+
+private slots:
+	void on_confirmButton_clicked();
+	void on_cancelButton_clicked();
 
 private:
 	Ui::AddStandardStationDialog *ui;

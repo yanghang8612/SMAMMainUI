@@ -6,6 +6,7 @@ ViewUserDialog::ViewUserDialog(QWidget *parent) :
 	ui(new Ui::ViewUserDialog)
 {
 	ui->setupUi(this);
+	setWindowTitle(tr("查看用户信息"));
 }
 
 ViewUserDialog::~ViewUserDialog()

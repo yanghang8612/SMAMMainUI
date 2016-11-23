@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "user/base_user.h"
+
 namespace Ui {
 	class ViewUserDialog;
 }

@@ -5,3 +5,50 @@ StandardStation::StandardStation()
 
 }
 
+CasterMode::Value StandardStation::getMode() const
+{
+    return mode;
+}
+
+void StandardStation::setMode(const CasterMode::Value& value)
+{
+	mode = value;
+}
+
+void StandardStation::setMode(const QString& value)
+{
+	if (value.toInt() == 0) {
+		mode = CasterMode::IMMEDIATE_CASTER;
+	}
+	else if (value.toInt() == 1) {
+		mode = CasterMode::PROCESS_CASTER;
+	}
+}
+
+quint8 StandardStation::getServiceThreadCount() const
+{
+    return serviceThreadCount;
+}
+
+void StandardStation::setServiceThreadCount(const quint8& value)
+{
+	serviceThreadCount = value;
+}
+
+void StandardStation::setServiceThreadCount(const QString& value)
+{
+	serviceThreadCount = value.toUShort();
+}
+
+void StandardStation::addReceiver(Receiver* receiver)
+{
+	receivers << receiver;
+}
+QList<Receiver*> StandardStation::getReceivers() const
+{
+    return receivers;
+}
+
+
+
+

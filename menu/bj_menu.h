@@ -1,12 +1,36 @@
-#ifndef BJMENU_H
-#define BJMENU_H
+/**
+ * Title: BJMenu
+ * Description: Definition of class BJMenu
+ * Copyright: Copyright 2016 CSNO•TARC
+ * author：Yang Hang
+ * version：1.0
+ * modify:
+ */
 
-#include <QMainWindow>
+#ifndef SMAM_BJMENU_H
+#define SMAM_BJMENU_H
 
-class BJMenu
+#include <QtCore>
+#include <QtGui>
+
+#include "base_menu.h"
+
+class BJMenu : public BaseMenu
 {
+	Q_OBJECT
+
 public:
-	BJMenu();
+	BJMenu(QMainWindow* mainWindow);
+
+private slots:
+	void quitSystem();
+	void showAddIGSStationDialog();
+	void showAddIGMASStationDialog();
+
+private:
+	void createMenus();
+	void createActions();
+	void addAllActionsToMenuBar();
 };
 
-#endif // BJMENU_H
+#endif // SMAM_BJMENU_H

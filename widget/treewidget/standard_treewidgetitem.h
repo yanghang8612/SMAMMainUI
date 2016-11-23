@@ -9,7 +9,7 @@
 class StandardTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	StandardTreeWidgetItem(StandardStation* station, QTreeWidgetItem* parent);
+	StandardTreeWidgetItem(QTreeWidgetItem* parent = 0, StandardStation* station = 0);
 	~StandardTreeWidgetItem();
 
 private:

@@ -1,2 +1,5 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/">
+        <file alias="satellite_distribution">img/satellite_distribution.png</file>
+    </qresource>
+</RCC>

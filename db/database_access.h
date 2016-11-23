@@ -1,11 +1,14 @@
 #ifndef DATABASEACCESS_H
 #define DATABASEACCESS_H
 
-#include <QObject>
+#include <QtSql>
 
 class DatabaseAccess
 {
 public:
+	static bool connect(const QString& dbName);
+
+private:
 	DatabaseAccess();
 };
 

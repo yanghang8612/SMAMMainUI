@@ -1,2 +1,23 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/">
+        <file alias="standard_receiver">icon/standard_receiver.png</file>
+        <file alias="standard_root">icon/standard_root.png</file>
+        <file alias="standard_station">icon/standard_station.png</file>
+        <file alias="1">icon/1.ico</file>
+        <file alias="2">icon/2.ico</file>
+        <file alias="user_add">icon/user_add.png</file>
+        <file alias="user_manager">icon/user_manager.png</file>
+        <file alias="user_modify">icon/user_modify.png</file>
+        <file alias="user_online">icon/user_online.png</file>
+        <file alias="user_root">icon/user_root.png</file>
+        <file alias="user_search">icon/user_search.png</file>
+        <file alias="user_setting">icon/user_setting.png</file>
+        <file alias="user_delete">icon/user_delete.png</file>
+        <file alias="user_view">icon/user_view.png</file>
+        <file alias="info_error">icon/info_error.png</file>
+        <file alias="info_normal">icon/info_normal.png</file>
+        <file alias="info_warning">icon/info_warning.png</file>
+        <file alias="status_green">icon/status_green.png</file>
+        <file alias="status_red">icon/status_red.png</file>
+    </qresource>
+</RCC>

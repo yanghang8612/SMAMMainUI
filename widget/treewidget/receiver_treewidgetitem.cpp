@@ -1,10 +1,12 @@
 #include "receiver_treewidgetitem.h"
 
-ReceiverTreeWidgetItem::ReceiverTreeWidgetItem(Receiver* receiver, QTreeWidgetItem* parent) :
-	QTreeWidgetItem(parent, 2),
-	receiver(receiver), parent(parent)
+ReceiverTreeWidgetItem::ReceiverTreeWidgetItem(QTreeWidgetItem* parent, Receiver* receiver) :
+	QTreeWidgetItem(parent, 02),
+	parent(parent), receiver(receiver)
 {
 	this->setText(0, receiver->getReceiverName());
+	this->setIcon(0, QIcon(":/standard_receiver"));
+	this->setData(0, Qt::UserRole, QVariant::fromValue((void*) receiver));
 }
 
 ReceiverTreeWidgetItem::~ReceiverTreeWidgetItem()

@@ -3,6 +3,8 @@
 
 #include <QDialog>
 
+#include "station/receiver.h"
+
 namespace Ui {
 	class AddReceiverDialog;
 }
@@ -14,6 +16,13 @@ class AddReceiverDialog : public QDialog
 public:
 	explicit AddReceiverDialog(QWidget *parent = 0);
 	~AddReceiverDialog();
+
+signals:
+	void confirmButtonClicked(Receiver* receiver);
+
+private slots:
+	void on_confirmButton_clicked();
+	void on_cancelButton_clicked();
 
 private:
 	Ui::AddReceiverDialog *ui;

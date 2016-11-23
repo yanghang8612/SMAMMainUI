@@ -3,6 +3,8 @@
 
 #include <QTabWidget>
 
+#include "station/standard_station.h"
+
 namespace Ui {
 	class StationInfoWidget;
 }
@@ -14,9 +16,11 @@ class StationInfoWidget : public QTabWidget
 public:
 	explicit StationInfoWidget(QWidget *parent = 0);
 	~StationInfoWidget();
+	void setStation(StandardStation* station);
 
 private:
 	Ui::StationInfoWidget *ui;
+	StandardStation* station;
 };
 
 #endif // STATIONINFO_WIDGET_H
