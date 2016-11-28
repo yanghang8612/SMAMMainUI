@@ -7,6 +7,8 @@
  * modify:
  */
 
+#include <QDebug>
+
 #include "xj_menu.h"
 
 XJMenu::XJMenu(QMainWindow* mainWindow) :

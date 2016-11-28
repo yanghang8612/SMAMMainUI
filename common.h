@@ -2,6 +2,7 @@
 #define COMMON_H
 
 #include <QtCore>
+#include <QtGui>
 
 namespace DeploymentType {
 	enum Value {

@@ -7,6 +7,8 @@
  * modify:
  */
 
+#include <QDebug>
+
 #include "base_menu.h"
 
 BaseMenu::BaseMenu(QMainWindow* mainWindow) :

@@ -42,7 +42,14 @@ SOURCES += main.cpp \
     dialog/modify_user_dialog.cpp \
     dialog/view_user_dialog.cpp \
     widget/button/status_pushbutton.cpp \
-    widget/softwarestatus_frame.cpp
+    widget/softwarestatus_frame.cpp \
+    mid/systemmanager_widget.cpp \
+    mid/systemmonitor_widget.cpp \
+    mid/graphicsitem/basenode.cpp \
+    mid/graphicsitem/stationnode.cpp \
+    mid/graphicsitem/receivernode.cpp \
+    mid/graphicsitem/centrenode.cpp \
+    mid/graphicsitem/edge.cpp
 
 HEADERS  += \
     smam_mainwindow.h \
@@ -75,7 +82,14 @@ HEADERS  += \
     dialog/modify_user_dialog.h \
     dialog/view_user_dialog.h \
     widget/button/status_pushbutton.h \
-    widget/softwarestatus_frame.h
+    widget/softwarestatus_frame.h \
+    mid/systemmanager_widget.h \
+    mid/systemmonitor_widget.h \
+    mid/graphicsitem/basenode.h \
+    mid/graphicsitem/stationnode.h \
+    mid/graphicsitem/receivernode.h \
+    mid/graphicsitem/centrenode.h \
+    mid/graphicsitem/edge.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -90,7 +104,9 @@ FORMS    += \
     dialog/add_user_dialog.ui \
     dialog/modify_user_dialog.ui \
     dialog/view_user_dialog.ui \
-    widget/softwarestatus_frame.ui
+    widget/softwarestatus_frame.ui \
+    mid/systemmanager_widget.ui \
+    mid/systemmonitor_widget.ui
 
 RESOURCES += \
     res/icon.qrc \

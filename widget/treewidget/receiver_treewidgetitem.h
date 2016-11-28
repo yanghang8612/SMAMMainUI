@@ -1,7 +1,6 @@
 #ifndef RECEIVERTREEWIDGETITEM_H
 #define RECEIVERTREEWIDGETITEM_H
 
-#include <QtCore>
 #include <QTreeWidgetItem>
 
 #include "station/receiver.h"

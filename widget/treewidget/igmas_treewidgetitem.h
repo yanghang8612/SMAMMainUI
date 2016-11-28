@@ -1,7 +1,6 @@
 #ifndef IGMASTREEWIDGETITEM_H
 #define IGMASTREEWIDGETITEM_H
 
-#include <QtCore>
 #include <QTreeWidgetItem>
 
 #include "station/igmas_station.h"

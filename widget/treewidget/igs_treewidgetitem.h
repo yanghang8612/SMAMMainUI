@@ -1,7 +1,6 @@
 #ifndef IGSTREEWIDGETITEM_H
 #define IGSTREEWIDGETITEM_H
 
-#include <QtCore>
 #include <QTreeWidgetItem>
 
 #include "station/igs_station.h"

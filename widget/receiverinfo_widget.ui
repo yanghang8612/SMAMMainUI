@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>999</width>
-    <height>510</height>
+    <width>1000</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -226,8 +226,8 @@ QLineEdit{
      <rect>
       <x>10</x>
       <y>20</y>
-      <width>450</width>
-      <height>450</height>
+      <width>400</width>
+      <height>400</height>
      </rect>
     </property>
     <property name="styleSheet">

@@ -19,5 +19,17 @@
         <file alias="info_warning">icon/info_warning.png</file>
         <file alias="status_green">icon/status_green.png</file>
         <file alias="status_red">icon/status_red.png</file>
+        <file alias="centre_green">icon/centre_green.png</file>
+        <file alias="centre_normal">icon/centre_normal.png</file>
+        <file alias="centre_red">icon/centre_red.png</file>
+        <file alias="receiver_green">icon/receiver_green.png</file>
+        <file alias="receiver_normal">icon/receiver_normal.png</file>
+        <file alias="receiver_red">icon/receiver_red.png</file>
+        <file alias="satellite_green">icon/satellite_green.png</file>
+        <file alias="satellite_normal">icon/satellite_normal.png</file>
+        <file alias="satellite_red">icon/satellite_red.png</file>
+        <file alias="station_green">icon/station_green.png</file>
+        <file alias="station_normal">icon/station_normal.png</file>
+        <file alias="station_red">icon/station_red.png</file>
     </qresource>
 </RCC>

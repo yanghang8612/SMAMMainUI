@@ -10,8 +10,9 @@
 #ifndef SMAM_BASEMENU_H
 #define SMAM_BASEMENU_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QMainWindow>
+#include <QAction>
+#include <QMenuBar>
 
 class BaseMenu : public QObject
 {

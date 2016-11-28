@@ -332,6 +332,7 @@ void SMAMTreeWidget::initAtXJ()
 
 			//Create station node of QTreewidget
 			QTreeWidgetItem* stationTreeNode = new StandardTreeWidgetItem(stationTreeRoot, station);
+			standardStationList << station;
 
 			QDomNode receiverNode = stationNode.namedItem("RECEIVERS").firstChild();
 			while (!receiverNode.isNull()) {

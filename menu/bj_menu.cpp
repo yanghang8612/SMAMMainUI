@@ -7,6 +7,8 @@
  * modify:
  */
 
+#include <QDebug>
+
 #include "bj_menu.h"
 
 BJMenu::BJMenu(QMainWindow* mainWindow) :

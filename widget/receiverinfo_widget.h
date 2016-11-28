@@ -2,7 +2,6 @@
 #define RECEIVERINFO_WIDGET_H
 
 #include <QTabWidget>
-#include <QtGui>
 
 #include "station/receiver.h"
 

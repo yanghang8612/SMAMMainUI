@@ -10,9 +10,6 @@
 #ifndef SMAM_BJMENU_H
 #define SMAM_BJMENU_H
 
-#include <QtCore>
-#include <QtGui>
-
 #include "base_menu.h"
 
 class BJMenu : public BaseMenu

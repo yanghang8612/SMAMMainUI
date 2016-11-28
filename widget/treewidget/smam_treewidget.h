@@ -42,6 +42,9 @@ private slots:
 
 	void deleteReceiver();
 
+public:
+	QList<StandardStation*> standardStationList;
+
 private:
 	QTreeWidget* tree;
 	QTreeWidgetItem* stationTreeRoot;

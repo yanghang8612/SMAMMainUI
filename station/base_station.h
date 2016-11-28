@@ -1,8 +1,6 @@
 #ifndef BASESTATION_H
 #define BASESTATION_H
 
-#include <QString>
-
 #include "common.h"
 
 class BaseStation

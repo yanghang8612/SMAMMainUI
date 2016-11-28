@@ -1,7 +1,6 @@
 #ifndef STANDARDTREEWIDGETITEM_H
 #define STANDARDTREEWIDGETITEM_H
 
-#include <QtCore>
 #include <QTreeWidgetItem>
 
 #include "station/standard_station.h"

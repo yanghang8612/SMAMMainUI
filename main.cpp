@@ -1,8 +1,7 @@
 #include "smam_mainwindow.h"
 #include <QApplication>
 #include <QDebug>
-
-#include "db/database_access.h"
+#include <QtCore>
 
 int main(int argc, char *argv[])
 {
