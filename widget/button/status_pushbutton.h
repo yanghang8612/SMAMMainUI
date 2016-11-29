@@ -12,11 +12,11 @@ public:
 	StatusPushButton(const QIcon& icon, const QString &text, QWidget *parent = 0);
 
 protected:
-	virtual void enterEvent(QEvent* event);
+	virtual void enterEvent(QEvent*);
 	virtual void leaveEvent(QEvent* event);
 
 private:
-	SoftwareStatusFrame* statusFrame = 0;
+	SoftwareStatusFrame* statusFrame;
 };
 
 #endif // STATUSPUSHBUTTON_H

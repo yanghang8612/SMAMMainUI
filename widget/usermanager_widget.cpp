@@ -11,7 +11,8 @@
 
 UserManagerWidget::UserManagerWidget(QWidget *parent) :
 	QTabWidget(parent),
-	ui(new Ui::UserManagerWidget)
+	ui(new Ui::UserManagerWidget),
+	dbName("UserManager"), data(0)
 {
 	ui->setupUi(this);
 	ui->userTable->horizontalHeader()->resizeSection(0, 150);

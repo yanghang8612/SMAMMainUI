@@ -13,7 +13,7 @@ QRectF StationNode::boundingRect() const
 	return QRectF(-40, -40, 80, 80);
 }
 
-void StationNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void StationNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 	QString imageName;
 	if (0 == status) {

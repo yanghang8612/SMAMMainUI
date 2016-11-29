@@ -44,7 +44,7 @@ QRectF Edge::boundingRect() const
 	return QRectF(sourcePoint, QSizeF(destPoint.x() - sourcePoint.x(), destPoint.y() - sourcePoint.y()));
 }
 
-void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 	painter->setPen(QPen(Qt::green, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 	painter->setBrush(Qt::green);

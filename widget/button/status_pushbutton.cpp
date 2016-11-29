@@ -3,7 +3,8 @@
 #include "status_pushbutton.h"
 
 StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidget* parent) :
-	QPushButton(icon, text, parent)
+	QPushButton(icon, text, parent),
+	statusFrame(0)
 {
 	this->setStyleSheet("QPushButton{border-style:none}");
 	statusFrame = new SoftwareStatusFrame();
@@ -11,16 +12,14 @@ StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidg
 	statusFrame->setFocusPolicy(Qt::NoFocus);
 }
 
-void StatusPushButton::enterEvent(QEvent* event)
+void StatusPushButton::enterEvent(QEvent*)
 {
-	qDebug() << "enter";
 	statusFrame->setGeometry(QCursor::pos().x() + 1, QCursor::pos().y() + 1, 170, 200);
 	statusFrame->show();
 }
 
-void StatusPushButton::leaveEvent(QEvent* event)
+void StatusPushButton::leaveEvent(QEvent*)
 {
-	qDebug() << "leave";
 	statusFrame->hide();
 }
 

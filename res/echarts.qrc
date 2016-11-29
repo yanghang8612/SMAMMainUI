@@ -1,2 +1,5 @@
-<RCC/>
-
+<RCC>
+    <qresource prefix="/">
+        <file alias="index">echarts/index.html</file>
+    </qresource>
+</RCC>

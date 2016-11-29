@@ -25,9 +25,9 @@
    <enum>QTabWidget::South</enum>
   </property>
   <property name="currentIndex">
-   <number>0</number>
+   <number>1</number>
   </property>
-  <widget class="QWidget" name="tab">
+  <widget class="QWidget" name="onlineUserTab">
    <attribute name="title">
     <string>在线用户信息</string>
    </attribute>
@@ -110,7 +110,7 @@ QGroupBox::title {
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="tab">
+  <widget class="QWidget" name="userDistributionTab">
    <attribute name="title">
     <string>在线用户分布</string>
    </attribute>

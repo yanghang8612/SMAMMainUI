@@ -32,8 +32,8 @@ private slots:
 
 private:
 	Ui::UserManagerWidget *ui;
-	const QString dbName = "UserManager";
-	QSqlTableModel* data = 0;
+	const QString dbName;
+	QSqlTableModel* data;
 	QList<QString> colunmName;
 
 	void updateTable();

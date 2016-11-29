@@ -23,8 +23,8 @@ protected:
 
 private:
 	Ui::UserOnlineWidget *ui;
-	const QString dbName = "UserOnline";
-	QSqlRelationalTableModel* data = 0;
+	const QString dbName;
+	QSqlRelationalTableModel* data;
 	QList<QString> colunmName;
 
 	void updateTable();

@@ -110,6 +110,7 @@ FORMS    += \
 
 RESOURCES += \
     res/icon.qrc \
-    res/img.qrc
+    res/img.qrc \
+    res/echarts.qrc
 
 DISTFILES +=

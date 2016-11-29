@@ -13,7 +13,7 @@ QRectF ReceiverNode::boundingRect() const
 	return QRectF(-30, -30, 60, 60);
 }
 
-void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget)
+void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 	QString imageName;
 	if (0 == status) {

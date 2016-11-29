@@ -51,8 +51,8 @@ private:
 	QTreeWidgetItem* userTreeRoot;
 
 	QVBoxLayout* container;
-	QWidget* currentContentWidget = 0;
 	DeploymentType::Value type;
+	QWidget* currentContentWidget;
 
 	QDomDocument root;
 

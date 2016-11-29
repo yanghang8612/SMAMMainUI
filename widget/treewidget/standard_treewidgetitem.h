@@ -12,8 +12,8 @@ public:
 	~StandardTreeWidgetItem();
 
 private:
-	StandardStation* station;
 	QTreeWidgetItem* parent;
+	StandardStation* station;
 };
 
 #endif // STANDARDTREEWIDGETITEM_H

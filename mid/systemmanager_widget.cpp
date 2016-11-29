@@ -38,7 +38,7 @@ SystemManagerWidget::~SystemManagerWidget()
 	delete ui;
 }
 
-void SystemManagerWidget::timerEvent(QTimerEvent* event)
+void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
 	ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
 	ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));

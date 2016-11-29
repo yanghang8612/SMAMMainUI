@@ -4,7 +4,8 @@
 
 UserOnlineWidget::UserOnlineWidget(QWidget *parent) :
 	QTabWidget(parent),
-	ui(new Ui::UserOnlineWidget)
+	ui(new Ui::UserOnlineWidget),
+	dbName("UserOnline"), data(0)
 {
 	ui->setupUi(this);
 	ui->onlineUserTable->horizontalHeader()->resizeSection(2, 200);
@@ -52,6 +53,7 @@ void UserOnlineWidget::updateTable()
 
 void UserOnlineWidget::timerEvent(QTimerEvent* event)
 {
+	Q_UNUSED(event)
 	for (int i = 0; i < ui->onlineUserTable->rowCount(); i++) {
 		int currentValue = ui->onlineUserTable->item(i, 4)->text().toInt();
 		ui->onlineUserTable->setItem(i, 4, new QTableWidgetItem(QString::number(currentValue + 1)));

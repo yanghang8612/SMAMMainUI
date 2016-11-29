@@ -12,8 +12,8 @@ public:
 	~ReceiverTreeWidgetItem();
 
 private:
-	Receiver* receiver;
 	QTreeWidgetItem* parent;
+	Receiver* receiver;
 };
 
 #endif // RECEIVERTREEWIDGETITEM_H

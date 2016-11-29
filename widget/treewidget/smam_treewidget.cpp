@@ -11,7 +11,8 @@
 #include "dialog/modify_receiver_dialog.h"
 
 SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type) :
-	tree(tree), container(container), type(type)
+	tree(tree), container(container), type(type),
+	currentContentWidget(0)
 {
 	if (DeploymentType::XJ_CENTER == type) {
 		initAtXJ();
@@ -23,7 +24,7 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, Deploy
 
 void SMAMTreeWidget::showRightMenuAtBJ(QPoint pos)
 {
-
+	Q_UNUSED(pos)
 }
 
 void SMAMTreeWidget::showRightMenuAtXJ(QPoint pos)

@@ -53,7 +53,6 @@ int get_total_mem()
 	fd = fopen (file, "r"); //以R读的方式打开文件再赋给指针fd
 
 	//获取memtotal:总内存占用大小
-	int i;
 	char name[32];//存放项目名称
 	int memtotal;//存放内存峰值大小
 	fgets (line_buff, sizeof(line_buff), fd);//读取memtotal这一行的数据,memtotal在第1行
