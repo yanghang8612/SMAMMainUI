@@ -1,10 +1,12 @@
-#ifndef CENTRENODE_H
+﻿#ifndef CENTRENODE_H
 #define CENTRENODE_H
 
 #include "basenode.h"
 
-class CentreNode : public BaseNode
+class CentreNode : public QObject, public BaseNode
 {
+    Q_OBJECT
+
 public:
 	CentreNode();
 

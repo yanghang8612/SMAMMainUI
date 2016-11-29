@@ -1,4 +1,4 @@
-#include <QPainter>
+﻿#include <QPainter>
 
 #include "stationnode.h"
 
@@ -20,10 +20,12 @@ void StationNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWid
 		imageName = ":/station_normal";
 	}
 	else if (1 == status) {
-		imageName = ":/station_green";
+        imageName = ":/station_green";
 	}
 	else if (2 == status) {
 		imageName = ":/station_red";
 	}
 	painter->drawImage(QRectF(-40, -40, 80, 80), QImage(imageName));
+    painter->setFont(QFont("Helvetica", 12, QFont::Bold));
+    painter->drawText(-75, 50, 150, 20, Qt::AlignCenter, station->getStationName());
 }

@@ -1,7 +1,8 @@
-#include "smam_mainwindow.h"
+﻿#include "smam_mainwindow.h"
 #include <QApplication>
 #include <QDebug>
 #include <QtCore>
+#include <QSqlDatabase>
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,8 @@ int main(int argc, char *argv[])
 	a.installTranslator(&qtGloble);
 
 	QApplication::setStyle("Cleanlooks");
+
+    qDebug() << QSqlDatabase::drivers();
 
 	SMAMMainWindow w;
 	w.show();

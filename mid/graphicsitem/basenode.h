@@ -1,4 +1,4 @@
-#ifndef BASENODE_H
+﻿#ifndef BASENODE_H
 #define BASENODE_H
 
 #include <QGraphicsItem>
@@ -10,11 +10,14 @@ class BaseNode : public QGraphicsItem
 public:
 	BaseNode();
 
-	void addEdge(Edge* e);
+    void addFromEdge(Edge* e);
+    void addToEdge(Edge* e);
+    void transformData();
 	void setStatus(quint8 status);
 
 protected:
-	QList<Edge*> edgeList;
+    QList<Edge*> edgeFromNodeList;
+    QList<Edge*> edgeToNodeList;
 	quint8 status;
 };
 

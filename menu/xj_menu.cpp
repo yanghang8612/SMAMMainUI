@@ -38,25 +38,25 @@ void XJMenu::showAddReceiverDialog()
 void XJMenu::createMenus()
 {
 	createMenu(tr("系统"));
-	createMenu("基准站管理");
-	createMenu("接收机管理");
+    createMenu(tr("基准站管理"));
+    createMenu(tr("接收机管理"));
 }
 
 void XJMenu::createActions()
 {
-	QAction* quitSystemAction = createAction("退出系统");
+    QAction* quitSystemAction = createAction(tr("退出系统"));
 	connect(quitSystemAction, SIGNAL(triggered(bool)), this, SLOT(quitSystem()));
 
-	QAction* addStationAction = createAction("添加基准站");
+    QAction* addStationAction = createAction(tr("添加基准站"));
 	connect(addStationAction, SIGNAL(triggered(bool)), this, SLOT(showAddStationDialog()));
 
-	QAction* addReceiverAction = createAction("添加接收机");
+    QAction* addReceiverAction = createAction(tr("添加接收机"));
 	connect(addReceiverAction, SIGNAL(triggered(bool)), this, SLOT(showAddReceiverDialog()));
 }
 
 void XJMenu::addAllActionsToMenuBar()
 {
-	addActionToMenu("系统", "退出系统");
-	addActionToMenu("基准站管理", "添加基准站");
-	addActionToMenu("接收机管理", "添加接收机");
+    addActionToMenu(tr("系统"), tr("退出系统"));
+    addActionToMenu(tr("基准站管理"), tr("添加基准站"));
+    addActionToMenu(tr("接收机管理"), tr("添加接收机"));
 }

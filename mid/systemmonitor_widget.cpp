@@ -1,8 +1,9 @@
-#include "systemmonitor_widget.h"
+﻿#include "systemmonitor_widget.h"
 #include "ui_systemmonitor_widget.h"
 #include "graphicsitem/receivernode.h"
 #include "graphicsitem/stationnode.h"
-#include "graphicsitem/centrenode.h"
+#include "graphicsitem/centernode.h"
+#include "graphicsitem/edge.h"
 
 SystemMonitorWidget::SystemMonitorWidget(QWidget *parent, SMAMTreeWidget* treeWidget) :
 	QWidget(parent),
@@ -10,20 +11,21 @@ SystemMonitorWidget::SystemMonitorWidget(QWidget *parent, SMAMTreeWidget* treeWi
 {
 	ui->setupUi(this);
 	scene = new QGraphicsScene(this);
-	scene->setItemIndexMethod(QGraphicsScene::NoIndex);
-	scene->setSceneRect(-200, -200, 400, 400);
+    //scene->setItemIndexMethod(QGraphicsScene::NoIndex);
+    scene->setSceneRect(-630, -350, 1260, 1000);
+    ui->monitorView->resize(1260, 1000);
 	ui->monitorView->setScene(scene);
 	ui->monitorView->setCacheMode(QGraphicsView::CacheBackground);
 	ui->monitorView->setViewportUpdateMode(QGraphicsView::BoundingRectViewportUpdate);
 	ui->monitorView->setRenderHint(QPainter::Antialiasing);
 	ui->monitorView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-	updateView();
+    updateView();
 }
 
 SystemMonitorWidget::~SystemMonitorWidget()
 {
-	delete ui;
+    delete ui;
 }
 
 void SystemMonitorWidget::updateView()
@@ -38,21 +40,17 @@ void SystemMonitorWidget::updateView()
 		StandardStation* station = treeWidget->standardStationList.at(i);
 		StationNode* stationNode = new StationNode(station);
 		stationNode->setPos(topStationPoint + QPointF(0, 200 * i));
+        stationNode->setStatus(1);
 		scene->addItem(stationNode);
 		scene->addItem(new Edge(stationNode, centreNode));
 
 		int receiverCount = station->getReceivers().size();
-		QPointF topReceiverPoint(-400, stationNode->pos().y() - 40 * (receiverCount - 1));
+        QPointF topReceiverPoint(-400, stationNode->pos().y() - 50 * (receiverCount - 1) - 1);
 		for (int j = 0; j < receiverCount; j++) {
 			Receiver* receiver = station->getReceivers().at(j);
 			ReceiverNode* receiverNode = new ReceiverNode(receiver);
-			receiverNode->setPos(topReceiverPoint + QPointF(0, 80 * j));
-			if (j % 2 == 1) {
-				receiverNode->setStatus(2);
-			}
-			else {
-				receiverNode->setStatus(1);
-			}
+            receiverNode->setPos(topReceiverPoint + QPointF(0, 100 * j));
+            receiverNode->setStatus(1);
 			scene->addItem(receiverNode);
 			scene->addItem(new Edge(receiverNode, stationNode));
 		}

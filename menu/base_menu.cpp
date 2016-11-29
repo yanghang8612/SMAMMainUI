@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Title: BaseMenu
  * Description: Implementation of class BaseMenu
  * Copyright: Copyright 2016 CSNO•TARC
@@ -28,20 +28,20 @@ QMenu* BaseMenu::getMenuByName(const QString& menuName)
 
 void BaseMenu::createHelpMenu()
 {
-	QAction* helpAction = createAction("帮助");
+    QAction* helpAction = createAction(tr("帮助"));
 	helpAction->setShortcut(QKeySequence::HelpContents);
 	helpAction->setStatusTip(tr("获取关于本软件的帮助信息"));
 	connect(helpAction, SIGNAL(triggered(bool)), this, SLOT(showHelp()));
 
-	QAction* aboutAction = createAction("关于");
+    QAction* aboutAction = createAction(tr("关于"));
 	aboutAction->setShortcut(QKeySequence::WhatsThis);
 	aboutAction->setStatusTip(tr("关于本软件的版本及授权"));
 	connect(aboutAction, SIGNAL(triggered(bool)), this, SLOT(showAboutPage()));
 
-	createMenu("帮助");
+    createMenu(tr("帮助"));
 
-	addActionToMenu("帮助", "帮助");
-	addActionToMenu("帮助", "关于");
+    addActionToMenu(tr("帮助"), tr("帮助"));
+    addActionToMenu(tr("帮助"), tr("关于"));
 }
 
 void BaseMenu::showHelp()

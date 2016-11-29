@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Title: BJMenu
  * Description: Implementation of class BJMenu
  * Copyright: Copyright 2016 CSNO•TARC
@@ -38,26 +38,26 @@ void BJMenu::showAddIGMASStationDialog()
 
 void BJMenu::createMenus()
 {
-	createMenu("系统");
-	createMenu("IGS站管理");
-	createMenu("IGMAS站管理");
+    createMenu(tr("系统"));
+    createMenu(tr("IGS站管理"));
+    createMenu(tr("IGMAS站管理"));
 }
 
 void BJMenu::createActions()
 {
-	QAction* quitSystemAction = createAction("退出系统");
+    QAction* quitSystemAction = createAction(tr("退出系统"));
 	connect(quitSystemAction, SIGNAL(triggered(bool)), this, SIGNAL(quitSystem()));
 
-	QAction* addIGSStationAction = createAction("添加IGS站");
+    QAction* addIGSStationAction = createAction(tr("添加IGS站"));
 	connect(addIGSStationAction, SIGNAL(triggered(bool)), this, SIGNAL(showAddIGSStationDialog()));
 
-	QAction* addIGMASStationAction = createAction("添加IGMAS站");
+    QAction* addIGMASStationAction = createAction(tr("添加IGMAS站"));
 	connect(addIGMASStationAction, SIGNAL(triggered(bool)), this, SIGNAL(showAddIGMASStationDialog()));
 }
 
 void BJMenu::addAllActionsToMenuBar()
 {
-	addActionToMenu("系统", "退出系统");
-	addActionToMenu("IGS站管理", "添加IGS站");
-	addActionToMenu("IGMAS站管理", "添加IGMAS站");
+    addActionToMenu(tr("系统"), tr("退出系统"));
+    addActionToMenu(tr("IGS站管理"), tr("添加IGS站"));
+    addActionToMenu(tr("IGMAS站管理"), tr("添加IGMAS站"));
 }

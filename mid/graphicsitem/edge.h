@@ -1,9 +1,9 @@
-#ifndef EDGE_H
+﻿#ifndef EDGE_H
 #define EDGE_H
 
 #include <QGraphicsItem>
-#include <QObject>
 #include <QQueue>
+#include <QTimer>
 
 class BaseNode;
 
@@ -18,6 +18,9 @@ public:
 	virtual QRectF boundingRect() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
+private slots:
+    void doSomething();
+
 public slots:
 	void adjust();
 
@@ -29,6 +32,7 @@ private:
 	QPointF dataFlowOffset;
 
 	QQueue<QPointF> dataList;
+    QTimer* timer;
 };
 
 #endif // EDGE_H

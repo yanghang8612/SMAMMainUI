@@ -48,8 +48,8 @@ SOURCES += main.cpp \
     mid/graphicsitem/basenode.cpp \
     mid/graphicsitem/stationnode.cpp \
     mid/graphicsitem/receivernode.cpp \
-    mid/graphicsitem/centrenode.cpp \
-    mid/graphicsitem/edge.cpp
+    mid/graphicsitem/edge.cpp \
+    mid/graphicsitem/centernode.cpp
 
 HEADERS  += \
     smam_mainwindow.h \
@@ -88,8 +88,8 @@ HEADERS  += \
     mid/graphicsitem/basenode.h \
     mid/graphicsitem/stationnode.h \
     mid/graphicsitem/receivernode.h \
-    mid/graphicsitem/centrenode.h \
-    mid/graphicsitem/edge.h
+    mid/graphicsitem/edge.h \
+    mid/graphicsitem/centernode.h
 
 FORMS    += \
     smam_mainwindow.ui \

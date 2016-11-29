@@ -1,4 +1,4 @@
-#ifndef SYSTEMMONITOR_WIDGET_H
+﻿#ifndef SYSTEMMONITOR_WIDGET_H
 #define SYSTEMMONITOR_WIDGET_H
 
 #include <QWidget>
