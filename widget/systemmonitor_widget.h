@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "widget/treewidget/smam_treewidget.h"
+#include "station/standard_station.h"
 
 namespace Ui {
 	class SystemMonitorWidget;
@@ -14,15 +14,21 @@ class SystemMonitorWidget : public QWidget
 	Q_OBJECT
 
 public:
-	explicit SystemMonitorWidget(QWidget *parent = 0, SMAMTreeWidget* treeWidget = 0);
+    SystemMonitorWidget(const QList<StandardStation*>& standardStationList, QWidget *parent = 0);
 	~SystemMonitorWidget();
 
 private:
-	void updateView();
+    void updateView();
+
+private slots:
+    void closeEvent(QCloseEvent* closeEvent);
+
+signals:
+    void closeMessage();
 
 private:
 	Ui::SystemMonitorWidget *ui;
-	SMAMTreeWidget* treeWidget;
+    QList<StandardStation*> standardStationList;
 	QGraphicsScene* scene;
 };
 

@@ -1,4 +1,4 @@
-#ifndef SYSTEMMANAGER_WIDGET_H
+﻿#ifndef SYSTEMMANAGER_WIDGET_H
 #define SYSTEMMANAGER_WIDGET_H
 
 #include <QWidget>
@@ -25,13 +25,17 @@ protected:
 
 private slots:
 	void addMessageToInfoContainer();
+    void closeEvent(QCloseEvent* closeEvent);
+
+signals:
+    void closeMessage();
 
 public:
 	SMAMTreeWidget* treeWidget;
 
 private:
 	Ui::SystemManagerWidget *ui;
-	QWidget* contentWidget;
+    QWidget* contentWidget;
 	int timerID;
 
 	StatusPushButton* softwareStatus;

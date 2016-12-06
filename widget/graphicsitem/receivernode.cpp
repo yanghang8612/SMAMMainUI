@@ -11,11 +11,11 @@ ReceiverNode::ReceiverNode(Receiver* receiver) :
 	receiver(receiver)
 {
     qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
-    QTimer* timer = new QTimer(this);
+    timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()), Qt::QueuedConnection);
     int r = qrand() % 5;
     qDebug() << r;
-    timer->start((r + 3) * 1000);
+    timer->start((r + 5) * 1000);
 }
 
 QRectF ReceiverNode::boundingRect() const
@@ -42,9 +42,16 @@ void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
 
 void ReceiverNode::doSomething()
 {
-    foreach (Edge* edge, edgeFromNodeList) {
-        //edge->adjust();
-        edge->addData();
+    if (getStatus() == 2) {
+        timer->stop();
+        delete timer;
+        timer = 0;
+    }
+    else {
+        foreach (Edge* edge, edgeFromNodeList) {
+            //edge->adjust();
+            edge->addData();
+        }
     }
 }
 

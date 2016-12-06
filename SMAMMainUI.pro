@@ -44,12 +44,13 @@ SOURCES += main.cpp \
     widget/button/status_pushbutton.cpp \
     widget/softwarestatus_frame.cpp \
     mid/systemmanager_widget.cpp \
-    mid/systemmonitor_widget.cpp \
-    mid/graphicsitem/basenode.cpp \
-    mid/graphicsitem/stationnode.cpp \
-    mid/graphicsitem/receivernode.cpp \
-    mid/graphicsitem/edge.cpp \
-    mid/graphicsitem/centernode.cpp
+    widget/graphicsitem/basenode.cpp \
+    widget/graphicsitem/centernode.cpp \
+    widget/graphicsitem/edge.cpp \
+    widget/graphicsitem/receivernode.cpp \
+    widget/graphicsitem/stationnode.cpp \
+    widget/systemmonitor_widget.cpp \
+    widget/mainmonitor_widget.cpp
 
 HEADERS  += \
     smam_mainwindow.h \
@@ -84,12 +85,13 @@ HEADERS  += \
     widget/button/status_pushbutton.h \
     widget/softwarestatus_frame.h \
     mid/systemmanager_widget.h \
-    mid/systemmonitor_widget.h \
-    mid/graphicsitem/basenode.h \
-    mid/graphicsitem/stationnode.h \
-    mid/graphicsitem/receivernode.h \
-    mid/graphicsitem/edge.h \
-    mid/graphicsitem/centernode.h
+    widget/graphicsitem/basenode.h \
+    widget/graphicsitem/centernode.h \
+    widget/graphicsitem/edge.h \
+    widget/graphicsitem/receivernode.h \
+    widget/graphicsitem/stationnode.h \
+    widget/systemmonitor_widget.h \
+    widget/mainmonitor_widget.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -106,7 +108,8 @@ FORMS    += \
     dialog/view_user_dialog.ui \
     widget/softwarestatus_frame.ui \
     mid/systemmanager_widget.ui \
-    mid/systemmonitor_widget.ui
+    widget/systemmonitor_widget.ui \
+    widget/mainmonitor_widget.ui
 
 RESOURCES += \
     res/icon.qrc \

@@ -20,6 +20,7 @@ public:
 
 private slots:
     void doSomething();
+    void finishAnimation();
 
 public slots:
 	void adjust();
@@ -31,7 +32,8 @@ private:
 	QPointF destPoint;
 	QPointF dataFlowOffset;
 
-	QQueue<QPointF> dataList;
+    QQueue<QPointF> dataList;
+    //QQueue<QGraphicsItem*> dataList;
     QTimer* timer;
 };
 

@@ -31,5 +31,7 @@
         <file alias="station_green">icon/station_green.png</file>
         <file alias="station_normal">icon/station_normal.png</file>
         <file alias="station_red">icon/station_red.png</file>
+        <file alias="manager">icon/toolbar_manager.png</file>
+        <file alias="monitor">icon/toolbar_monitor.png</file>
     </qresource>
 </RCC>

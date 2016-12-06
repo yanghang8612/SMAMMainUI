@@ -28,3 +28,9 @@ void BaseNode::setStatus(quint8 status)
 	this->status = status;
 }
 
+quint8 BaseNode::getStatus() const
+{
+    return status;
+}
+
+

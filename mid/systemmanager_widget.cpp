@@ -65,5 +65,11 @@ void SystemManagerWidget::addMessageToInfoContainer()
 		ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(":/info_error"), tr("这是一条错误的消息")));
 	}
 	ui->infoOutputTable->setRowHeight(currentRowCount, 22);
-	ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
+    ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
+}
+
+void SystemManagerWidget::closeEvent(QCloseEvent *closeEvent)
+{
+    closeEvent->ignore();
+    emit closeMessage();
 }

@@ -1,4 +1,4 @@
-#ifndef SMAMTREEWIDGET_H
+﻿#ifndef SMAMTREEWIDGET_H
 #define SMAMTREEWIDGET_H
 
 #include <QString>
@@ -53,6 +53,7 @@ private:
 	QVBoxLayout* container;
 	DeploymentType::Value type;
 	QWidget* currentContentWidget;
+    QWidget* systemMonitorWidget;
 
 	QDomDocument root;
 

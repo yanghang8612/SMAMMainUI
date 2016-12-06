@@ -1,6 +1,8 @@
 ﻿#ifndef RECEIVERNODE_H
 #define RECEIVERNODE_H
 
+#include <QTimer>
+
 #include "basenode.h"
 #include "station/receiver.h"
 
@@ -19,6 +21,7 @@ private slots:
 
 private:
 	Receiver* receiver;
+    QTimer* timer;
 };
 
 #endif // RECEIVERNODE_H

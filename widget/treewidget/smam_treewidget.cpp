@@ -1,10 +1,12 @@
-#include <QMenu>
+﻿#include <QMenu>
 
 #include "smam_treewidget.h"
 #include "widget/stationinfo_widget.h"
 #include "widget/receiverinfo_widget.h"
 #include "widget/usermanager_widget.h"
 #include "widget/useronline_widget.h"
+#include "widget/systemmonitor_widget.h"
+#include "widget/mainmonitor_widget.h"
 #include "dialog/add_standardstation_dialog.h"
 #include "dialog/modify_standardstation_dialog.h"
 #include "dialog/add_receiver_dialog.h"
@@ -12,7 +14,7 @@
 
 SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type) :
 	tree(tree), container(container), type(type),
-	currentContentWidget(0)
+    currentContentWidget(0)
 {
 	if (DeploymentType::XJ_CENTER == type) {
 		initAtXJ();
@@ -20,6 +22,7 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, Deploy
 	else if (DeploymentType::BJ_CENTER == type) {
 		initAtBJ();
 	}
+    systemMonitorWidget = new MainMonitorWidget(standardStationList);
 }
 
 void SMAMTreeWidget::showRightMenuAtBJ(QPoint pos)
@@ -72,9 +75,14 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 {
 	if (currentContentWidget) {
 		container->removeWidget(currentContentWidget);
-		delete currentContentWidget;
+        if (currentContentWidget != systemMonitorWidget) {
+            delete currentContentWidget;
+        }
 	}
-	switch (item->type()) {
+    switch (item->type()) {
+        case 00:
+            currentContentWidget = systemMonitorWidget;
+            break;
 		case 01:
 			currentContentWidget = new StationInfoWidget();
 			((StationInfoWidget*) currentContentWidget)->setStation((StandardStation*) item->data(0, Qt::UserRole).value<void*>());

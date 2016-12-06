@@ -1,13 +1,12 @@
-#include <QDebug>
+﻿#include <QDebug>
 
 #include "status_pushbutton.h"
 
 StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidget* parent) :
-	QPushButton(icon, text, parent),
-	statusFrame(0)
+    QPushButton(icon, text, parent)
 {
 	this->setStyleSheet("QPushButton{border-style:none}");
-	statusFrame = new SoftwareStatusFrame();
+    statusFrame = new SoftwareStatusFrame(0);
 	statusFrame->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
 	statusFrame->setFocusPolicy(Qt::NoFocus);
 }
@@ -20,6 +19,6 @@ void StatusPushButton::enterEvent(QEvent*)
 
 void StatusPushButton::leaveEvent(QEvent*)
 {
-	statusFrame->hide();
+    statusFrame->hide();
 }
 

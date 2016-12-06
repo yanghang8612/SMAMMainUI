@@ -2,17 +2,17 @@
 
 #include "centernode.h"
 
-CentreNode::CentreNode()
+CenterNode::CenterNode()
 {
 
 }
 
-QRectF CentreNode::boundingRect() const
+QRectF CenterNode::boundingRect() const
 {
 	return QRectF(-50, -50, 100, 100);
 }
 
-void CentreNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void CenterNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
 	painter->drawImage(QRectF(-50, -50, 100, 100), QImage(":/centre_normal"));
     painter->setFont(QFont("Helvetica", 18, QFont::Bold));

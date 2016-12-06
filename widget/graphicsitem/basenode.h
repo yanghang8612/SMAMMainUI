@@ -14,6 +14,7 @@ public:
     void addToEdge(Edge* e);
     void transformData();
 	void setStatus(quint8 status);
+    quint8 getStatus() const;
 
 protected:
     QList<Edge*> edgeFromNodeList;
