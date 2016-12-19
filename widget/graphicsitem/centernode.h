@@ -8,7 +8,7 @@ class CenterNode : public QObject, public BaseNode
     Q_OBJECT
 
 public:
-    CenterNode();
+    CenterNode(quint8 length);
 
 	virtual QRectF boundingRect() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

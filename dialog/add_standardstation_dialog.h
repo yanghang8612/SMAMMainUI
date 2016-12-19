@@ -22,10 +22,11 @@ signals:
 
 private slots:
 	void on_confirmButton_clicked();
-	void on_cancelButton_clicked();
+    void on_cancelButton_clicked();
 
 private:
 	Ui::AddStandardStationDialog *ui;
+    quint8 inputValidByte;
 };
 
 #endif // ADD_STANDARDSTATION_DIALOG_H

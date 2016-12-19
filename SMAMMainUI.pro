@@ -50,7 +50,11 @@ SOURCES += main.cpp \
     widget/graphicsitem/receivernode.cpp \
     widget/graphicsitem/stationnode.cpp \
     widget/systemmonitor_widget.cpp \
-    widget/mainmonitor_widget.cpp
+    widget/mainmonitor_widget.cpp \
+    utilies/general_functions.cpp \
+    widget/graphicsitem/filenode.cpp \
+    widget/graphicsitem/harddrivenode.cpp \
+    widget/graphicsitem/usersnode.cpp
 
 HEADERS  += \
     smam_mainwindow.h \
@@ -91,7 +95,11 @@ HEADERS  += \
     widget/graphicsitem/receivernode.h \
     widget/graphicsitem/stationnode.h \
     widget/systemmonitor_widget.h \
-    widget/mainmonitor_widget.h
+    widget/mainmonitor_widget.h \
+    utilies/general_functions.h \
+    widget/graphicsitem/filenode.h \
+    widget/graphicsitem/harddrivenode.h \
+    widget/graphicsitem/usersnode.h
 
 FORMS    += \
     smam_mainwindow.ui \

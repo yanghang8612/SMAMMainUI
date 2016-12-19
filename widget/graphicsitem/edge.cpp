@@ -12,7 +12,7 @@
 
 Edge::Edge(BaseNode* sourceNode, BaseNode* destNode) :
     sourceNode(sourceNode), destNode(destNode),
-    timer(0)
+    timer(0), status(0)
 {
     sourceNode->addFromEdge(this);
     destNode->addToEdge(this);
@@ -78,17 +78,43 @@ void Edge::adjust()
 	QPointF destEdgeOffset((line.dx() * destWidth) / length, (line.dy() * destWidth) / length);
     destPoint = line.p2() - destEdgeOffset;
 }
+quint8 Edge::getStatus() const
+{
+    return status;
+}
+
+void Edge::setStatus(const quint8 &value)
+{
+    status = value;
+    prepareGeometryChange();
+    update();
+}
+
 
 QRectF Edge::boundingRect() const
 {
     return QRectF(sourcePoint, QSizeF(destPoint.x() - sourcePoint.x(), destPoint.y() - sourcePoint.y()))
             .normalized()
-            .adjusted(-5, -5, 5, 5);
+            .adjusted(-3, -3, 3, 3);
 }
 
 void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    painter->setPen(QPen(Qt::black, 5, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    QBrush lineColor;
+    switch (status) {
+        case 0:
+            lineColor = Qt::black;
+            break;
+        case 1:
+            lineColor = Qt::darkGreen;
+            break;
+        case 2:
+            lineColor = Qt::darkRed;
+            break;
+        default:
+            break;
+    }
+    painter->setPen(QPen(lineColor, 3, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(QLineF(sourcePoint, destPoint));
 
     painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -101,7 +127,7 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
     }
     for (int i = 0; i < dataCount; i++) {
         QPointF currentData = dataList.dequeue();
-        painter->drawEllipse(currentData, 6, 6);
+        painter->drawEllipse(currentData, 4, 4);
         currentData += dataFlowOffset;
         if (currentData.x() >= destPoint.x()) {
             destNode->transformData();

@@ -13,23 +13,12 @@
     <height>300</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QDialog {
-  background-color: rgb(240,240,240);
-}
-* {
-  font: 12px;
-}</string>
-  </property>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>260</x>
      <y>250</y>
-     <width>201</width>
+     <width>231</width>
      <height>41</height>
     </rect>
    </property>
@@ -62,70 +51,47 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>290</x>
+     <x>280</x>
      <y>10</y>
      <width>200</width>
-     <height>121</height>
+     <height>110</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QGroupBox {
-  border: 1px solid gray;
-  margin-top: 10px;
-}
-QGroupBox::title {
-  top: -10px;
-  left: 10px;
-}</string>
    </property>
    <property name="title">
     <string>接收机位置</string>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
-      <property name="spacing">
-       <number>0</number>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>经度：</string>
       </property>
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>经度：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="text">
-         <string>纬度：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_6">
-      <property name="spacing">
-       <number>15</number>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="receiverLongitudeEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_5">
+      <property name="text">
+       <string>纬度：</string>
       </property>
-      <property name="topMargin">
-       <number>0</number>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
-      <item>
-       <widget class="QLineEdit" name="receiverLongitudeEdit">
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="receiverLatitudeEdit">
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="receiverLatitudeEdit"/>
     </item>
    </layout>
   </widget>
@@ -134,82 +100,58 @@ QGroupBox::title {
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>260</width>
-     <height>161</height>
+     <width>250</width>
+     <height>150</height>
     </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">QGroupBox {
-  border: 1px solid gray;
-  margin-top: 10px;
-}
-QGroupBox::title {
-  top: -10px;
-  left: 10px;
-}</string>
    </property>
    <property name="title">
     <string>接收机信息</string>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="spacing">
-       <number>0</number>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>名称：</string>
       </property>
-      <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>接收机名称：</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_2">
-        <property name="text">
-         <string>接收机IP：    </string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_3">
-        <property name="text">
-         <string>接收机端口：</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
     </item>
-    <item>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="spacing">
-       <number>15</number>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="receiverNameEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>IP：</string>
       </property>
-      <property name="topMargin">
-       <number>0</number>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
-      <item>
-       <widget class="QLineEdit" name="receiverNameEdit">
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="receiverIPEdit">
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="receiverPortEdit">
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="receiverIPEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Port：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="receiverPortEdit"/>
     </item>
    </layout>
   </widget>

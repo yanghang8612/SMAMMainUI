@@ -10,14 +10,8 @@
     <height>470</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>TabWidget</string>
-  </property>
   <property name="tabPosition">
    <enum>QTabWidget::South</enum>
-  </property>
-  <property name="currentIndex">
-   <number>0</number>
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">

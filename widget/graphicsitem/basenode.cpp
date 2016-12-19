@@ -1,7 +1,8 @@
 ﻿#include "basenode.h"
 #include "edge.h"
 
-BaseNode::BaseNode()
+BaseNode::BaseNode(quint8 length) :
+    length(length)
 {
 
 }
@@ -26,11 +27,14 @@ void BaseNode::transformData()
 void BaseNode::setStatus(quint8 status)
 {
 	this->status = status;
+    prepareGeometryChange();
+    update();
 }
 
 quint8 BaseNode::getStatus() const
 {
     return status;
 }
+
 
 

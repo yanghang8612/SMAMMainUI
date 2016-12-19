@@ -7,37 +7,49 @@
 #include "receivernode.h"
 #include "edge.h"
 
-ReceiverNode::ReceiverNode(Receiver* receiver) :
+ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :
+    BaseNode(length),
 	receiver(receiver)
 {
+    receiverName = receiver->getReceiverName();
+    quint8 lineCount = receiverName.length() / 5 + receiverName.length() % 5 == 0 ? 0 : 1;
+    for (int i = 1; i <= lineCount; i++) {
+        receiverName.insert(i * 5, '\n');
+    }
+
     qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()), Qt::QueuedConnection);
     int r = qrand() % 5;
-    qDebug() << r;
     timer->start((r + 5) * 1000);
 }
 
 QRectF ReceiverNode::boundingRect() const
 {
-	return QRectF(-30, -30, 60, 60);
+    return QRectF(- length / 2, - length / 2, length, length);
 }
 
 void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-	QString imageName;
-	if (0 == status) {
-		imageName = ":/receiver_normal";
-	}
-	else if (1 == status) {
-        imageName = ":/receiver_green";
-	}
-	else if (2 == status) {
-		imageName = ":/receiver_red";
-	}
-    painter->drawImage(QRectF(-30, -30, 60, 60), QImage(imageName));
-    painter->setFont(QFont("Helvetica", 8, QFont::Bold));
-    painter->drawText(-50, 35, 100, 10, Qt::AlignCenter, receiver->getReceiverName());
+    QString imageName;
+    switch (status) {
+        case 0:
+            imageName = ":/receiver_normal";
+            break;
+        case 1:
+            imageName = ":/receiver_green";
+            break;
+        case 2:
+            imageName = ":/receiver_red";
+            break;
+        default:
+            break;
+    }
+    painter->drawImage(QRectF(- length / 2, - length / 2, length, length), QImage(imageName));
+    painter->setFont(QFont("Helvetica", 7, QFont::Bold));
+    QTextOption option(Qt::AlignTrailing | Qt::AlignVCenter);
+    option.setWrapMode(QTextOption::WordWrap);
+    painter->drawText(QRectF(- length / 2 - 40, - length / 2, 40, 40), receiverName, option);
 }
 
 void ReceiverNode::doSomething()

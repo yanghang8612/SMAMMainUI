@@ -1,5 +1,6 @@
 #include "modify_standardstation_dialog.h"
 #include "ui_modify_standardstation_dialog.h"
+#include "utilies/general_functions.h"
 
 ModifyStandardStationDialog::ModifyStandardStationDialog(QWidget *parent, StandardStation* station) :
 	QDialog(parent),
@@ -14,6 +15,8 @@ ModifyStandardStationDialog::ModifyStandardStationDialog(QWidget *parent, Standa
 	ui->stationThreadCountEdit->setValue(station->getServiceThreadCount());
 	ui->stationDetailEdit->setText(station->getDetail());
 	setWindowTitle(tr("编辑基准站"));
+    ui->stationNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
+    ui->stationIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }
 
 ModifyStandardStationDialog::~ModifyStandardStationDialog()
@@ -23,6 +26,30 @@ ModifyStandardStationDialog::~ModifyStandardStationDialog()
 
 void ModifyStandardStationDialog::on_confirmButton_clicked()
 {
+    if (!GeneralFunctions::checkNameString(ui->stationNameEdit->text())) {
+        ui->stationNameEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationNameEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkIPAddressString(ui->stationIPEdit->text())) {
+        ui->stationIPEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationIPEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkIPPortString(ui->stationPortEdit->text())) {
+        ui->stationPortEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationPortEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
 	station->setStationName(ui->stationNameEdit->text());
 	station->setIpAddress(ui->stationIPEdit->text());
 	station->setPort(ui->stationPortEdit->text());

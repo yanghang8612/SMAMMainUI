@@ -14,10 +14,9 @@ class MainMonitorWidget : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit MainMonitorWidget(const QList<StandardStation*>& standardStationList, QWidget *parent = 0);
+    explicit MainMonitorWidget(QList<StandardStation*>* standardStationList, QWidget *parent = 0);
     ~MainMonitorWidget();
 
-private:
     void updateView();
 
 private slots:
@@ -28,7 +27,7 @@ signals:
 
 private:
     Ui::MainMonitorWidget *ui;
-    QList<StandardStation*> standardStationList;
+    QList<StandardStation*>* standardStationList;
     QGraphicsScene* scene;
 };
 

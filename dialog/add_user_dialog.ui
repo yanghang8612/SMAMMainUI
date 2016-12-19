@@ -13,17 +13,6 @@
     <height>320</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QDialog {
-  background-color: rgb(240,240,240);
-}
-* {
-  font: 12px;
-}</string>
-  </property>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>

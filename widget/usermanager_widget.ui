@@ -10,22 +10,8 @@
     <height>470</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>TabWidget</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">QTabWidget::pane {
-  background-color: rgb(220,220,220);
-}
-*{
-   font: 12px;
-}</string>
-  </property>
   <property name="tabPosition">
    <enum>QTabWidget::South</enum>
-  </property>
-  <property name="currentIndex">
-   <number>0</number>
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
@@ -36,20 +22,9 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>981</width>
-      <height>421</height>
+      <width>980</width>
+      <height>420</height>
      </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QGroupBox {
-  border: 1px solid gray;
-  margin-top: 10px;
-  padding: 10px 5x 5px 5px;
-}
-QGroupBox::title {
-  top: -10px;
-  left: 10px;
-}</string>
     </property>
     <property name="title">
      <string>注册终端用户列表</string>

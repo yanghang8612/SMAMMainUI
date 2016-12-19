@@ -5,7 +5,6 @@
 #include "widget/receiverinfo_widget.h"
 #include "widget/usermanager_widget.h"
 #include "widget/useronline_widget.h"
-#include "widget/systemmonitor_widget.h"
 #include "widget/mainmonitor_widget.h"
 #include "dialog/add_standardstation_dialog.h"
 #include "dialog/modify_standardstation_dialog.h"
@@ -22,7 +21,9 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, Deploy
 	else if (DeploymentType::BJ_CENTER == type) {
 		initAtBJ();
 	}
-    systemMonitorWidget = new MainMonitorWidget(standardStationList);
+    systemMonitorWidget = new MainMonitorWidget(&standardStationList);
+    currentContentWidget = systemMonitorWidget;
+    container->addWidget(currentContentWidget);
 }
 
 void SMAMTreeWidget::showRightMenuAtBJ(QPoint pos)
@@ -74,8 +75,11 @@ void SMAMTreeWidget::showRightMenuAtXJ(QPoint pos)
 void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 {
 	if (currentContentWidget) {
-		container->removeWidget(currentContentWidget);
-        if (currentContentWidget != systemMonitorWidget) {
+        if (currentContentWidget == systemMonitorWidget) {
+            systemMonitorWidget->hide();
+        }
+        else {
+            container->removeWidget(currentContentWidget);
             delete currentContentWidget;
         }
 	}
@@ -102,7 +106,12 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 			break;
 	}
 	if (currentContentWidget) {
-		container->addWidget(currentContentWidget);
+        if (currentContentWidget == systemMonitorWidget) {
+            systemMonitorWidget->show();
+        }
+        else {
+            container->addWidget(currentContentWidget);
+        }
 	}
 	else {
 		container->addWidget(new QWidget);
@@ -118,6 +127,7 @@ void SMAMTreeWidget::showAddNewStandardStationDialog()
 
 void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 {
+    standardStationList << station;
 	tree->currentItem()->addChild(new StandardTreeWidgetItem(tree->currentItem(), station));
 
 	QDomElement newStandardStation = root.createElement("STATION");
@@ -207,12 +217,13 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 void SMAMTreeWidget::deleteStandardStation()
 {
 	StandardStation* station = (StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
-	QString content = "确认删除基准站 " + station->getStationName() + " 吗？";
+    QString content = tr("确认删除基准站 ") + station->getStationName() + tr(" 吗？");
 	int ret = QMessageBox::warning(tree,
 								   tr("提示"),
-								   content,
+                                   content,
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
+        standardStationList.removeAt(tree->currentIndex().row());
 		root.namedItem("STATIONS").removeChild(root.namedItem("STATIONS").childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
@@ -228,6 +239,7 @@ void SMAMTreeWidget::showAddNewReceiverDialog()
 
 void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 {
+    ((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->addReceiver(receiver);
 	tree->currentItem()->addChild(new ReceiverTreeWidgetItem(tree->currentItem(), receiver));
 
 	QDomElement newReceiver = root.createElement("RECEIVER");
@@ -299,13 +311,14 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 void SMAMTreeWidget::deleteReceiver()
 {
 	Receiver* receiver = (Receiver*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
-	QString content = "确认删除接受机 " + receiver->getReceiverName() + " 吗？";
+    QString content = tr("确认删除接受机 ") + receiver->getReceiverName() + tr(" 吗？");
 	int ret = QMessageBox::warning(tree,
 								   tr("提示"),
-								   content,
+                                   content,
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
 		int parentNodeIndex = stationTreeRoot->indexOfChild(tree->currentItem()->parent());
+        standardStationList.at(parentNodeIndex)->removerReceiver(tree->currentIndex().row());
 		QDomNode parentNode = root.namedItem("STATIONS").childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
 		parentNode.removeChild(parentNode.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
@@ -408,6 +421,10 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
 
 void SMAMTreeWidget::writeConfigFile()
 {
+    ((MainMonitorWidget*) systemMonitorWidget)->updateView();
+
+    addWidgetToContainer(tree->currentItem());
+
 	QFile file(STANDARD_CONFIGFILE_PATH);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return;

@@ -9,10 +9,10 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
 	ui(new Ui::SMAMMainWindow)
 {
 	ui->setupUi(this);
+    ui->systemManagerAction->setEnabled(true);
     this->setFixedSize(1440, 960);
 
 	menu = new XJMenu(this);
-
 
     SystemManagerWidget* managerWidget = new SystemManagerWidget(this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));

@@ -18,6 +18,9 @@ public:
 	virtual QRectF boundingRect() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
+    quint8 getStatus() const;
+    void setStatus(const quint8 &value);
+
 private slots:
     void doSomething();
     void finishAnimation();
@@ -35,6 +38,8 @@ private:
     QQueue<QPointF> dataList;
     //QQueue<QGraphicsItem*> dataList;
     QTimer* timer;
+
+    quint8 status;
 };
 
 #endif // EDGE_H

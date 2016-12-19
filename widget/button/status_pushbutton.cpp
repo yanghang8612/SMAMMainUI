@@ -6,19 +6,19 @@ StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidg
     QPushButton(icon, text, parent)
 {
 	this->setStyleSheet("QPushButton{border-style:none}");
-    statusFrame = new SoftwareStatusFrame(0);
-	statusFrame->setWindowFlags(Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
-	statusFrame->setFocusPolicy(Qt::NoFocus);
+    statusFrame = new SoftwareStatusFrame(parent);
+    statusFrame->hide();
+    statusFrame->setStyleSheet(QString("QFrame{border: 1px solid gray;background-color: white;}QPushButton {border-style: none;font: 12px;}"));
+    //statusFrame->setWindowFlags(Qt::Popup);
 }
 
 void StatusPushButton::enterEvent(QEvent*)
 {
-	statusFrame->setGeometry(QCursor::pos().x() + 1, QCursor::pos().y() + 1, 170, 200);
-	statusFrame->show();
+    statusFrame->setGeometry(this->pos().x() + 150, this->pos().y() + 30, 170, 200);
+    statusFrame->show();
 }
 
 void StatusPushButton::leaveEvent(QEvent*)
 {
     statusFrame->hide();
 }
-

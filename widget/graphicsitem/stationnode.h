@@ -1,4 +1,4 @@
-#ifndef STATIONNODE_H
+﻿#ifndef STATIONNODE_H
 #define STATIONNODE_H
 
 #include "basenode.h"
@@ -7,7 +7,7 @@
 class StationNode : public BaseNode
 {
 public:
-	StationNode(StandardStation* station);
+    StationNode(StandardStation* station, quint8 length);
 
 	virtual QRectF boundingRect() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);

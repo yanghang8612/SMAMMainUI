@@ -1,4 +1,4 @@
-#ifndef STANDARDSTATION_H
+﻿#ifndef STANDARDSTATION_H
 #define STANDARDSTATION_H
 
 #include "base_station.h"
@@ -19,12 +19,12 @@ public:
 	void setServiceThreadCount(const QString& value);
 
 	void addReceiver(Receiver* receiver);
-
-	QList<Receiver*> getReceivers() const;
+    void removerReceiver(quint8 index);
+    QList<Receiver *> getReceivers() const;
 
 private:
-	CasterMode::Value mode;
-	quint8 serviceThreadCount;
+    CasterMode::Value mode;
+    quint8 serviceThreadCount;
 	QList<Receiver*> receivers;
 };
 

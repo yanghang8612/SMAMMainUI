@@ -46,7 +46,7 @@ public:
 	QList<StandardStation*> standardStationList;
 
 private:
-	QTreeWidget* tree;
+    QTreeWidget* tree;
 	QTreeWidgetItem* stationTreeRoot;
 	QTreeWidgetItem* userTreeRoot;
 

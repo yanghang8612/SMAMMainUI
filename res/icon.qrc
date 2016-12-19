@@ -33,5 +33,8 @@
         <file alias="station_red">icon/station_red.png</file>
         <file alias="manager">icon/toolbar_manager.png</file>
         <file alias="monitor">icon/toolbar_monitor.png</file>
+        <file alias="hard_drive">icon/hard_drive.png</file>
+        <file alias="saved_file">icon/saved_file.png</file>
+        <file alias="users">icon/users.png</file>
     </qresource>
 </RCC>

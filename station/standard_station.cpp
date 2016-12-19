@@ -1,4 +1,4 @@
-#include "standard_station.h"
+﻿#include "standard_station.h"
 
 StandardStation::StandardStation()
 {
@@ -42,12 +42,18 @@ void StandardStation::setServiceThreadCount(const QString& value)
 
 void StandardStation::addReceiver(Receiver* receiver)
 {
-	receivers << receiver;
+    receivers << receiver;
 }
-QList<Receiver*> StandardStation::getReceivers() const
+
+void StandardStation::removerReceiver(quint8 index)
+{
+    receivers.removeAt(index);
+}
+QList<Receiver *> StandardStation::getReceivers() const
 {
     return receivers;
 }
+
 
 
 

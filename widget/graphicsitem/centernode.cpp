@@ -2,19 +2,20 @@
 
 #include "centernode.h"
 
-CenterNode::CenterNode()
+CenterNode::CenterNode(quint8 length) :
+    BaseNode(length)
 {
 
 }
 
 QRectF CenterNode::boundingRect() const
 {
-	return QRectF(-50, -50, 100, 100);
+    return QRectF(- length / 2, - length / 2, length + 20, length + 20);
 }
 
 void CenterNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-	painter->drawImage(QRectF(-50, -50, 100, 100), QImage(":/centre_normal"));
-    painter->setFont(QFont("Helvetica", 18, QFont::Bold));
-    painter->drawText(-50, 60, 100, 20, Qt::AlignCenter, tr("北京中心"));
+    painter->drawImage(QRectF(-length / 2, - length / 2, length, length), QImage(":/centre_normal"));
+    painter->setFont(QFont("Helvetica", 10, QFont::Bold));
+    painter->drawText(-length / 2 - 10, length / 2 + 2, length + 20, 15, Qt::AlignCenter, tr("新疆中心"));
 }
