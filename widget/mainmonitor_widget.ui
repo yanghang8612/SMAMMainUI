@@ -13,6 +13,9 @@
   <property name="tabPosition">
    <enum>QTabWidget::South</enum>
   </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
     <string>系统监控</string>
@@ -27,11 +30,6 @@
      </rect>
     </property>
    </widget>
-  </widget>
-  <widget class="QWidget" name="tab_2">
-   <attribute name="title">
-    <string>软件监控</string>
-   </attribute>
   </widget>
  </widget>
  <resources/>

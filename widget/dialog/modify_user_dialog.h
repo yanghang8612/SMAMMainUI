@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "user/base_user.h"
+#include "bean/user/base_user.h"
 
 namespace Ui {
 	class ModifyUserDialog;

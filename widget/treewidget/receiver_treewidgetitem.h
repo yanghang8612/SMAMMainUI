@@ -3,7 +3,7 @@
 
 #include <QTreeWidgetItem>
 
-#include "station/receiver.h"
+#include "bean/station/receiver.h"
 
 class ReceiverTreeWidgetItem : public QTreeWidgetItem
 {

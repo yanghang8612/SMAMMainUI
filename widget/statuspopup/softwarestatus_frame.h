@@ -15,6 +15,9 @@ public:
 	explicit SoftwareStatusFrame(QWidget *parent = 0);
 	~SoftwareStatusFrame();
 
+signals:
+    void isEveryComponentNormal(bool);
+
 private:
 	Ui::SoftwareStatusFrame *ui;
 };

@@ -19,6 +19,16 @@ int main(int argc, char *argv[])
 
     QApplication::setStyle("Cleanlooks");
 
+    QList<QString> list;
+
+    list << "123";
+
+    QList<QString>& otherList = list;
+
+    list << "321";
+
+    qDebug() << otherList.size();
+
     qDebug() << QSqlDatabase::drivers();
 
     SMAMMainWindow w;

@@ -4,7 +4,7 @@
 #include <QTabWidget>
 
 #include "db/database_access.h"
-#include "user/base_user.h"
+#include "bean/user/base_user.h"
 
 namespace Ui {
 	class UserManagerWidget;

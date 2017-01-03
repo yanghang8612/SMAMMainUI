@@ -19,9 +19,9 @@
         <file alias="info_warning">icon/info_warning.png</file>
         <file alias="status_green">icon/status_green.png</file>
         <file alias="status_red">icon/status_red.png</file>
-        <file alias="centre_green">icon/centre_green.png</file>
-        <file alias="centre_normal">icon/centre_normal.png</file>
-        <file alias="centre_red">icon/centre_red.png</file>
+        <file alias="center_green">icon/center_green.png</file>
+        <file alias="center_normal">icon/center_normal.png</file>
+        <file alias="center_red">icon/center_red.png</file>
         <file alias="receiver_green">icon/receiver_green.png</file>
         <file alias="receiver_normal">icon/receiver_normal.png</file>
         <file alias="receiver_red">icon/receiver_red.png</file>
@@ -36,5 +36,7 @@
         <file alias="hard_drive">icon/hard_drive.png</file>
         <file alias="saved_file">icon/saved_file.png</file>
         <file alias="users">icon/users.png</file>
+        <file alias="center_root">icon/center_root.png</file>
+        <file alias="other_center">icon/other_center.png</file>
     </qresource>
 </RCC>

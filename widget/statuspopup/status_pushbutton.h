@@ -3,7 +3,7 @@
 
 #include <QPushButton>
 
-#include "widget/softwarestatus_frame.h"
+#include "softwarestatus_frame.h"
 
 
 class StatusPushButton : public QPushButton

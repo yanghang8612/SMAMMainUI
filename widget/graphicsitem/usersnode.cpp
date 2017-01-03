@@ -10,7 +10,7 @@ UsersNode::UsersNode(quint8 length) :
 
 QRectF UsersNode::boundingRect() const
 {
-    return QRectF(-length / 2, -length / 2, length + 20, length + 20);
+    return QRectF(-length / 2, -length / 2, length, length);
 }
 
 void UsersNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)

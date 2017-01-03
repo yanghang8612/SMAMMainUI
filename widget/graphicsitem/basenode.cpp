@@ -2,7 +2,7 @@
 #include "edge.h"
 
 BaseNode::BaseNode(quint8 length) :
-    length(length)
+    length(length), status(0)
 {
 
 }

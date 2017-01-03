@@ -3,7 +3,8 @@
 
 #include <QTabWidget>
 
-#include "station/standard_station.h"
+#include "bean/station/standard_station.h"
+#include "bean/center/other_center.h"
 
 namespace Ui {
 class MainMonitorWidget;
@@ -14,7 +15,7 @@ class MainMonitorWidget : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit MainMonitorWidget(QList<StandardStation*>* standardStationList, QWidget *parent = 0);
+    explicit MainMonitorWidget(const QList<StandardStation*>& standardStationList, const QList<OtherCenter*>& otherCenterList, QWidget* parent = 0);
     ~MainMonitorWidget();
 
     void updateView();
@@ -26,8 +27,9 @@ signals:
     void closeMessage();
 
 private:
-    Ui::MainMonitorWidget *ui;
-    QList<StandardStation*>* standardStationList;
+    Ui::MainMonitorWidget* ui;
+    const QList<StandardStation*>& standardStationList;
+    const QList<OtherCenter*>& otherCenterList;
     QGraphicsScene* scene;
 };
 

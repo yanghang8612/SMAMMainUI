@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "station/receiver.h"
+#include "bean/station/receiver.h"
 
 namespace Ui {
 	class ModifyReceiverDialog;

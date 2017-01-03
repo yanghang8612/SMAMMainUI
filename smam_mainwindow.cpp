@@ -2,7 +2,7 @@
 #include "ui_smam_mainwindow.h"
 #include "menu/bj_menu.h"
 #include "menu/xj_menu.h"
-#include "mid/systemmanager_widget.h"
+#include "widget/mid/systemmanager_widget.h"
 
 SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,7 +12,7 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
     ui->systemManagerAction->setEnabled(true);
     this->setFixedSize(1440, 960);
 
-	menu = new XJMenu(this);
+    menu = new XJMenu(this);
 
     SystemManagerWidget* managerWidget = new SystemManagerWidget(this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));

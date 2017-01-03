@@ -11,6 +11,7 @@
 #include "igs_treewidgetitem.h"
 #include "igmas_treewidgetitem.h"
 #include "receiver_treewidgetitem.h"
+#include "center_treewidgetitem.h"
 
 class SMAMTreeWidget : public QObject
 {
@@ -42,20 +43,23 @@ private slots:
 
 	void deleteReceiver();
 
-public:
-	QList<StandardStation*> standardStationList;
-
 private:
+    QList<StandardStation*> standardStationList;
+    QList<OtherCenter*> otherCenterList;
+
     QTreeWidget* tree;
 	QTreeWidgetItem* stationTreeRoot;
 	QTreeWidgetItem* userTreeRoot;
+    QTreeWidgetItem* centerTreeRoot;
 
 	QVBoxLayout* container;
 	DeploymentType::Value type;
 	QWidget* currentContentWidget;
     QWidget* systemMonitorWidget;
 
-	QDomDocument root;
+    QDomDocument root;
+    QDomNode stationRoot;
+    QDomNode centerRoot;
 
 	void initAtBJ();
 	void initAtXJ();

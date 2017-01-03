@@ -3,7 +3,7 @@
 
 #include <QTabWidget>
 
-#include "station/receiver.h"
+#include "bean/station/receiver.h"
 
 namespace Ui {
 	class ReceiverInfoWidget;

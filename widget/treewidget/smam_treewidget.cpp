@@ -6,10 +6,10 @@
 #include "widget/usermanager_widget.h"
 #include "widget/useronline_widget.h"
 #include "widget/mainmonitor_widget.h"
-#include "dialog/add_standardstation_dialog.h"
-#include "dialog/modify_standardstation_dialog.h"
-#include "dialog/add_receiver_dialog.h"
-#include "dialog/modify_receiver_dialog.h"
+#include "widget/dialog/add_standardstation_dialog.h"
+#include "widget/dialog/modify_standardstation_dialog.h"
+#include "widget/dialog/add_receiver_dialog.h"
+#include "widget/dialog/modify_receiver_dialog.h"
 
 SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type) :
 	tree(tree), container(container), type(type),
@@ -21,7 +21,7 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, Deploy
 	else if (DeploymentType::BJ_CENTER == type) {
 		initAtBJ();
 	}
-    systemMonitorWidget = new MainMonitorWidget(&standardStationList);
+    systemMonitorWidget = new MainMonitorWidget(standardStationList, otherCenterList);
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
 }
@@ -163,7 +163,7 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 	QDomElement receiverList = root.createElement("RECEIVERS");
 	newStandardStation.appendChild(receiverList);
 
-	root.namedItem("STATIONS").appendChild(newStandardStation);
+    stationRoot.appendChild(newStandardStation);
 
 	writeConfigFile();
 }
@@ -181,7 +181,7 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 	addWidgetToContainer(tree->currentItem());
 
 	int index = tree->currentIndex().row();
-	QDomNode standardStationNode = root.namedItem("STATIONS").childNodes().at(index);
+    QDomNode standardStationNode = stationRoot.childNodes().at(index);
 
 	QDomElement stationName = root.createElement("STATIONNAME");
 	stationName.appendChild(root.createTextNode(station->getStationName()));
@@ -224,7 +224,7 @@ void SMAMTreeWidget::deleteStandardStation()
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
         standardStationList.removeAt(tree->currentIndex().row());
-		root.namedItem("STATIONS").removeChild(root.namedItem("STATIONS").childNodes().at(tree->currentIndex().row()));
+        stationRoot.removeChild(stationRoot.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
 	}
@@ -264,7 +264,7 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 	receiverLatitude.appendChild(root.createTextNode(QString::number(receiver->getLatitude())));
 	newReceiver.appendChild(receiverLatitude);
 
-	root.namedItem("STATIONS").childNodes().at(tree->currentIndex().row()).namedItem("RECEIVERS").appendChild(newReceiver);
+    stationRoot.childNodes().at(tree->currentIndex().row()).namedItem("RECEIVERS").appendChild(newReceiver);
 
 	writeConfigFile();
 }
@@ -283,7 +283,7 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 
 	int parentNodeIndex = stationTreeRoot->indexOfChild(tree->currentItem()->parent());
 	int nodeIndex = tree->currentIndex().row();
-	QDomNode receiverNode = root.namedItem("STATIONS").childNodes().at(parentNodeIndex).namedItem("RECEIVERS").childNodes().at(nodeIndex);
+    QDomNode receiverNode = stationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS").childNodes().at(nodeIndex);
 
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
@@ -319,7 +319,7 @@ void SMAMTreeWidget::deleteReceiver()
 	if (ret == QMessageBox::Ok) {
 		int parentNodeIndex = stationTreeRoot->indexOfChild(tree->currentItem()->parent());
         standardStationList.at(parentNodeIndex)->removerReceiver(tree->currentIndex().row());
-		QDomNode parentNode = root.namedItem("STATIONS").childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
+        QDomNode parentNode = stationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
 		parentNode.removeChild(parentNode.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
@@ -340,10 +340,11 @@ void SMAMTreeWidget::initAtXJ()
 
 	//Read info from config xml file
 	root = getRootFromXMLFile(STANDARD_CONFIGFILE_PATH);
-	QDomNode stationNode = root.namedItem("STATIONS").firstChild();
+    stationRoot = root.namedItem("BDLSS").namedItem("STATIONS");
+    QDomNode stationNode = stationRoot.firstChild();
 	while (!stationNode.isNull()) {
 		if (stationNode.isElement()) {
-			StandardStation* station = new StandardStation;
+            StandardStation* station = new StandardStation();
 			station->setStationName(stationNode.namedItem("STATIONNAME").toElement().text());
 			station->setIpAddress(stationNode.namedItem("IPADDRESS").toElement().text());
 			station->setPort(stationNode.namedItem("IPPORT").toElement().text());
@@ -359,7 +360,7 @@ void SMAMTreeWidget::initAtXJ()
 			QDomNode receiverNode = stationNode.namedItem("RECEIVERS").firstChild();
 			while (!receiverNode.isNull()) {
 				if (receiverNode.isElement()) {
-					Receiver* receiver = new Receiver;
+                    Receiver* receiver = new Receiver();
 					receiver->setReceiverName(receiverNode.namedItem("RECEIVERNAME").toElement().text());
 					receiver->setIpAddress(receiverNode.namedItem("IPADDRESS").toElement().text());
 					receiver->setPort(receiverNode.namedItem("IPPORT").toElement().text());
@@ -374,14 +375,34 @@ void SMAMTreeWidget::initAtXJ()
 			}
 		}
 		stationNode = stationNode.nextSibling();
-	}
+    }
+
+    centerTreeRoot = new QTreeWidgetItem(20);
+    centerTreeRoot->setText(0, tr("其他中心管理"));
+    centerTreeRoot->setIcon(0, QIcon(":/center_root"));
+
+    centerRoot = root.namedItem("BDLSS").namedItem("CENTERS");
+    QDomNode centerNode = centerRoot.firstChild();
+    while (!centerNode.isNull()) {
+        if (centerNode.isElement()) {
+            OtherCenter* center = new OtherCenter();
+            center->setCenterName(centerNode.namedItem("CENTERNAME").toElement().text());
+            center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
+            center->setPort(centerNode.namedItem("IPPORT").toElement().text());
+            center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
+
+            QTreeWidgetItem* centerTreeNode = new CenterTreeWidgetItem(centerTreeRoot, center);
+            otherCenterList << center;
+        }
+        centerNode = centerNode.nextSibling();
+    }
 
 	//Create user root of QTreeWidget
 	userTreeRoot = new QTreeWidgetItem(10);
 	userTreeRoot->setText(0, tr("终端用户"));
 	userTreeRoot->setIcon(0, QIcon(":/user_root"));
 
-	QTreeWidgetItem* userManager = new QTreeWidgetItem(userTreeRoot, 11);
+    QTreeWidgetItem* userManager = new QTreeWidgetItem(userTreeRoot, 11);
 	userManager->setText(0, tr("用户管理"));
 	userManager->setIcon(0, QIcon(":/user_manager"));
 
@@ -392,9 +413,11 @@ void SMAMTreeWidget::initAtXJ()
 	tree->setColumnCount(1);
 	tree->addTopLevelItem(stationTreeRoot);
 	tree->addTopLevelItem(userTreeRoot);
+    tree->addTopLevelItem(centerTreeRoot);
 	tree->setContextMenuPolicy(Qt::CustomContextMenu);
 	stationTreeRoot->setExpanded(true);
 	userTreeRoot->setExpanded(true);
+    centerTreeRoot->setExpanded(true);
 
 	connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenuAtXJ(QPoint)));
 	connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(addWidgetToContainer(QTreeWidgetItem*)));
@@ -416,7 +439,7 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
 		configFile.close();
 	}
 	configFile.close();
-	return doc;
+    return doc;
 }
 
 void SMAMTreeWidget::writeConfigFile()

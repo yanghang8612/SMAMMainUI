@@ -6,7 +6,7 @@
 
 #include "utilies/cpumem_info.h"
 #include "widget/treewidget/smam_treewidget.h"
-#include "widget/button/status_pushbutton.h"
+#include "widget/statuspopup/status_pushbutton.h"
 
 namespace Ui {
 	class SystemManagerWidget;

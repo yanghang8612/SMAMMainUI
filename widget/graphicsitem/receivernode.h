@@ -4,7 +4,7 @@
 #include <QTimer>
 
 #include "basenode.h"
-#include "station/receiver.h"
+#include "bean/station/receiver.h"
 
 class ReceiverNode : public QObject, public BaseNode
 {
@@ -22,7 +22,7 @@ private slots:
 private:
     Receiver* receiver;
     QTimer* timer;
-    QString receiverName;
+    QString formattedReceiverName;
 };
 
 #endif // RECEIVERNODE_H

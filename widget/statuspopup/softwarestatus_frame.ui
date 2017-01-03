@@ -38,17 +38,17 @@ QPushButton {
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="mainFrameworkLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
         <property name="text">
-         <string>主框架部件状态</string>
+         <string>主框架部件</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="dataCollectAndBroadcastLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
@@ -58,7 +58,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="dataDisposeLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
@@ -68,7 +68,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="dataStorageLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
@@ -78,7 +78,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_5">
+       <widget class="QPushButton" name="userManagerLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
@@ -88,7 +88,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_6">
+       <widget class="QPushButton" name="systemManagerLabel">
         <property name="layoutDirection">
          <enum>Qt::RightToLeft</enum>
         </property>
@@ -102,7 +102,7 @@ QPushButton {
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QPushButton" name="pushButton_7">
+       <widget class="QPushButton" name="mainFrameworkStatus">
         <property name="text">
          <string/>
         </property>
@@ -113,7 +113,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_8">
+       <widget class="QPushButton" name="dataCollectAndBroadcastStatus">
         <property name="text">
          <string/>
         </property>
@@ -124,7 +124,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_9">
+       <widget class="QPushButton" name="dataDisposeStatus">
         <property name="text">
          <string/>
         </property>
@@ -135,7 +135,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_10">
+       <widget class="QPushButton" name="dataStorageStatus">
         <property name="text">
          <string/>
         </property>
@@ -146,7 +146,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_11">
+       <widget class="QPushButton" name="userManagerStatus">
         <property name="text">
          <string/>
         </property>
@@ -157,7 +157,7 @@ QPushButton {
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_12">
+       <widget class="QPushButton" name="systemManagerStatus">
         <property name="text">
          <string/>
         </property>

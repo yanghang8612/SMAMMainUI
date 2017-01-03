@@ -1,6 +1,4 @@
-﻿#include <QDebug>
-
-#include "status_pushbutton.h"
+﻿#include "status_pushbutton.h"
 
 StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidget* parent) :
     QPushButton(icon, text, parent)

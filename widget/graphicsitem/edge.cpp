@@ -83,7 +83,7 @@ quint8 Edge::getStatus() const
     return status;
 }
 
-void Edge::setStatus(const quint8 &value)
+void Edge::setStatus(const quint8& value)
 {
     status = value;
     prepareGeometryChange();
@@ -129,7 +129,7 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
         QPointF currentData = dataList.dequeue();
         painter->drawEllipse(currentData, 4, 4);
         currentData += dataFlowOffset;
-        if (currentData.x() >= destPoint.x()) {
+        if (QLineF(sourcePoint, currentData).length() >= QLineF(sourcePoint, destPoint).length()) {
             destNode->transformData();
             continue;
         }

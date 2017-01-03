@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "station/standard_station.h"
+#include "bean/station/standard_station.h"
 
 namespace Ui {
 	class AddStandardStationDialog;

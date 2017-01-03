@@ -3,13 +3,13 @@
 
 #include <QTreeWidgetItem>
 
-#include "station/igmas_station.h"
+#include "bean/station/igmas_station.h"
 
 class IGMASTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	IGMASTreeWidgetItem(IGMASStation* station, QTreeWidgetItem* parent);
-	~IGMASTreeWidgetItem();
+    IGMASTreeWidgetItem(IGMASStation* station, QTreeWidgetItem* parent);
+    ~IGMASTreeWidgetItem();
 
 private:
 	IGMASStation* station;

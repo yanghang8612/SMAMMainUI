@@ -3,7 +3,7 @@
 
 #include <QTreeWidgetItem>
 
-#include "station/standard_station.h"
+#include "bean/station/standard_station.h"
 
 class StandardTreeWidgetItem : public QTreeWidgetItem
 {

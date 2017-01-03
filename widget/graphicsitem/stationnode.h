@@ -2,7 +2,7 @@
 #define STATIONNODE_H
 
 #include "basenode.h"
-#include "station/standard_station.h"
+#include "bean/station/standard_station.h"
 
 class StationNode : public BaseNode
 {

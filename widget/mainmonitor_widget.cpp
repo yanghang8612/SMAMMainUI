@@ -11,9 +11,9 @@
 #include "graphicsitem/usersnode.h"
 #include "graphicsitem/edge.h"
 
-MainMonitorWidget::MainMonitorWidget(QList<StandardStation*>* standardStationList, QWidget *parent) :
+MainMonitorWidget::MainMonitorWidget(const QList<StandardStation*>& standardStationList, const QList<OtherCenter*>& otherCenterList, QWidget* parent) :
     QTabWidget(parent),
-    ui(new Ui::MainMonitorWidget), standardStationList(standardStationList)
+    ui(new Ui::MainMonitorWidget), standardStationList(standardStationList), otherCenterList(otherCenterList)
 {
     ui->setupUi(this);
 
@@ -39,12 +39,12 @@ void MainMonitorWidget::updateView()
 {
     scene->clear();
 
-    CenterNode* centerNode = new CenterNode(60);
+    CenterNode* centerNode = new CenterNode(60, tr("新疆中心"));
     centerNode->setPos(200, 0);
     scene->addItem(centerNode);
 
-    UsersNode* usersNode = new UsersNode(60);
-    usersNode->setPos(400, 0);
+    UsersNode* usersNode = new UsersNode(50);
+    usersNode->setPos(200, -150);
     scene->addItem(usersNode);
     scene->addItem(new Edge(centerNode, usersNode));
 
@@ -54,11 +54,11 @@ void MainMonitorWidget::updateView()
     scene->addItem(new Edge(centerNode, fileNode));
 
     HardDriveNode* hardDriveNode = new HardDriveNode(40);
-    hardDriveNode->setPos(400, 150);
+    hardDriveNode->setPos(300, 150);
     scene->addItem(hardDriveNode);
     scene->addItem(new Edge(fileNode, hardDriveNode));
 
-    int stationCount = standardStationList->size();
+    int stationCount = standardStationList.size();
     if (0 == stationCount) {
         return;
     }
@@ -68,14 +68,14 @@ void MainMonitorWidget::updateView()
     qreal receiverLength = 0;
 
     for (int i = 0; i < stationCount; i++) {
-        int receiverCount = standardStationList->at(i)->getReceivers().size();
+        int receiverCount = standardStationList.at(i)->getReceivers().size();
         maxReceiverCount = (receiverCount > maxReceiverCount) ? receiverCount : maxReceiverCount;
     }
     receiverLength = stationLength / maxReceiverCount;
 
     QPointF topStationPoint(-100, - stationLength / 2 * (stationCount - 1));
     for (int i = 0; i < stationCount; i++) {
-        StandardStation* station = standardStationList->at(i);
+        StandardStation* station = standardStationList.at(i);
         StationNode* stationNode = new StationNode(station, stationLength * 0.5);
         stationNode->setPos(topStationPoint + QPointF(0, stationLength * i));
         stationNode->setStatus(1);
@@ -100,7 +100,7 @@ void MainMonitorWidget::updateView()
     }
 }
 
-void MainMonitorWidget::closeEvent(QCloseEvent *closeEvent)
+void MainMonitorWidget::closeEvent(QCloseEvent* closeEvent)
 {
     closeEvent->ignore();
     emit closeMessage();

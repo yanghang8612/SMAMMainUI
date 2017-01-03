@@ -3,13 +3,13 @@
 
 #include <QTreeWidgetItem>
 
-#include "station/igs_station.h"
+#include "bean/station/igs_station.h"
 
 class IGSTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	IGSTreeWidgetItem(IGSSTation* station, QTreeWidgetItem* parent);
-	~IGSTreeWidgetItem();
+    IGSTreeWidgetItem(IGSSTation* station, QTreeWidgetItem* parent);
+    ~IGSTreeWidgetItem();
 
 private:
 	IGSSTation* station;
