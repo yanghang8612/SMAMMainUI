@@ -14,7 +14,7 @@ class ModifyReceiverDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit ModifyReceiverDialog(QWidget *parent = 0, Receiver* receiver = 0);
+    explicit ModifyReceiverDialog(Receiver* receiver, QWidget *parent = 0);
 	~ModifyReceiverDialog();
 
 signals:

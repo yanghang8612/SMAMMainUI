@@ -1,7 +1,7 @@
 #include "center_treewidgetitem.h"
 
 CenterTreeWidgetItem::CenterTreeWidgetItem(QTreeWidgetItem* parent, OtherCenter* center) :
-    QTreeWidgetItem(parent, 21),
+    QTreeWidgetItem(parent, 11),
     parent(parent), center(center)
 {
     this->setText(0, center->getCenterName());

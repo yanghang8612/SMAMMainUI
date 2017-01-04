@@ -4,7 +4,7 @@
 
 AddStandardStationDialog::AddStandardStationDialog(QWidget *parent) :
 	QDialog(parent),
-    ui(new Ui::AddStandardStationDialog), inputValidByte(0)
+    ui(new Ui::AddStandardStationDialog)
 {
 	ui->setupUi(this);
     setWindowTitle(tr("添加基准站"));

@@ -16,6 +16,7 @@ class StationInfoWidget : public QTabWidget
 public:
 	explicit StationInfoWidget(QWidget *parent = 0);
 	~StationInfoWidget();
+
 	void setStation(StandardStation* station);
 
 private:

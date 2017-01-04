@@ -2,7 +2,7 @@
 #include "ui_modify_receiver_dialog.h"
 #include "utilies/general_functions.h"
 
-ModifyReceiverDialog::ModifyReceiverDialog(QWidget *parent, Receiver* receiver) :
+ModifyReceiverDialog::ModifyReceiverDialog(Receiver* receiver, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::ModifyReceiverDialog),
 	receiver(receiver)

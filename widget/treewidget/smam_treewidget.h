@@ -43,6 +43,14 @@ private slots:
 
 	void deleteReceiver();
 
+    void showAddNewCenterDialog();
+    void addNewCenter(OtherCenter* center);
+
+    void showModifyCenterDialog();
+    void modifyCenter(OtherCenter* center);
+
+    void deleteCenter();
+
 private:
     QList<StandardStation*> standardStationList;
     QList<OtherCenter*> otherCenterList;

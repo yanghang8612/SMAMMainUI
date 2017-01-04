@@ -16,6 +16,7 @@ class ReceiverInfoWidget : public QTabWidget
 public:
 	explicit ReceiverInfoWidget(QWidget *parent = 0);
 	~ReceiverInfoWidget();
+
 	void setReceiver(Receiver* receiver);
 
 private:

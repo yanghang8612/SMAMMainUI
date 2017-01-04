@@ -21,8 +21,8 @@ public:
 protected:
     QList<Edge*> edgeFromNodeList;
     QList<Edge*> edgeToNodeList;
-    quint8 status;
     quint8 length;
+    quint8 status;
 };
 
 #endif // BASENODE_H

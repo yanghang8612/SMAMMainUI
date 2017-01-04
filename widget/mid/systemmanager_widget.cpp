@@ -26,10 +26,8 @@ SystemManagerWidget::SystemManagerWidget(QWidget *parent) :
 
 	treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer, DeploymentType::XJ_CENTER);
 
-	softwareStatus = new StatusPushButton(QIcon(":/status_red"), tr("软件运行状态"), this);
-	otherCentreStatus = new StatusPushButton(QIcon(":/status_green"), tr("其他中心状态"), this);
-	ui->statusContainer->addWidget(softwareStatus);
-	ui->statusContainer->addWidget(otherCentreStatus);
+    softwareStatus = new StatusPushButton(QIcon(":/status_red"), tr("软件运行状态"), this);
+    ui->statusContainer->addWidget(softwareStatus);
 }
 
 SystemManagerWidget::~SystemManagerWidget()

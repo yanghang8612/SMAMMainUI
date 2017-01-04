@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui xml sql
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,7 +19,6 @@ SOURCES += main.cpp \
     menu/base_menu.cpp \
     utilies/cpumem_info.cpp \
     utilies/general_functions.cpp \
-    db/database_access.cpp \
     bean/center/base_center.cpp \
     bean/center/main_center.cpp \
     bean/center/other_center.cpp \
@@ -28,19 +27,16 @@ SOURCES += main.cpp \
     bean/station/receiver.cpp \
     bean/station/igs_station.cpp \
     bean/station/igmas_station.cpp \
-    bean/user/base_user.cpp \
+    widget/centerinfo_widget.cpp \
     widget/mainmonitor_widget.cpp \
     widget/stationinfo_widget.cpp \
     widget/receiverinfo_widget.cpp \
-    widget/usermanager_widget.cpp \
-    widget/useronline_widget.cpp \
-    widget/dialog/add_standardstation_dialog.cpp \
-    widget/dialog/modify_standardstation_dialog.cpp \
+    widget/dialog/add_center_dialog.cpp \
+    widget/dialog/modify_center_dialog.cpp \
     widget/dialog/add_receiver_dialog.cpp \
     widget/dialog/modify_receiver_dialog.cpp \
-    widget/dialog/add_user_dialog.cpp \
-    widget/dialog/modify_user_dialog.cpp \
-    widget/dialog/view_user_dialog.cpp \
+    widget/dialog/add_standardstation_dialog.cpp \
+    widget/dialog/modify_standardstation_dialog.cpp \
     widget/treewidget/igmas_treewidgetitem.cpp \
     widget/treewidget/igs_treewidgetitem.cpp \
     widget/treewidget/receiver_treewidgetitem.cpp \
@@ -66,7 +62,6 @@ HEADERS  += \
     menu/base_menu.h \
     utilies/cpumem_info.h \
     utilies/general_functions.h \
-    db/database_access.h \
     bean/center/base_center.h \
     bean/center/main_center.h \
     bean/center/other_center.h \
@@ -75,19 +70,16 @@ HEADERS  += \
     bean/station/receiver.h \
     bean/station/igs_station.h \
     bean/station/igmas_station.h \
-    bean/user/base_user.h \
+    widget/centerinfo_widget.h \
     widget/mainmonitor_widget.h \
     widget/stationinfo_widget.h \
     widget/receiverinfo_widget.h \
-    widget/usermanager_widget.h \
-    widget/useronline_widget.h \
-    widget/dialog/add_standardstation_dialog.h \
-    widget/dialog/modify_standardstation_dialog.h \
+    widget/dialog/add_center_dialog.h \
+    widget/dialog/modify_center_dialog.h \
     widget/dialog/add_receiver_dialog.h \
     widget/dialog/modify_receiver_dialog.h \
-    widget/dialog/add_user_dialog.h \
-    widget/dialog/modify_user_dialog.h \
-    widget/dialog/view_user_dialog.h \
+    widget/dialog/add_standardstation_dialog.h \
+    widget/dialog/modify_standardstation_dialog.h \
     widget/treewidget/igmas_treewidgetitem.h \
     widget/treewidget/igs_treewidgetitem.h \
     widget/treewidget/receiver_treewidgetitem.h \
@@ -108,18 +100,16 @@ HEADERS  += \
 
 FORMS    += \
     smam_mainwindow.ui \
+    widget/centerinfo_widget.ui \
     widget/mainmonitor_widget.ui \
     widget/stationinfo_widget.ui \
     widget/receiverinfo_widget.ui \
-    widget/usermanager_widget.ui \
-    widget/useronline_widget.ui \
+    widget/dialog/add_center_dialog.ui \
+    widget/dialog/modify_center_dialog.ui \
     widget/dialog/add_standardstation_dialog.ui \
     widget/dialog/modify_standardstation_dialog.ui \
     widget/dialog/add_receiver_dialog.ui \
     widget/dialog/modify_receiver_dialog.ui \
-    widget/dialog/add_user_dialog.ui \
-    widget/dialog/modify_user_dialog.ui \
-    widget/dialog/view_user_dialog.ui \
     widget/statuspopup/softwarestatus_frame.ui \
     widget/mid/systemmanager_widget.ui
 

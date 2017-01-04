@@ -98,6 +98,22 @@ void MainMonitorWidget::updateView()
             scene->addItem(new Edge(receiverNode, stationNode));
         }
     }
+
+    int centerCount = otherCenterList.size();
+    if (0 == centerCount) {
+        return;
+    }
+    qreal centerLength = 400 / centerCount;
+
+    QPointF topCenterPoint(400, - centerLength / 2 * (centerCount - 1));
+    for (int i = 0; i < centerCount; i++) {
+        OtherCenter* center = otherCenterList.at(i);
+        CenterNode* otherCenterNode = new CenterNode(60, center->getCenterName());
+        otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
+        otherCenterNode->setStatus(1);
+        scene->addItem(otherCenterNode);
+        scene->addItem(new Edge(centerNode, otherCenterNode));
+    }
 }
 
 void MainMonitorWidget::closeEvent(QCloseEvent* closeEvent)

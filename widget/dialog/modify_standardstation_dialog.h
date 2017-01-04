@@ -14,7 +14,7 @@ class ModifyStandardStationDialog : public QDialog
 	Q_OBJECT
 
 public:
-	explicit ModifyStandardStationDialog(QWidget *parent = 0, StandardStation* station = 0);
+    explicit ModifyStandardStationDialog(StandardStation* station, QWidget *parent = 0);
 	~ModifyStandardStationDialog();
 
 signals:

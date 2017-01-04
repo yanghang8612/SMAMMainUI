@@ -2,7 +2,7 @@
 #include "ui_modify_standardstation_dialog.h"
 #include "utilies/general_functions.h"
 
-ModifyStandardStationDialog::ModifyStandardStationDialog(QWidget *parent, StandardStation* station) :
+ModifyStandardStationDialog::ModifyStandardStationDialog(StandardStation* station, QWidget *parent) :
 	QDialog(parent),
 	ui(new Ui::ModifyStandardStationDialog),
 	station(station)

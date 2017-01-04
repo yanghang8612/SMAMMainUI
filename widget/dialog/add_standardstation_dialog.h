@@ -25,8 +25,7 @@ private slots:
     void on_cancelButton_clicked();
 
 private:
-	Ui::AddStandardStationDialog *ui;
-    quint8 inputValidByte;
+    Ui::AddStandardStationDialog *ui;
 };
 
 #endif // ADD_STANDARDSTATION_DIALOG_H

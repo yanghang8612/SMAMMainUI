@@ -1,15 +1,16 @@
 ﻿#include <QMenu>
 
 #include "smam_treewidget.h"
+#include "widget/centerinfo_widget.h"
+#include "widget/mainmonitor_widget.h"
 #include "widget/stationinfo_widget.h"
 #include "widget/receiverinfo_widget.h"
-#include "widget/usermanager_widget.h"
-#include "widget/useronline_widget.h"
-#include "widget/mainmonitor_widget.h"
-#include "widget/dialog/add_standardstation_dialog.h"
-#include "widget/dialog/modify_standardstation_dialog.h"
+#include "widget/dialog/add_center_dialog.h"
+#include "widget/dialog/modify_center_dialog.h"
 #include "widget/dialog/add_receiver_dialog.h"
 #include "widget/dialog/modify_receiver_dialog.h"
+#include "widget/dialog/add_standardstation_dialog.h"
+#include "widget/dialog/modify_standardstation_dialog.h"
 
 SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type) :
 	tree(tree), container(container), type(type),
@@ -37,38 +38,61 @@ void SMAMTreeWidget::showRightMenuAtXJ(QPoint pos)
 	if (curItem == NULL)
 		return;
 	QMenu* popMenu =new QMenu;
-	if (curItem->type() == 0)
-	{
-	   QAction* addNewStandardStation = new QAction(tr("添加基准站"), this);
-	   connect(addNewStandardStation, SIGNAL(triggered(bool)), this, SLOT(showAddNewStandardStationDialog()));
-	   popMenu->addAction(addNewStandardStation);
-
-	}
-	else if (curItem->type() == 1)
-	{
-	   QAction* addNewReceiver = new QAction(tr("添加接收机"), this);
-	   connect(addNewReceiver, SIGNAL(triggered(bool)), this, SLOT(showAddNewReceiverDialog()));
-	   popMenu->addAction(addNewReceiver);
-	   QAction* modifyStandardStation = new QAction(tr("编辑基准站"), this);
-	   connect(modifyStandardStation, SIGNAL(triggered(bool)), this, SLOT(showModifyStandardStationDialog()));
-	   popMenu->addAction(modifyStandardStation);
-	   QAction* deleteStandardStation = new QAction(tr("删除基准站"), this);
-	   connect(deleteStandardStation, SIGNAL(triggered(bool)), this, SLOT(deleteStandardStation()));
-	   popMenu->addAction(deleteStandardStation);
-	}
-	else if (curItem->type() == 2)
-	{
-	   QAction* startReceiver = new QAction(tr("启动接收机"), this);
-	   popMenu->addAction(startReceiver);
-	   QAction* stopReceiver = new QAction(tr("停止接收机"), this);
-	   popMenu->addAction(stopReceiver);
-	   QAction* modifyReceiver = new QAction(tr("编辑接收机"), this);
-	   connect(modifyReceiver, SIGNAL(triggered(bool)), this, SLOT(showModifyReceiverDialog()));
-	   popMenu->addAction(modifyReceiver);
-	   QAction* deleteReceiver = new QAction(tr("删除接收机"), this);
-	   connect(deleteReceiver, SIGNAL(triggered(bool)), this, SLOT(deleteReceiver()));
-	   popMenu->addAction(deleteReceiver);
-	}
+    switch (curItem->type()) {
+        case 00:
+        {
+            QAction* addNewStandardStation = new QAction(tr("添加基准站"), this);
+            connect(addNewStandardStation, SIGNAL(triggered(bool)), this, SLOT(showAddNewStandardStationDialog()));
+            popMenu->addAction(addNewStandardStation);
+            break;
+        }
+        case 01:
+        {
+            QAction* addNewReceiver = new QAction(tr("添加接收机"), this);
+            connect(addNewReceiver, SIGNAL(triggered(bool)), this, SLOT(showAddNewReceiverDialog()));
+            popMenu->addAction(addNewReceiver);
+            QAction* modifyStandardStation = new QAction(tr("编辑基准站"), this);
+            connect(modifyStandardStation, SIGNAL(triggered(bool)), this, SLOT(showModifyStandardStationDialog()));
+            popMenu->addAction(modifyStandardStation);
+            QAction* deleteStandardStation = new QAction(tr("删除基准站"), this);
+            connect(deleteStandardStation, SIGNAL(triggered(bool)), this, SLOT(deleteStandardStation()));
+            popMenu->addAction(deleteStandardStation);
+            break;
+        }
+        case 02:
+        {
+            QAction* startReceiver = new QAction(tr("启动接收机"), this);
+            popMenu->addAction(startReceiver);
+            QAction* stopReceiver = new QAction(tr("停止接收机"), this);
+            popMenu->addAction(stopReceiver);
+            QAction* modifyReceiver = new QAction(tr("编辑接收机"), this);
+            connect(modifyReceiver, SIGNAL(triggered(bool)), this, SLOT(showModifyReceiverDialog()));
+            popMenu->addAction(modifyReceiver);
+            QAction* deleteReceiver = new QAction(tr("删除接收机"), this);
+            connect(deleteReceiver, SIGNAL(triggered(bool)), this, SLOT(deleteReceiver()));
+            popMenu->addAction(deleteReceiver);
+            break;
+        }
+        case 10:
+        {
+            QAction* addNewCenter = new QAction(tr("添加其他中心"), this);
+            connect(addNewCenter, SIGNAL(triggered(bool)), this, SLOT(showAddNewCenterDialog()));
+            popMenu->addAction(addNewCenter);
+            break;
+        }
+        case 11:
+        {
+            QAction* modifyCenter = new QAction(tr("编辑其他中心"), this);
+            connect(modifyCenter, SIGNAL(triggered(bool)), this, SLOT(showModifyCenterDialog()));
+            popMenu->addAction(modifyCenter);
+            QAction* deleteCenter = new QAction(tr("删除其他中心"), this);
+            connect(deleteCenter, SIGNAL(triggered(bool)), this, SLOT(deleteCenter()));
+            popMenu->addAction(deleteCenter);
+            break;
+        }
+        default:
+            break;
+    }
 	popMenu->exec(QCursor::pos());
 }
 
@@ -85,6 +109,7 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 	}
     switch (item->type()) {
         case 00:
+        case 10:
             currentContentWidget = systemMonitorWidget;
             break;
 		case 01:
@@ -96,11 +121,9 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 			((ReceiverInfoWidget*) currentContentWidget)->setReceiver((Receiver*) item->data(0, Qt::UserRole).value<void*>());
 			break;
 		case 11:
-			currentContentWidget = new UserManagerWidget();
-			break;
-		case 12:
-			currentContentWidget = new UserOnlineWidget();
-			break;
+            currentContentWidget = new CenterInfoWidget();
+            ((CenterInfoWidget*) currentContentWidget)->setCenter((OtherCenter*) item->data(0, Qt::UserRole).value<void*>());
+            break;
 		default:
 			currentContentWidget = 0;
 			break;
@@ -114,7 +137,7 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
         }
 	}
 	else {
-		container->addWidget(new QWidget);
+        container->addWidget(new QWidget());
 	}
 }
 
@@ -170,8 +193,7 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 
 void SMAMTreeWidget::showModifyStandardStationDialog()
 {
-	ModifyStandardStationDialog* dialog = new ModifyStandardStationDialog(tree,
-											  (StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>());
+    ModifyStandardStationDialog* dialog = new ModifyStandardStationDialog((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>(), tree);
 	connect(dialog, SIGNAL(confirmButtonClicked(StandardStation*)), this, SLOT(modifyStandardStation(StandardStation*)));
 	dialog->show();
 }
@@ -271,8 +293,7 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 
 void SMAMTreeWidget::showModifyReceiverDialog()
 {
-	ModifyReceiverDialog* dialog = new ModifyReceiverDialog(tree,
-											  (Receiver*) tree->currentItem()->data(0, Qt::UserRole).value<void*>());
+    ModifyReceiverDialog* dialog = new ModifyReceiverDialog((Receiver*) tree->currentItem()->data(0, Qt::UserRole).value<void*>(), tree);
 	connect(dialog, SIGNAL(confirmButtonClicked(Receiver*)), this, SLOT(modifyReceiver(Receiver*)));
 	dialog->show();
 }
@@ -323,7 +344,91 @@ void SMAMTreeWidget::deleteReceiver()
 		parentNode.removeChild(parentNode.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
-	}
+    }
+}
+
+void SMAMTreeWidget::showAddNewCenterDialog()
+{
+    AddCenterDialog* dialog = new AddCenterDialog(tree);
+    connect(dialog, SIGNAL(confirmButtonClicked(OtherCenter*)), this, SLOT(addNewCenter(OtherCenter*)));
+    dialog->show();
+}
+
+void SMAMTreeWidget::addNewCenter(OtherCenter* center)
+{
+    otherCenterList << center;
+    tree->currentItem()->addChild(new CenterTreeWidgetItem(tree->currentItem(), center));
+
+    QDomElement newCenter = root.createElement("CENTER");
+
+    QDomElement centerName = root.createElement("CENTERNAME");
+    centerName.appendChild(root.createTextNode(center->getCenterName()));
+    newCenter.appendChild(centerName);
+
+    QDomElement centerIP = root.createElement("IPADDRESS");
+    centerIP.appendChild(root.createTextNode(center->getIpAddress()));
+    newCenter.appendChild(centerIP);
+
+    QDomElement centerPort = root.createElement("IPPORT");
+    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
+    newCenter.appendChild(centerPort);
+
+    QDomElement centerDetail = root.createElement("DETAIL");
+    centerDetail.appendChild(root.createTextNode(center->getDetail()));
+    newCenter.appendChild(centerDetail);
+
+    centerRoot.appendChild(newCenter);
+
+    writeConfigFile();
+}
+
+void SMAMTreeWidget::showModifyCenterDialog()
+{
+    ModifyCenterDialog* dialog = new ModifyCenterDialog((OtherCenter*) tree->currentItem()->data(0, Qt::UserRole).value<void*>(), tree);
+    connect(dialog, SIGNAL(confirmButtonClicked(OtherCenter*)), this, SLOT(modifyCenter(OtherCenter*)));
+    dialog->show();
+}
+
+void SMAMTreeWidget::modifyCenter(OtherCenter* center)
+{
+    addWidgetToContainer(tree->currentItem());
+
+    int index = tree->currentIndex().row();
+    QDomNode centerNode = centerRoot.childNodes().at(index);
+
+    QDomElement centerName = root.createElement("CENTERNAME");
+    centerName.appendChild(root.createTextNode(center->getCenterName()));
+    centerNode.replaceChild(centerName, centerNode.namedItem("CENTERNAME"));
+
+    QDomElement centerIP = root.createElement("IPADDRESS");
+    centerIP.appendChild(root.createTextNode(center->getIpAddress()));
+    centerNode.replaceChild(centerIP, centerNode.namedItem("IPADDRESS"));
+
+    QDomElement centerPort = root.createElement("IPPORT");
+    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
+    centerNode.replaceChild(centerPort, centerNode.namedItem("IPPORT"));
+
+    QDomElement centerDetail = root.createElement("DETAIL");
+    centerDetail.appendChild(root.createTextNode(center->getDetail()));
+    centerNode.replaceChild(centerDetail, centerNode.namedItem("DETAIL"));
+
+    writeConfigFile();
+}
+
+void SMAMTreeWidget::deleteCenter()
+{
+    OtherCenter* center = (OtherCenter*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
+    QString content = tr("确认删除其他中心 ") + center->getCenterName() + tr(" 吗？");
+    int ret = QMessageBox::warning(tree,
+                                   tr("提示"),
+                                   content,
+                                   QMessageBox::Cancel | QMessageBox::Ok);
+    if (ret == QMessageBox::Ok) {
+        otherCenterList.removeAt(tree->currentIndex().row());
+        centerRoot.removeChild(centerRoot.childNodes().at(tree->currentIndex().row()));
+        delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
+        writeConfigFile();
+    }
 }
 
 void SMAMTreeWidget::initAtBJ()
@@ -377,7 +482,7 @@ void SMAMTreeWidget::initAtXJ()
 		stationNode = stationNode.nextSibling();
     }
 
-    centerTreeRoot = new QTreeWidgetItem(20);
+    centerTreeRoot = new QTreeWidgetItem(10);
     centerTreeRoot->setText(0, tr("其他中心管理"));
     centerTreeRoot->setIcon(0, QIcon(":/center_root"));
 
@@ -397,26 +502,11 @@ void SMAMTreeWidget::initAtXJ()
         centerNode = centerNode.nextSibling();
     }
 
-	//Create user root of QTreeWidget
-	userTreeRoot = new QTreeWidgetItem(10);
-	userTreeRoot->setText(0, tr("终端用户"));
-	userTreeRoot->setIcon(0, QIcon(":/user_root"));
-
-    QTreeWidgetItem* userManager = new QTreeWidgetItem(userTreeRoot, 11);
-	userManager->setText(0, tr("用户管理"));
-	userManager->setIcon(0, QIcon(":/user_manager"));
-
-	QTreeWidgetItem* userOnline = new QTreeWidgetItem(userTreeRoot, 12);
-	userOnline->setText(0 ,tr("在线用户"));
-	userOnline->setIcon(0, QIcon(":/user_online"));
-
 	tree->setColumnCount(1);
-	tree->addTopLevelItem(stationTreeRoot);
-	tree->addTopLevelItem(userTreeRoot);
+    tree->addTopLevelItem(stationTreeRoot);
     tree->addTopLevelItem(centerTreeRoot);
 	tree->setContextMenuPolicy(Qt::CustomContextMenu);
-	stationTreeRoot->setExpanded(true);
-	userTreeRoot->setExpanded(true);
+    stationTreeRoot->setExpanded(true);
     centerTreeRoot->setExpanded(true);
 
 	connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenuAtXJ(QPoint)));

@@ -297,7 +297,7 @@ QDialog {
           </property>
           <property name="styleSheet">
            <string notr="true">QTableWidget {
-  margin-top: 10px;
+  margin-top: 5px;
   font: 11px;
 }
 *{
