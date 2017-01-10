@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <unistd.h>
 
+#include "common.h"
 #include "utilies/cpumem_info.h"
 #include "widget/treewidget/smam_treewidget.h"
 #include "widget/statuspopup/status_pushbutton.h"
@@ -17,7 +18,7 @@ class SystemManagerWidget : public QWidget
 	Q_OBJECT
 
 public:
-	explicit SystemManagerWidget(QWidget *parent = 0);
+    explicit SystemManagerWidget(DeploymentType::Value type = DeploymentType::XJ_CENTER, QWidget* parent = 0);
 	~SystemManagerWidget();
 
 protected:
@@ -38,8 +39,7 @@ private:
     QWidget* contentWidget;
 	int timerID;
 
-	StatusPushButton* softwareStatus;
-	StatusPushButton* otherCentreStatus;
+    StatusPushButton* softwareStatus;
 };
 
 #endif // SYSTEMMANAGER_WIDGET_H

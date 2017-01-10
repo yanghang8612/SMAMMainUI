@@ -7,6 +7,9 @@ class IGMASStation : public BaseStation
 {
 public:
 	IGMASStation();
+
+private:
+    quint16 mountPoint;
 };
 
 #endif // IGMASSTATION_H

@@ -18,7 +18,7 @@ class SMAMTreeWidget : public QObject
 	Q_OBJECT
 
 public:
-	SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type);
+    SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container);
 
 signals:
 
@@ -43,6 +43,22 @@ private slots:
 
 	void deleteReceiver();
 
+    void showAddNewIGMASStationDialog();
+    void addNewIGMASStationDialog(IGMASStation* station);
+
+    void showModifyIGMASStationDialog();
+    void modifyIGMASStation(IGMASStation* station);
+
+    void deleteIGMASStation();
+
+    void showAddNewIGSStationDialog();
+    void addNewIGSStationDialog(IGSStation * station);
+
+    void showModifyIGSStationDialog();
+    void modifyIGSStation(IGSStation * station);
+
+    void deleteIGSStation();
+
     void showAddNewCenterDialog();
     void addNewCenter(OtherCenter* center);
 
@@ -53,20 +69,24 @@ private slots:
 
 private:
     QList<StandardStation*> standardStationList;
+    QList<IGMASStation*> iGMASStationList;
+    QList<IGSStation*> iGSStationList;
     QList<OtherCenter*> otherCenterList;
 
     QTreeWidget* tree;
-	QTreeWidgetItem* stationTreeRoot;
-	QTreeWidgetItem* userTreeRoot;
+    QTreeWidgetItem* standardStationTreeRoot;
+    QTreeWidgetItem* iGMASStationTreeRoot;
+    QTreeWidgetItem* iGSStatioinTreeRoot;
     QTreeWidgetItem* centerTreeRoot;
 
-	QVBoxLayout* container;
-	DeploymentType::Value type;
+    QVBoxLayout* container;
 	QWidget* currentContentWidget;
     QWidget* systemMonitorWidget;
 
     QDomDocument root;
-    QDomNode stationRoot;
+    QDomNode standardStationRoot;
+    QDomNode iGMASStationiRoot;
+    QDomNode iGSStationRoot;
     QDomNode centerRoot;
 
 	void initAtBJ();

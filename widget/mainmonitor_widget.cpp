@@ -1,6 +1,9 @@
-﻿#include <QGraphicsView>
+﻿#include <QtGlobal>
+#include <QGraphicsView>
+#include <QCloseEvent>
 #include <QDebug>
 
+#include "common.h"
 #include "mainmonitor_widget.h"
 #include "ui_mainmonitor_widget.h"
 #include "graphicsitem/receivernode.h"
@@ -11,10 +14,47 @@
 #include "graphicsitem/usersnode.h"
 #include "graphicsitem/edge.h"
 
-MainMonitorWidget::MainMonitorWidget(const QList<StandardStation*>& standardStationList, const QList<OtherCenter*>& otherCenterList, QWidget* parent) :
+extern DeploymentType::Value deploymentType;
+
+MainMonitorWidget::MainMonitorWidget(const QList<StandardStation*>* const standardStationList, const QList<OtherCenter*>* const otherCenterList, QWidget* parent) :
     QTabWidget(parent),
-    ui(new Ui::MainMonitorWidget), standardStationList(standardStationList), otherCenterList(otherCenterList)
+    ui(new Ui::MainMonitorWidget), standardStationList(standardStationList), iGMASStationList(0), otherCenterList(otherCenterList)
 {
+    init();
+}
+
+MainMonitorWidget::MainMonitorWidget(const QList<IGMASStation*>* const iGMASStationList, const QList<OtherCenter*>* const otherCenterList, QWidget* parent) :
+    QTabWidget(parent),
+    ui(new Ui::MainMonitorWidget), standardStationList(0), iGMASStationList(iGMASStationList), otherCenterList(otherCenterList)
+{
+    init();
+}
+
+MainMonitorWidget::~MainMonitorWidget()
+{
+    delete ui;
+}
+
+void MainMonitorWidget::updateView() {
+    switch (deploymentType) {
+        case DeploymentType::XJ_CENTER:
+            updateXJView();
+            break;
+        case DeploymentType::BJ_CENTER:
+            updateBJView();
+            break;
+        default:
+            break;
+    }
+}
+
+void MainMonitorWidget::closeEvent(QCloseEvent* closeEvent)
+{
+    closeEvent->ignore();
+    emit closeMessage();
+}
+
+void MainMonitorWidget::init() {
     ui->setupUi(this);
 
     scene = new QGraphicsScene(this);
@@ -30,12 +70,7 @@ MainMonitorWidget::MainMonitorWidget(const QList<StandardStation*>& standardStat
     updateView();
 }
 
-MainMonitorWidget::~MainMonitorWidget()
-{
-    delete ui;
-}
-
-void MainMonitorWidget::updateView()
+void MainMonitorWidget::updateXJView()
 {
     scene->clear();
 
@@ -58,24 +93,24 @@ void MainMonitorWidget::updateView()
     scene->addItem(hardDriveNode);
     scene->addItem(new Edge(fileNode, hardDriveNode));
 
-    int stationCount = standardStationList.size();
+    int stationCount = standardStationList->size();
     if (0 == stationCount) {
         return;
     }
-    qreal stationLength = 400 / stationCount;
+    qreal stationLength = qMin((double) 400 / stationCount, 100.0);
 
     int maxReceiverCount = 1;
     qreal receiverLength = 0;
 
     for (int i = 0; i < stationCount; i++) {
-        int receiverCount = standardStationList.at(i)->getReceivers().size();
+        int receiverCount = standardStationList->at(i)->getReceivers().size();
         maxReceiverCount = (receiverCount > maxReceiverCount) ? receiverCount : maxReceiverCount;
     }
-    receiverLength = stationLength / maxReceiverCount;
+    receiverLength = qMin(stationLength / maxReceiverCount, 60.0);
 
     QPointF topStationPoint(-100, - stationLength / 2 * (stationCount - 1));
     for (int i = 0; i < stationCount; i++) {
-        StandardStation* station = standardStationList.at(i);
+        StandardStation* station = standardStationList->at(i);
         StationNode* stationNode = new StationNode(station, stationLength * 0.5);
         stationNode->setPos(topStationPoint + QPointF(0, stationLength * i));
         stationNode->setStatus(1);
@@ -99,7 +134,7 @@ void MainMonitorWidget::updateView()
         }
     }
 
-    int centerCount = otherCenterList.size();
+    int centerCount = otherCenterList->size();
     if (0 == centerCount) {
         return;
     }
@@ -107,7 +142,7 @@ void MainMonitorWidget::updateView()
 
     QPointF topCenterPoint(400, - centerLength / 2 * (centerCount - 1));
     for (int i = 0; i < centerCount; i++) {
-        OtherCenter* center = otherCenterList.at(i);
+        OtherCenter* center = otherCenterList->at(i);
         CenterNode* otherCenterNode = new CenterNode(60, center->getCenterName());
         otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
         otherCenterNode->setStatus(1);
@@ -116,8 +151,7 @@ void MainMonitorWidget::updateView()
     }
 }
 
-void MainMonitorWidget::closeEvent(QCloseEvent* closeEvent)
+void MainMonitorWidget::updateBJView()
 {
-    closeEvent->ignore();
-    emit closeMessage();
+
 }

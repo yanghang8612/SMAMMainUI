@@ -3,10 +3,10 @@
 
 #include "base_station.h"
 
-class IGSSTation : public BaseStation
+class IGSStation : public BaseStation
 {
 public:
-	IGSSTation();
+    IGSStation();
 };
 
 #endif // IGSSTATION_H

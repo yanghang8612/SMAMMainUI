@@ -1,6 +1,8 @@
 ﻿#ifndef STANDARDSTATION_H
 #define STANDARDSTATION_H
 
+#include <QList>
+
 #include "base_station.h"
 #include "receiver.h"
 #include "common.h"

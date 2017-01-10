@@ -1,6 +1,6 @@
 #include "igs_station.h"
 
-IGSSTation::IGSSTation()
+IGSStation::IGSStation()
 {
 
 }

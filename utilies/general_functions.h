@@ -1,6 +1,8 @@
 #ifndef GENERALFUNCTIONS_H
 #define GENERALFUNCTIONS_H
 
+#include <QRegExp>
+
 #include "common.h"
 
 class GeneralFunctions

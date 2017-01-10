@@ -107,7 +107,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
@@ -118,7 +118,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
@@ -129,7 +129,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_red</normaloff>:/status_red</iconset>
         </property>
        </widget>
@@ -140,7 +140,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
@@ -151,7 +151,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
@@ -162,7 +162,7 @@ QPushButton {
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="../res/icon.qrc">
+         <iconset resource="../../res/icon.qrc">
           <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
@@ -173,7 +173,7 @@ QPushButton {
   </widget>
  </widget>
  <resources>
-  <include location="../res/icon.qrc"/>
+  <include location="../../res/icon.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -3,6 +3,7 @@
 #include <QtCore>
 
 #include "smam_mainwindow.h"
+#include "mainframework_header.h"
 
 int main(int argc, char *argv[])
 {

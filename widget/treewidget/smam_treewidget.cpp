@@ -1,4 +1,8 @@
-﻿#include <QMenu>
+﻿#include <QGraphicsScene>
+#include <QMessageBox>
+#include <QMenu>
+#include <QFile>
+#include <QDebug>
 
 #include "smam_treewidget.h"
 #include "widget/centerinfo_widget.h"
@@ -12,24 +16,44 @@
 #include "widget/dialog/add_standardstation_dialog.h"
 #include "widget/dialog/modify_standardstation_dialog.h"
 
-SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container, DeploymentType::Value type) :
-	tree(tree), container(container), type(type),
+extern DeploymentType::Value deploymentType;
+
+SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
+    tree(tree), container(container),
     currentContentWidget(0)
 {
-	if (DeploymentType::XJ_CENTER == type) {
-		initAtXJ();
-	}
-	else if (DeploymentType::BJ_CENTER == type) {
-		initAtBJ();
-	}
-    systemMonitorWidget = new MainMonitorWidget(standardStationList, otherCenterList);
+    switch (deploymentType) {
+        case DeploymentType::XJ_CENTER:
+            initAtXJ();
+            break;
+        case DeploymentType::BJ_CENTER:
+            initAtBJ();
+            break;
+        default:
+            break;
+    }
+    systemMonitorWidget = new MainMonitorWidget(&standardStationList, &otherCenterList);
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
 }
 
 void SMAMTreeWidget::showRightMenuAtBJ(QPoint pos)
 {
-	Q_UNUSED(pos)
+    QTreeWidgetItem* curItem = tree->itemAt(pos);
+    if (curItem == NULL)
+        return;
+    QMenu* popMenu =new QMenu;
+    switch (curItem->type()) {
+        case 00:
+        {
+            QAction* addNewiGMASStation = new QAction(tr("添加iGMAS站"), this);
+            popMenu->addAction(addNewiGMASStation);
+            break;
+        }
+        default:
+            break;
+    }
+    popMenu->exec(QCursor::pos());
 }
 
 void SMAMTreeWidget::showRightMenuAtXJ(QPoint pos)
@@ -176,7 +200,7 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 	newStandardStation.appendChild(stationThreadCount);
 
 	QDomElement stationType = root.createElement("DEPLOYMENTTYPE");
-	stationType.appendChild(root.createTextNode(QString::number((int) type)));
+    stationType.appendChild(root.createTextNode(QString::number((int) deploymentType)));
 	newStandardStation.appendChild(stationType);
 
 	QDomElement stationDetail = root.createElement("DETAIL");
@@ -186,7 +210,7 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 	QDomElement receiverList = root.createElement("RECEIVERS");
 	newStandardStation.appendChild(receiverList);
 
-    stationRoot.appendChild(newStandardStation);
+    standardStationRoot.appendChild(newStandardStation);
 
 	writeConfigFile();
 }
@@ -203,7 +227,7 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 	addWidgetToContainer(tree->currentItem());
 
 	int index = tree->currentIndex().row();
-    QDomNode standardStationNode = stationRoot.childNodes().at(index);
+    QDomNode standardStationNode = standardStationRoot.childNodes().at(index);
 
 	QDomElement stationName = root.createElement("STATIONNAME");
 	stationName.appendChild(root.createTextNode(station->getStationName()));
@@ -226,7 +250,7 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 	standardStationNode.replaceChild(stationThreadCount, standardStationNode.namedItem("SERVICETHREADCOUNT"));
 
 	QDomElement stationType = root.createElement("DEPLOYMENTTYPE");
-	stationType.appendChild(root.createTextNode(QString::number((int) type)));
+    stationType.appendChild(root.createTextNode(QString::number((int) deploymentType)));
 	standardStationNode.replaceChild(stationType, standardStationNode.namedItem("DEPLOYMENTTYPE"));
 
 	QDomElement stationDetail = root.createElement("DETAIL");
@@ -246,7 +270,7 @@ void SMAMTreeWidget::deleteStandardStation()
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
         standardStationList.removeAt(tree->currentIndex().row());
-        stationRoot.removeChild(stationRoot.childNodes().at(tree->currentIndex().row()));
+        standardStationRoot.removeChild(standardStationRoot.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
 	}
@@ -286,7 +310,7 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 	receiverLatitude.appendChild(root.createTextNode(QString::number(receiver->getLatitude())));
 	newReceiver.appendChild(receiverLatitude);
 
-    stationRoot.childNodes().at(tree->currentIndex().row()).namedItem("RECEIVERS").appendChild(newReceiver);
+    standardStationRoot.childNodes().at(tree->currentIndex().row()).namedItem("RECEIVERS").appendChild(newReceiver);
 
 	writeConfigFile();
 }
@@ -302,9 +326,9 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 {
 	addWidgetToContainer(tree->currentItem());
 
-	int parentNodeIndex = stationTreeRoot->indexOfChild(tree->currentItem()->parent());
+    int parentNodeIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
 	int nodeIndex = tree->currentIndex().row();
-    QDomNode receiverNode = stationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS").childNodes().at(nodeIndex);
+    QDomNode receiverNode = standardStationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS").childNodes().at(nodeIndex);
 
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
@@ -338,13 +362,63 @@ void SMAMTreeWidget::deleteReceiver()
                                    content,
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
-		int parentNodeIndex = stationTreeRoot->indexOfChild(tree->currentItem()->parent());
+        int parentNodeIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
         standardStationList.at(parentNodeIndex)->removerReceiver(tree->currentIndex().row());
-        QDomNode parentNode = stationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
+        QDomNode parentNode = standardStationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
 		parentNode.removeChild(parentNode.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
 		writeConfigFile();
     }
+}
+
+void SMAMTreeWidget::showAddNewIGMASStationDialog()
+{
+
+}
+
+void SMAMTreeWidget::addNewIGMASStationDialog(IGMASStation* station)
+{
+
+}
+
+void SMAMTreeWidget::showModifyIGMASStationDialog()
+{
+
+}
+
+void SMAMTreeWidget::modifyIGMASStation(IGMASStation* station)
+{
+
+}
+
+void SMAMTreeWidget::deleteIGMASStation()
+{
+
+}
+
+void SMAMTreeWidget::showAddNewIGSStationDialog()
+{
+
+}
+
+void SMAMTreeWidget::addNewIGSStationDialog(IGSStation* station)
+{
+
+}
+
+void SMAMTreeWidget::showModifyIGSStationDialog()
+{
+
+}
+
+void SMAMTreeWidget::modifyIGSStation(IGSStation* station)
+{
+
+}
+
+void SMAMTreeWidget::deleteIGSStation()
+{
+
 }
 
 void SMAMTreeWidget::showAddNewCenterDialog()
@@ -439,14 +513,18 @@ void SMAMTreeWidget::initAtBJ()
 void SMAMTreeWidget::initAtXJ()
 {
 	//Create standard stations root of QTreewidget
-	stationTreeRoot = new QTreeWidgetItem(00);
-	stationTreeRoot->setText(0, tr("基准站管理"));
-	stationTreeRoot->setIcon(0, QIcon(":/standard_root"));
+    standardStationTreeRoot = new QTreeWidgetItem(00);
+    standardStationTreeRoot->setText(0, tr("基准站管理"));
+    standardStationTreeRoot->setIcon(0, QIcon(":/standard_root"));
 
 	//Read info from config xml file
 	root = getRootFromXMLFile(STANDARD_CONFIGFILE_PATH);
-    stationRoot = root.namedItem("BDLSS").namedItem("STATIONS");
-    QDomNode stationNode = stationRoot.firstChild();
+    standardStationRoot = root.namedItem("BDLSS").namedItem("STATIONS");
+    if (standardStationRoot.isNull()) {
+        standardStationRoot = root.createElement("STATIONS");
+        root.namedItem("BDLSS").appendChild(standardStationRoot);
+    }
+    QDomNode stationNode = standardStationRoot.firstChild();
 	while (!stationNode.isNull()) {
 		if (stationNode.isElement()) {
             StandardStation* station = new StandardStation();
@@ -459,7 +537,7 @@ void SMAMTreeWidget::initAtXJ()
 			station->setDetail(stationNode.namedItem("DETAIL").toElement().text());
 
 			//Create station node of QTreewidget
-			QTreeWidgetItem* stationTreeNode = new StandardTreeWidgetItem(stationTreeRoot, station);
+            QTreeWidgetItem* stationTreeNode = new StandardTreeWidgetItem(standardStationTreeRoot, station);
 			standardStationList << station;
 
 			QDomNode receiverNode = stationNode.namedItem("RECEIVERS").firstChild();
@@ -479,7 +557,7 @@ void SMAMTreeWidget::initAtXJ()
 				receiverNode = receiverNode.nextSibling();
 			}
 		}
-		stationNode = stationNode.nextSibling();
+        stationNode = stationNode.nextSibling();
     }
 
     centerTreeRoot = new QTreeWidgetItem(10);
@@ -487,6 +565,10 @@ void SMAMTreeWidget::initAtXJ()
     centerTreeRoot->setIcon(0, QIcon(":/center_root"));
 
     centerRoot = root.namedItem("BDLSS").namedItem("CENTERS");
+    if (centerRoot.isNull()) {
+        centerRoot = root.createElement("CENTERS");
+        root.namedItem("BDLSS").appendChild(centerRoot);
+    }
     QDomNode centerNode = centerRoot.firstChild();
     while (!centerNode.isNull()) {
         if (centerNode.isElement()) {
@@ -503,10 +585,10 @@ void SMAMTreeWidget::initAtXJ()
     }
 
 	tree->setColumnCount(1);
-    tree->addTopLevelItem(stationTreeRoot);
+    tree->addTopLevelItem(standardStationTreeRoot);
     tree->addTopLevelItem(centerTreeRoot);
 	tree->setContextMenuPolicy(Qt::CustomContextMenu);
-    stationTreeRoot->setExpanded(true);
+    standardStationTreeRoot->setExpanded(true);
     centerTreeRoot->setExpanded(true);
 
 	connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenuAtXJ(QPoint)));
@@ -516,18 +598,32 @@ void SMAMTreeWidget::initAtXJ()
 QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
 {
 	QFile configFile(filePath);
-	if (!configFile.open(QIODevice::ReadWrite | QFile::Text)) {
-		qDebug() << "open configfile error:" << filePath;
+    if (!configFile.open(QIODevice::ReadOnly | QFile::Text)) {
+        qDebug() << "Configfile " << filePath << " is not existed, create it.";
+        if (!configFile.open(QIODevice::ReadWrite | QFile::Text)) {
+            qDebug() << "Create configfile " << filePath << " error.";
+        }
+        else {
+            QDomDocument doc;
+            QDomProcessingInstruction instruction = doc.createProcessingInstruction("xml","version=\"1.0\" encoding=\"UTF-8\"");
+            doc.appendChild(instruction);
+            QDomElement rootElement = doc.createElement("BDLSS");
+            doc.appendChild(rootElement);
+
+            QTextStream out(&configFile);
+            out.setCodec("UTF-8");
+            doc.save(out, 4, QDomNode::EncodingFromTextStream);
+            configFile.close();
+            return doc;
+        }
 	}
 	QString errorStr;
 	int errorLine;
 	int errorColumn;
-
 	QDomDocument doc;
 	if (!doc.setContent(&configFile, false, &errorStr, &errorLine, &errorColumn)) {
-		qDebug()<<"setcontent error." ;
-		configFile.close();
-	}
+        qDebug()<<"QDomDocument setcontent error, the errormessage is " << errorStr;
+    }
 	configFile.close();
     return doc;
 }

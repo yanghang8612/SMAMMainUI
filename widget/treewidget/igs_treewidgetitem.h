@@ -8,11 +8,11 @@
 class IGSTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    IGSTreeWidgetItem(IGSSTation* station, QTreeWidgetItem* parent);
+    IGSTreeWidgetItem(IGSStation* station, QTreeWidgetItem* parent);
     ~IGSTreeWidgetItem();
 
 private:
-	IGSSTation* station;
+    IGSStation* station;
 };
 
 #endif // IGSTREEWIDGETITEM_H

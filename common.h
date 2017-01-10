@@ -1,8 +1,8 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QString>
+#include <QDateTime>
 
 namespace DeploymentType {
 	enum Value {

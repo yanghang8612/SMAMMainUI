@@ -1,6 +1,6 @@
 #include "igs_treewidgetitem.h"
 
-IGSTreeWidgetItem::IGSTreeWidgetItem(IGSSTation* station, QTreeWidgetItem* parent) :
+IGSTreeWidgetItem::IGSTreeWidgetItem(IGSStation* station, QTreeWidgetItem* parent) :
 	QTreeWidgetItem(parent),
 	station(station)
 {

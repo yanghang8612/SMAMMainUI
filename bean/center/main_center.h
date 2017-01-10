@@ -1,7 +1,8 @@
 #ifndef MAINCENTER_H
 #define MAINCENTER_H
 
-#include "base_center.h"
+#include <QList>
+
 #include "other_center.h"
 
 class MainCenter : public BaseCenter

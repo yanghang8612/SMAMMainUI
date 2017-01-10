@@ -12,6 +12,9 @@ ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
     ui->centerPortEdit->setText(QString::number(center->getPort()));
     ui->centerDetailEdit->setText(center->getDetail());
     setWindowTitle(tr("编辑其他中心信息"));
+
+    ui->centerNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
+    ui->centerIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }
 
 ModifyCenterDialog::~ModifyCenterDialog()

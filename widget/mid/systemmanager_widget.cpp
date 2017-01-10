@@ -1,4 +1,4 @@
-﻿#include <QtGlobal>
+﻿#include <QCloseEvent>
 #include <QTime>
 #include <QTimer>
 
@@ -6,10 +6,13 @@
 #include "ui_systemmanager_widget.h"
 #include "common.h"
 
-SystemManagerWidget::SystemManagerWidget(QWidget *parent) :
+DeploymentType::Value deploymentType;
+
+SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::SystemManagerWidget)
 {
+    deploymentType = type;
 	ui->setupUi(this);
 	ui->infoOutputTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
 	ui->infoOutputTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
@@ -24,7 +27,7 @@ SystemManagerWidget::SystemManagerWidget(QWidget *parent) :
 	connect(timer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
 	timer->start(2000);
 
-	treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer, DeploymentType::XJ_CENTER);
+    treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
 
     softwareStatus = new StatusPushButton(QIcon(":/status_red"), tr("软件运行状态"), this);
     ui->statusContainer->addWidget(softwareStatus);

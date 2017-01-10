@@ -53,9 +53,13 @@ SOURCES += main.cpp \
     widget/graphicsitem/stationnode.cpp \
     widget/graphicsitem/filenode.cpp \
     widget/graphicsitem/harddrivenode.cpp \
-    widget/graphicsitem/usersnode.cpp
+    widget/graphicsitem/usersnode.cpp \
+    library_exportfunction.cpp \
+    utilies/shared_buffer.cpp
 
 HEADERS  += \
+    common.h \
+    mainframework_header.h \
     smam_mainwindow.h \
     menu/xj_menu.h \
     menu/bj_menu.h \
@@ -96,7 +100,8 @@ HEADERS  += \
     widget/graphicsitem/stationnode.h \
     widget/graphicsitem/filenode.h \
     widget/graphicsitem/harddrivenode.h \
-    widget/graphicsitem/usersnode.h
+    widget/graphicsitem/usersnode.h \
+    utilies/shared_buffer.h
 
 FORMS    += \
     smam_mainwindow.ui \
