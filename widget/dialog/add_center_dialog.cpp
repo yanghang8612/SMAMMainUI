@@ -40,7 +40,7 @@ void AddCenterDialog::on_confirmButton_clicked()
         return;
     }
     else {
-        ui->stationNameEdit->setStyleSheet("QLineEdit{border-color:white}");
+        ui->centerPortEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
     OtherCenter* center = new OtherCenter();

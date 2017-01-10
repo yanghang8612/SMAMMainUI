@@ -5,6 +5,12 @@
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"
 #include "common.h"
+#include "mainframework_header.h"
+
+findMemoryInfoFunc FindMemoryInfoFunc;
+dllStatusReadFunc  DllStatusReadFunc;
+dllStatusWriteFunc DllStatusWriteFunc;
+softWorkStatusWriteFunc SoftWorkStatusWriteFunc;
 
 DeploymentType::Value deploymentType;
 

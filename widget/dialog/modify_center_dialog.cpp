@@ -1,5 +1,6 @@
 #include "modify_center_dialog.h"
 #include "ui_modify_center_dialog.h"
+#include "utilies/general_functions.h"
 
 ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
 	QDialog(parent),
@@ -24,6 +25,30 @@ ModifyCenterDialog::~ModifyCenterDialog()
 
 void ModifyCenterDialog::on_confirmButton_clicked()
 {
+    if (!GeneralFunctions::checkNameString(ui->centerNameEdit->text())) {
+        ui->centerNameEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->centerNameEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkIPAddressString(ui->centerIPEdit->text())) {
+        ui->centerIPEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->centerIPEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkIPPortString(ui->centerPortEdit->text())) {
+        ui->centerPortEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->centerPortEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
     center->setCenterName(ui->centerNameEdit->text());
     center->setIpAddress(ui->centerIPEdit->text());
     center->setPort(ui->centerPortEdit->text());

@@ -16,10 +16,10 @@ typedef void  (*dllStatusReadFunc)(int);//软件运行状态读函数指针
 typedef bool  (*dllStatusWriteFunc)(int);//软件运行状态写函数指针
 typedef bool  (*softWorkStatusWriteFunc)(int,SoftWorkStatus);//软件工作状态写函数指针
 
-findMemoryInfoFunc FindMemoryInfoFunc;
-dllStatusReadFunc  DllStatusReadFunc;
-dllStatusWriteFunc DllStatusWriteFunc;
-softWorkStatusWriteFunc SoftWorkStatusWriteFunc;
+extern findMemoryInfoFunc FindMemoryInfoFunc;
+extern dllStatusReadFunc  DllStatusReadFunc;
+extern dllStatusWriteFunc DllStatusWriteFunc;
+extern softWorkStatusWriteFunc SoftWorkStatusWriteFunc;
 
 #endif // MAINFRAMEWORK_HEADER
 
