@@ -1,4 +1,6 @@
 #include <string.h>
+#include <iostream>
+#include <iomanip>
 
 #include "shared_buffer.h"
 
@@ -15,9 +17,15 @@ SharedBuffer::SharedBuffer(void* headerPointer, quint32 bufferSize, quint32 bloc
     header->bufferSize = bufferSize;
     header->blockSize = blockSize;
     header->writePointer = 0;
-    header->readAndWriteLock = 0;
+    header->readWriteLock = 0;
     header->stationID = stationID;
     header->ipAddress = ipAddress;
+    memset(dataStartPointer, 0, bufferSize);
+}
+
+SharedBuffer::~SharedBuffer()
+{
+
 }
 
 quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthToRead)
@@ -66,6 +74,51 @@ quint32 SharedBuffer::writeData(const void* dataFromWrite, quint32 lengthFromWri
         header->writePointer = lengthFromWrite - bufferTailLength;
     }
     return lengthFromWrite;
+}
+
+quint32 SharedBuffer::getBufferSize() const
+{
+    return header->bufferSize;
+}
+
+quint32 SharedBuffer::getBlockSize() const
+{
+    return header->blockSize;
+}
+
+quint32 SharedBuffer::getWritePointer() const
+{
+    return header->writePointer;
+}
+
+quint8 SharedBuffer::getReadWriteLock() const
+{
+    return header->readWriteLock;
+}
+
+void SharedBuffer::setStationID(quint32 stationID)
+{
+    header->stationID = stationID;
+}
+
+quint32 SharedBuffer::getStationID() const
+{
+    return header->stationID;
+}
+
+void SharedBuffer::setIPAddress(quint32 ipAddress)
+{
+    header->ipAddress = ipAddress;
+}
+
+quint32 SharedBuffer::getIPAddress() const
+{
+    return header->ipAddress;
+}
+
+void* SharedBuffer::getDataStartPointer() const
+{
+    return dataStartPointer;
 }
 
 void SharedBuffer::commonInit(void* headerPointer)

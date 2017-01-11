@@ -9,6 +9,7 @@
 #include "widget/mainmonitor_widget.h"
 #include "widget/stationinfo_widget.h"
 #include "widget/receiverinfo_widget.h"
+#include "widget/sharedmemoryinfo_widget.h"
 #include "widget/dialog/add_center_dialog.h"
 #include "widget/dialog/modify_center_dialog.h"
 #include "widget/dialog/add_receiver_dialog.h"
@@ -148,6 +149,9 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
             currentContentWidget = new CenterInfoWidget();
             ((CenterInfoWidget*) currentContentWidget)->setCenter((OtherCenter*) item->data(0, Qt::UserRole).value<void*>());
             break;
+        case 20:
+            currentContentWidget = new SharedMemoryInfoWidget();
+            break;
 		default:
 			currentContentWidget = 0;
 			break;
@@ -160,7 +164,7 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
             container->addWidget(currentContentWidget);
         }
 	}
-	else {
+    else {
         container->addWidget(new QWidget());
 	}
 }
@@ -584,9 +588,14 @@ void SMAMTreeWidget::initAtXJ()
         centerNode = centerNode.nextSibling();
     }
 
+    memoryTreeRoot = new QTreeWidgetItem(20);
+    memoryTreeRoot->setText(0, tr("内存管理"));
+    memoryTreeRoot->setIcon(0, QIcon(":/2"));
+
 	tree->setColumnCount(1);
     tree->addTopLevelItem(standardStationTreeRoot);
     tree->addTopLevelItem(centerTreeRoot);
+    tree->addTopLevelItem(memoryTreeRoot);
 	tree->setContextMenuPolicy(Qt::CustomContextMenu);
     standardStationTreeRoot->setExpanded(true);
     centerTreeRoot->setExpanded(true);

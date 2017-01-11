@@ -55,7 +55,8 @@ SOURCES += main.cpp \
     widget/graphicsitem/harddrivenode.cpp \
     widget/graphicsitem/usersnode.cpp \
     library_exportfunction.cpp \
-    utilies/shared_buffer.cpp
+    utilies/shared_buffer.cpp \
+    widget/sharedmemoryinfo_widget.cpp
 
 HEADERS  += \
     common.h \
@@ -101,7 +102,9 @@ HEADERS  += \
     widget/graphicsitem/filenode.h \
     widget/graphicsitem/harddrivenode.h \
     widget/graphicsitem/usersnode.h \
-    utilies/shared_buffer.h
+    utilies/shared_buffer.h \
+    widget/sharedmemoryinfo_widget.h \
+    library_exportfunction.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -116,7 +119,8 @@ FORMS    += \
     widget/dialog/add_receiver_dialog.ui \
     widget/dialog/modify_receiver_dialog.ui \
     widget/statuspopup/softwarestatus_frame.ui \
-    widget/mid/systemmanager_widget.ui
+    widget/mid/systemmanager_widget.ui \
+    widget/sharedmemoryinfo_widget.ui
 
 RESOURCES += \
     res/icon.qrc \

@@ -78,6 +78,7 @@ private:
     QTreeWidgetItem* iGMASStationTreeRoot;
     QTreeWidgetItem* iGSStatioinTreeRoot;
     QTreeWidgetItem* centerTreeRoot;
+    QTreeWidgetItem* memoryTreeRoot;
 
     QVBoxLayout* container;
 	QWidget* currentContentWidget;
