@@ -67,7 +67,18 @@ void Receiver::setLatitude(float value)
 
 void Receiver::setLatitude(const QString& value)
 {
-	latitude = value.toFloat();
+    latitude = value.toFloat();
+}
+
+ReceiverInBuffer Receiver::toReceiverInBuffer()
+{
+    ReceiverInBuffer receiverInBuffer;
+    receiverInBuffer.receiverName = receiverName;
+    receiverInBuffer.ipAddress = ipAddress;
+    receiverInBuffer.port = port;
+    receiverInBuffer.longitude = longitude;
+    receiverInBuffer.latitude = latitude;
+    return receiverInBuffer;
 }
 
 

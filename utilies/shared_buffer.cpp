@@ -1,26 +1,52 @@
-#include <string.h>
-#include <iostream>
-#include <iomanip>
+#include <QDebug>
 
 #include "shared_buffer.h"
 
-SharedBuffer::SharedBuffer(void* headerPointer)
+SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer)
 {
-    commonInit(headerPointer);
-    type = ONLY_READ;
+    this->type = type;
+    this->mode = mode;
+    if (type == LOOP_BUFFER) {
+        commonInit(headerPointer);
+        bufferCapacity = header->bufferSize - sizeof(SharedBufferHeader);
+    }
+    else {
+        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+    }
 }
 
-SharedBuffer::SharedBuffer(void* headerPointer, quint32 bufferSize, quint32 blockSize, quint32 stationID, quint32 ipAddress)
+SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer, quint32 bufferSize, quint32 blockSize)
 {
-    commonInit(headerPointer);
-    type = READ_WRITE;
-    header->bufferSize = bufferSize;
-    header->blockSize = blockSize;
-    header->writePointer = 0;
-    header->readWriteLock = 0;
-    header->stationID = stationID;
-    header->ipAddress = ipAddress;
-    memset(dataStartPointer, 0, bufferSize);
+    this->type = type;
+    this->mode = mode;
+    if (type == LOOP_BUFFER) {
+        commonInit(headerPointer);
+        bufferCapacity = bufferSize - sizeof(SharedBufferHeader);
+        header->bufferSize = bufferSize;
+        header->blockSize = blockSize;
+        header->writePointer = 0;
+        header->readWriteLock = 0;
+        header->stationID = 0;
+        header->ipAddress = 0;
+        qMemSet(dataStartPointer, 0, bufferCapacity);
+    }
+    else {
+        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+    }
+}
+
+SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer, quint32 itemSize)
+{
+    this->type = type;
+    this->mode = mode;
+    if (type == COVER_BUFFER) {
+        header = 0;
+        dataStartPointer = (quint8*) headerPointer + 4;
+        itemCount = (quint32*) headerPointer;
+    }
+    else {
+        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+    }
 }
 
 SharedBuffer::~SharedBuffer()
@@ -28,97 +54,128 @@ SharedBuffer::~SharedBuffer()
 
 }
 
-quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthToRead)
+quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
 {
-    quint32 length = 0;
-    if (readPointer == header->writePointer || lengthToRead == 0) {
-        return 0;
-    }
-    else if (readPointer < header->writePointer) {
-        if (header->writePointer - readPointer >= lengthToRead) {
-            length = lengthToRead;
-        }
-        else {
-            length = header->writePointer - readPointer;
-        }
-    }
-    else {
-        if (header->bufferSize - readPointer > lengthToRead) {
-            length = lengthToRead;
-        }
-        else {
-            length = header->bufferSize - readPointer;
-            memcpy(dataToRead, dataStartPointer + readPointer, length);
-            readPointer = 0;
-            return length + readData(dataToRead + length, lengthToRead - length);
-        }
-    }
-    memcpy(dataToRead, dataStartPointer + readPointer, length);
-    readPointer += length;
-    return length;
-}
-
-quint32 SharedBuffer::writeData(const void* dataFromWrite, quint32 lengthFromWrite)
-{
-    if (lengthFromWrite > header->bufferSize) {
+    if (mode == ONLY_WRITE) {
         return -1;
     }
-    quint32 bufferTailLength = header->bufferSize - header->writePointer;
-    if (bufferTailLength > lengthFromWrite) {
-        memcpy(dataStartPointer + header->writePointer, dataFromWrite, lengthFromWrite);
-        header->writePointer += lengthFromWrite;
+    if (lengthOrCountToRead == 0) {
+        return 0;
     }
-    else {
-        memcpy(dataStartPointer + header->writePointer, dataFromWrite, bufferTailLength);
-        memcpy(dataStartPointer, dataFromWrite + bufferTailLength, lengthFromWrite - bufferTailLength);
-        header->writePointer = lengthFromWrite - bufferTailLength;
+    qDebug() << "Read Pointer is" << readPointer;
+    if (type == LOOP_BUFFER) {
+        quint32 length = 0;
+        if (readPointer == header->writePointer) {
+            return 0;
+        }
+        else if (readPointer < header->writePointer) {
+            if (header->writePointer - readPointer >= lengthOrCountToRead) {
+                length = lengthOrCountToRead;
+            }
+            else {
+                length = header->writePointer - readPointer;
+            }
+        }
+        else {
+            if (bufferCapacity - readPointer > lengthOrCountToRead) {
+                length = lengthOrCountToRead;
+            }
+            else {
+                length = bufferCapacity - readPointer;
+                qMemCopy(dataToRead, dataStartPointer + readPointer, length);
+                readPointer = 0;
+                return length + readData(dataToRead + length, lengthOrCountToRead - length);
+            }
+        }
+        qMemCopy(dataToRead, dataStartPointer + readPointer, length);
+        readPointer += length;
+        return length;
     }
-    return lengthFromWrite;
+    else if (type == COVER_BUFFER) {
+        qMemCopy(dataToRead, dataStartPointer, itemSize * lengthOrCountToRead);
+        return lengthOrCountToRead;
+    }
+}
+
+quint32 SharedBuffer::writeData(const void* dataFromWrite, quint32 lengthOrCountFromWrite)
+{
+    if (mode == ONLY_READ) {
+        return -1;
+    }
+    if (type == LOOP_BUFFER) {
+        if (lengthOrCountFromWrite > bufferCapacity) {
+            return -1;
+        }
+        quint32 bufferTailLength = bufferCapacity - header->writePointer;
+        if (bufferTailLength > lengthOrCountFromWrite) {
+            qMemCopy(dataStartPointer + header->writePointer, dataFromWrite, lengthOrCountFromWrite);
+            header->writePointer += lengthOrCountFromWrite;
+        }
+        else {
+            qMemCopy(dataStartPointer + header->writePointer, dataFromWrite, bufferTailLength);
+            qMemCopy(dataStartPointer, dataFromWrite + bufferTailLength, lengthOrCountFromWrite - bufferTailLength);
+            header->writePointer = lengthOrCountFromWrite - bufferTailLength;
+        }
+    }
+    else if (type == COVER_BUFFER) {
+        qMemCopy(dataStartPointer, dataFromWrite, itemSize * lengthOrCountFromWrite);
+        *itemCount = lengthOrCountFromWrite;
+    }
+    return lengthOrCountFromWrite;
 }
 
 quint32 SharedBuffer::getBufferSize() const
 {
-    return header->bufferSize;
+    return (header != 0) ? header->bufferSize : 0;
 }
 
 quint32 SharedBuffer::getBlockSize() const
 {
-    return header->blockSize;
+    return (header != 0) ? header->blockSize : 0;
 }
 
 quint32 SharedBuffer::getWritePointer() const
 {
-    return header->writePointer;
+    return (header != 0) ? header->writePointer : 0;
 }
 
 quint8 SharedBuffer::getReadWriteLock() const
 {
-    return header->readWriteLock;
+    return (header != 0) ? header->readWriteLock : 0;
 }
 
 void SharedBuffer::setStationID(quint32 stationID)
 {
-    header->stationID = stationID;
+    if (header != 0) {
+        header->stationID = stationID;
+    }
 }
 
 quint32 SharedBuffer::getStationID() const
 {
-    return header->stationID;
+    return (header != 0) ? header->stationID : 0;
 }
 
 void SharedBuffer::setIPAddress(quint32 ipAddress)
 {
-    header->ipAddress = ipAddress;
+    if (header != 0) {
+        header->ipAddress = ipAddress;
+    }
 }
 
 quint32 SharedBuffer::getIPAddress() const
 {
-    return header->ipAddress;
+    return (header != 0) ? header->ipAddress : 0;
 }
 
 void* SharedBuffer::getDataStartPointer() const
 {
     return dataStartPointer;
+}
+
+quint32 SharedBuffer::getItemCount() const
+{
+    return *itemCount;
 }
 
 void SharedBuffer::commonInit(void* headerPointer)

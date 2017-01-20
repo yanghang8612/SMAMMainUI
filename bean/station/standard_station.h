@@ -6,6 +6,7 @@
 #include "base_station.h"
 #include "receiver.h"
 #include "common.h"
+#include "smamframework_header.h"
 
 class StandardStation : public BaseStation
 {
@@ -22,7 +23,9 @@ public:
 
 	void addReceiver(Receiver* receiver);
     void removerReceiver(quint8 index);
-    QList<Receiver *> getReceivers() const;
+    QList<Receiver*> getReceivers() const;
+
+    StandardStationInBuffer toStandardStationInBuffer();
 
 private:
     CasterMode::Value mode;

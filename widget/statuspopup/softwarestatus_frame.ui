@@ -130,7 +130,7 @@ QPushButton {
         </property>
         <property name="icon">
          <iconset resource="../../res/icon.qrc">
-          <normaloff>:/status_red</normaloff>:/status_red</iconset>
+          <normaloff>:/status_green</normaloff>:/status_green</iconset>
         </property>
        </widget>
       </item>

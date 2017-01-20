@@ -28,7 +28,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>600</width>
+      <width>500</width>
       <height>350</height>
      </rect>
     </property>
@@ -176,7 +176,7 @@
    <widget class="QPushButton" name="autoUpdateButton">
     <property name="geometry">
      <rect>
-      <x>190</x>
+      <x>192</x>
       <y>50</y>
       <width>75</width>
       <height>23</height>
@@ -195,9 +195,9 @@
    <widget class="QTableWidget" name="memoryCharInfoTable">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>520</x>
       <y>80</y>
-      <width>360</width>
+      <width>460</width>
       <height>350</height>
      </rect>
     </property>

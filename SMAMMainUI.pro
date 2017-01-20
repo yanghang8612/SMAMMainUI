@@ -104,7 +104,8 @@ HEADERS  += \
     widget/graphicsitem/usersnode.h \
     utilies/shared_buffer.h \
     widget/sharedmemoryinfo_widget.h \
-    library_exportfunction.h
+    library_exportfunction.h \
+    smamframework_header.h
 
 FORMS    += \
     smam_mainwindow.ui \

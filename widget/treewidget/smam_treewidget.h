@@ -12,6 +12,7 @@
 #include "igmas_treewidgetitem.h"
 #include "receiver_treewidgetitem.h"
 #include "center_treewidgetitem.h"
+#include "utilies/shared_buffer.h"
 
 class SMAMTreeWidget : public QObject
 {
@@ -72,6 +73,7 @@ private:
     QList<IGMASStation*> iGMASStationList;
     QList<IGSStation*> iGSStationList;
     QList<OtherCenter*> otherCenterList;
+    SharedBuffer* buffer;
 
     QTreeWidget* tree;
     QTreeWidgetItem* standardStationTreeRoot;

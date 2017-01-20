@@ -6,11 +6,12 @@
 #include "ui_systemmanager_widget.h"
 #include "common.h"
 #include "mainframework_header.h"
+#include "library_exportfunction.h"
 
-findMemoryInfoFunc FindMemoryInfoFunc;
-dllStatusReadFunc  DllStatusReadFunc;
-dllStatusWriteFunc DllStatusWriteFunc;
-softWorkStatusWriteFunc SoftWorkStatusWriteFunc;
+FINDMEMORYINFOFUNC findMemoryInfoFunc = 0;
+DLLSTATUSREADFUNC  dllStatusReadFunc = 0;
+DLLSTATUSWRITEFUNC dllStatusWriteFunc = 0;
+SOFTWORKSTATUSWRITEFUNC softWorkStatusWriteFunc = 0;
 
 DeploymentType::Value deploymentType;
 
@@ -29,9 +30,12 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	timerID = startTimer(1000);
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
-	QTimer* timer = new QTimer(this);
-	connect(timer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
-	timer->start(2000);
+    for (int i = 0; i < 6; ++i) {
+        messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, findMemoryInfoFunc(i + 2, 1520));
+    }
+    QTimer* messageReceiverTimer = new QTimer(this);
+    connect(messageReceiverTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
+    messageReceiverTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
 
@@ -41,7 +45,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 
 SystemManagerWidget::~SystemManagerWidget()
 {
-	killTimer(timerID);
+    killTimer(timerID);
 	delete ui;
 }
 
@@ -58,21 +62,35 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
 
 void SystemManagerWidget::addMessageToInfoContainer()
 {
-	int type = qrand() % 10;
 	int currentRowCount = ui->infoOutputTable->rowCount();
-	ui->infoOutputTable->setRowCount(currentRowCount + 1);
-	ui->infoOutputTable->setItem(currentRowCount, 0, new QTableWidgetItem(QDateTime::currentDateTime().toString(DATETIME_FORMAT_STRING)));
-	if (type < 7) {
-		ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(":/info_normal"), tr("这是一条正常的消息")));
-	}
-	else if (type < 9) {
-		ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(":/info_warning"), tr("这是一条异常的消息")));
-	}
-	else {
-		ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(":/info_error"), tr("这是一条错误的消息")));
-	}
-	ui->infoOutputTable->setRowHeight(currentRowCount, 22);
-    ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
+    for (int i = 0; i < 6; ++i) {
+        while (true) {
+            SoftWorkStatus status;
+            if (messageBuffers[i]->readData(&status, sizeof(status)) == 0) {
+                break;
+            }
+            ui->infoOutputTable->setRowCount(currentRowCount + 1);
+            ui->infoOutputTable->setItem(currentRowCount, 0, new QTableWidgetItem(QDateTime::fromTime_t(status.messageTime).toString(DATETIME_FORMAT_STRING)));
+            QString iconName;
+            switch (status.messageType) {
+                case 1:
+                    iconName = ":/info_normal";
+                    break;
+                case 2:
+                    iconName = ":/info_warning";
+                    break;
+                case 3:
+                    iconName = ":/info_error";
+                    break;
+                default:
+                    break;
+            }
+            ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(iconName), QString(status.messageContent)));
+            ui->infoOutputTable->setRowHeight(currentRowCount, 22);
+            ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
+            currentRowCount++;
+        }
+    }
 }
 
 void SystemManagerWidget::closeEvent(QCloseEvent *closeEvent)

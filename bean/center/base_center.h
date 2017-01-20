@@ -26,6 +26,9 @@ protected:
     QString ipAddress;
     quint16 port;
     QString detail;
+
+private:
+    Q_DISABLE_COPY(BaseCenter)
 };
 
 #endif // BASECENTER_H

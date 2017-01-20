@@ -49,9 +49,26 @@ void StandardStation::removerReceiver(quint8 index)
 {
     receivers.removeAt(index);
 }
+
 QList<Receiver *> StandardStation::getReceivers() const
 {
     return receivers;
+}
+
+StandardStationInBuffer StandardStation::toStandardStationInBuffer()
+{
+    StandardStationInBuffer standardStationInBuffer;
+    standardStationInBuffer.stationName = stationName;
+    standardStationInBuffer.ipAddress = ipAddress;
+    standardStationInBuffer.port = port;
+    standardStationInBuffer.deploymentType = (quint8) type;
+    standardStationInBuffer.detail = detail;
+    standardStationInBuffer.casterMode = (quint8) mode;
+    standardStationInBuffer.serviceThreadCount = serviceThreadCount;
+    foreach (Receiver* receiver, receivers) {
+        standardStationInBuffer.receivers << receiver->toReceiverInBuffer();
+    }
+    return standardStationInBuffer;
 }
 
 

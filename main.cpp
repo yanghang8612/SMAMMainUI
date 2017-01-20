@@ -4,6 +4,9 @@
 
 #include "smam_mainwindow.h"
 #include "mainframework_header.h"
+#include "smamframework_header.h"
+
+extern "C" bool DllMain(int argc, char* argv[]);
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +21,8 @@ int main(int argc, char *argv[])
 
     SMAMMainWindow w;
     w.show();
+
+    //DllMain(0, 0);
 
     return a.exec();
 }

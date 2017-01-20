@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#include "smamframework_header.h"
+
 class Receiver
 {
 public:
@@ -25,6 +27,8 @@ public:
 	float getLatitude() const;
 	void setLatitude(float value);
 	void setLatitude(const QString& value);
+
+    ReceiverInBuffer toReceiverInBuffer();
 
 private:
 	QString receiverName;

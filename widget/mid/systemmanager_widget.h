@@ -6,6 +6,7 @@
 
 #include "common.h"
 #include "utilies/cpumem_info.h"
+#include "utilies/shared_buffer.h"
 #include "widget/treewidget/smam_treewidget.h"
 #include "widget/statuspopup/status_pushbutton.h"
 
@@ -37,9 +38,9 @@ public:
 private:
 	Ui::SystemManagerWidget *ui;
     QWidget* contentWidget;
-	int timerID;
-
     StatusPushButton* softwareStatus;
+    int timerID;
+    SharedBuffer* messageBuffers[6];
 };
 
 #endif // SYSTEMMANAGER_WIDGET_H
