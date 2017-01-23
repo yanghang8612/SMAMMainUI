@@ -8,10 +8,10 @@
 #include "mainframework_header.h"
 #include "library_exportfunction.h"
 
-FINDMEMORYINFOFUNC findMemoryInfoFunc = 0;
-DLLSTATUSREADFUNC  dllStatusReadFunc = 0;
-DLLSTATUSWRITEFUNC dllStatusWriteFunc = 0;
-SOFTWORKSTATUSWRITEFUNC softWorkStatusWriteFunc = 0;
+FINDMEMORYINFOFUNC FindMemoryInfoFunc = 0;
+DLLSTATUSREADFUNC  DllStatusReadFunc = 0;
+DLLSTATUSWRITEFUNC DllStatusWriteFunc = 0;
+SOFTWORKSTATUSWRITEFUNC SoftWorkStatusWriteFunc = 0;
 
 DeploymentType::Value deploymentType;
 
@@ -31,7 +31,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
     for (int i = 0; i < 6; ++i) {
-        messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, findMemoryInfoFunc(i + 2, 1520));
+        messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 1520));
     }
     QTimer* messageReceiverTimer = new QTimer(this);
     connect(messageReceiverTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
@@ -51,8 +51,8 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-    //ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-    //ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
+    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
 	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
 
 	QDateTime time = QDateTime::currentDateTime();

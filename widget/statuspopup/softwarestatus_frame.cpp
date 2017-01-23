@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "softwarestatus_frame.h"
 #include "ui_softwarestatus_frame.h"
 #include "mainframework_header.h"
@@ -15,7 +17,7 @@ SoftwareStatusFrame::SoftwareStatusFrame(QWidget *parent) :
     buttons[4] = ui->userManagerStatus;
     buttons[5] = ui->systemManagerStatus;
     startTimer(DLLSTATUS_CHECK_TIMEINTERVAL);
-    qMemSet(preDllStatus, 0, DLL_COUNT * sizeof(int));  
+    qMemSet(preDllStatus, 0, DLL_COUNT * sizeof(int));
 }
 
 SoftwareStatusFrame::~SoftwareStatusFrame()
@@ -25,8 +27,11 @@ SoftwareStatusFrame::~SoftwareStatusFrame()
 
 void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
 {
-    if (dllStatusReadFunc != 0) {
-        dllStatusReadFunc(dllStatus, DLL_COUNT);
+    for (int i = 0; i < DLL_COUNT; i++) {
+        qDebug() << dllStatus[i] << preDllStatus[i];
+    }
+    if (DllStatusReadFunc != 0) {
+        DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
         for (int i = 0; i < 6; ++i) {
             QString status = ":/status_green";
             for (int j = 0; j < COMPONENT_DLL_COUNT[i]; ++j) {

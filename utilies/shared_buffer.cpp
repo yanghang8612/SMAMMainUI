@@ -62,7 +62,7 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
     if (lengthOrCountToRead == 0) {
         return 0;
     }
-    qDebug() << "Read Pointer is" << readPointer;
+    //qDebug() << "Read Pointer is" << readPointer;
     if (type == LOOP_BUFFER) {
         quint32 length = 0;
         if (readPointer == header->writePointer) {

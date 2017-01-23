@@ -4,6 +4,7 @@
 #include <QFrame>
 #include <QPushButton>
 
+#include "common.h"
 #include "utilies/shared_buffer.h"
 
 namespace Ui {
@@ -29,6 +30,7 @@ private:
     int* dllStatus;
     int* preDllStatus;
     QPushButton* buttons[6];
+    bool status;
 };
 
 #endif // SOFTWARESTATUS_FRAME_H

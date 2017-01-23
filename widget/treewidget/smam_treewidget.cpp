@@ -24,8 +24,8 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     tree(tree), container(container),
     currentContentWidget(0)
 {
-    if (findMemoryInfoFunc != 0) {
-        void* bufferPointer = findMemoryInfoFunc(STANDARD_SHAREDBUFFER_ID, STANDARD_SHAREDBUFFER_MAXITEMCOUNT * sizeof(StandardStationInBuffer));
+    if (FindMemoryInfoFunc != 0) {
+        void* bufferPointer = FindMemoryInfoFunc(STANDARD_SHAREDBUFFER_ID, STANDARD_SHAREDBUFFER_MAXITEMCOUNT * sizeof(StandardStationInBuffer));
         buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_WRITE, bufferPointer, sizeof(StandardStationInBuffer));
     }
     switch (deploymentType) {

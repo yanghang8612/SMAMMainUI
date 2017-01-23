@@ -42,7 +42,7 @@ void SharedMemoryInfoWidget::on_viewButton_clicked()
         return;
     }
     else {
-        void* sharedMemoryPointer = (*findMemoryInfoFunc)(memoryID, 180);
+        void* sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 180);
         buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
         updateView();
     }
