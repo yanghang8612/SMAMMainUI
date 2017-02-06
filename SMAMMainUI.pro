@@ -9,7 +9,7 @@ QT       += core gui xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SMAMMainUI
-TEMPLATE = lib
+TEMPLATE = app
 
 
 SOURCES += main.cpp \
@@ -60,7 +60,6 @@ SOURCES += main.cpp \
 
 HEADERS  += \
     common.h \
-    mainframework_header.h \
     smam_mainwindow.h \
     menu/xj_menu.h \
     menu/bj_menu.h \
@@ -105,7 +104,8 @@ HEADERS  += \
     utilies/shared_buffer.h \
     widget/sharedmemoryinfo_widget.h \
     library_exportfunction.h \
-    smamframework_header.h
+    main_component_header.h \
+    smam_component_header.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -127,3 +127,4 @@ RESOURCES += \
     res/icon.qrc \
     res/img.qrc \
     res/echarts.qrc
+

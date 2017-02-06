@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include "smamframework_header.h"
+#include "smam_component_header.h"
 
 class Receiver
 {

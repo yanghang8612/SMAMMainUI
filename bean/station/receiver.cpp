@@ -73,8 +73,8 @@ void Receiver::setLatitude(const QString& value)
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
-    receiverInBuffer.receiverName = receiverName;
-    receiverInBuffer.ipAddress = ipAddress;
+    qMemCopy(receiverInBuffer.receiverName, receiverName.toStdString().c_str(), receiverName.length());
+    qMemCopy(receiverInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
     receiverInBuffer.port = port;
     receiverInBuffer.longitude = longitude;
     receiverInBuffer.latitude = latitude;

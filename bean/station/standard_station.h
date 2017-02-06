@@ -6,7 +6,7 @@
 #include "base_station.h"
 #include "receiver.h"
 #include "common.h"
-#include "smamframework_header.h"
+#include "smam_component_header.h"
 
 class StandardStation : public BaseStation
 {

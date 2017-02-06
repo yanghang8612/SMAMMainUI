@@ -8,8 +8,13 @@
 
 class StatusPushButton : public QPushButton
 {
+    Q_OBJECT
+
 public:
 	StatusPushButton(const QIcon& icon, const QString &text, QWidget *parent = 0);
+
+private slots:
+    void receiveComponentCheckSignal(bool status);
 
 protected:
 	virtual void enterEvent(QEvent*);

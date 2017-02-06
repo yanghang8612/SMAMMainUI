@@ -73,13 +73,16 @@ private:
     QList<IGMASStation*> iGMASStationList;
     QList<IGSStation*> iGSStationList;
     QList<OtherCenter*> otherCenterList;
-    SharedBuffer* buffer;
+    SharedBuffer* standardBuffer;
+    SharedBuffer* iGMASStationBuffer;
+    SharedBuffer* iGSStationBuffer;
+    SharedBuffer* otherCenterBuffer;
 
     QTreeWidget* tree;
     QTreeWidgetItem* standardStationTreeRoot;
     QTreeWidgetItem* iGMASStationTreeRoot;
     QTreeWidgetItem* iGSStatioinTreeRoot;
-    QTreeWidgetItem* centerTreeRoot;
+    QTreeWidgetItem* otherCenterTreeRoot;
     QTreeWidgetItem* memoryTreeRoot;
 
     QVBoxLayout* container;
@@ -90,12 +93,13 @@ private:
     QDomNode standardStationRoot;
     QDomNode iGMASStationiRoot;
     QDomNode iGSStationRoot;
-    QDomNode centerRoot;
+    QDomNode otherCenterRoot;
 
 	void initAtBJ();
 	void initAtXJ();
 	QDomDocument getRootFromXMLFile(const QString& filePath);
 	void writeConfigFile();
+    void writeSharedBuffer();
 };
 
 #endif // SMAMTREEWIDGET_H

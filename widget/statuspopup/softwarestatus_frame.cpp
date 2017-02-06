@@ -2,12 +2,12 @@
 
 #include "softwarestatus_frame.h"
 #include "ui_softwarestatus_frame.h"
-#include "mainframework_header.h"
+#include "main_component_header.h"
 #include "common.h"
 
 SoftwareStatusFrame::SoftwareStatusFrame(QWidget *parent) :
 	QFrame(parent),
-    ui(new Ui::SoftwareStatusFrame), dllStatus(new int[DLL_COUNT]), preDllStatus(new int[DLL_COUNT])
+    ui(new Ui::SoftwareStatusFrame)
 {
 	ui->setupUi(this);
     buttons[0] = ui->mainFrameworkStatus;
@@ -17,7 +17,9 @@ SoftwareStatusFrame::SoftwareStatusFrame(QWidget *parent) :
     buttons[4] = ui->userManagerStatus;
     buttons[5] = ui->systemManagerStatus;
     startTimer(DLLSTATUS_CHECK_TIMEINTERVAL);
-    qMemSet(preDllStatus, 0, DLL_COUNT * sizeof(int));
+    qMemSet(dllStatus, 0, sizeof(dllStatus));
+    qMemSet(preDllStatus, 0, sizeof(dllStatus));
+    qMemSet(componentStatus, true, sizeof(componentStatus));
 }
 
 SoftwareStatusFrame::~SoftwareStatusFrame()
@@ -27,22 +29,27 @@ SoftwareStatusFrame::~SoftwareStatusFrame()
 
 void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
 {
-    for (int i = 0; i < DLL_COUNT; i++) {
-        qDebug() << dllStatus[i] << preDllStatus[i];
-    }
+//    for (int i = 0; i < DLL_COUNT; i++) {
+//        qDebug() << dllStatus[i] << preDllStatus[i];
+//    }
     if (DllStatusReadFunc != 0) {
         DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
-        for (int i = 0; i < 6; ++i) {
-            QString status = ":/status_green";
+        for (int i = 0; i < DLL_COUNT; ++i) {
+            componentStatus[i] = true;
             for (int j = 0; j < COMPONENT_DLL_COUNT[i]; ++j) {
                 int index = COMPONENT_STATUSARRAY_INDEX[i] + j;
                 if (dllStatus[index] == preDllStatus[index]) {
-                    status = ":/status_red";
+                    componentStatus[i] = false;
                     break;
                 }
             }
-            buttons[i]->setIcon(QIcon(status));
+            buttons[i]->setIcon(QIcon(componentStatus[i] ? ":/status_green" : ":/status_red"));
         }
         qMemCopy(preDllStatus, dllStatus, DLL_COUNT * sizeof(int));
+        bool status = true;
+        for (int i = 0; i < DLL_COUNT; i++) {
+            status &= componentStatus[i];
+        }
+        emit isEveryComponentNormal(status);
     }
 }

@@ -3,12 +3,12 @@
 #include <QtCore>
 
 #include "smam_mainwindow.h"
-#include "mainframework_header.h"
-#include "smamframework_header.h"
+#include "main_component_header.h"
+#include "smam_component_header.h"
 
 extern "C" bool DllMain(int argc, char* argv[]);
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForTr(codec);

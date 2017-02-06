@@ -4,7 +4,7 @@
 #include <QFile>
 #include <QDebug>
 
-#include "mainframework_header.h"
+#include "main_component_header.h"
 #include "smam_treewidget.h"
 #include "widget/centerinfo_widget.h"
 #include "widget/mainmonitor_widget.h"
@@ -24,10 +24,6 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     tree(tree), container(container),
     currentContentWidget(0)
 {
-    if (FindMemoryInfoFunc != 0) {
-        void* bufferPointer = FindMemoryInfoFunc(STANDARD_SHAREDBUFFER_ID, STANDARD_SHAREDBUFFER_MAXITEMCOUNT * sizeof(StandardStationInBuffer));
-        buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_WRITE, bufferPointer, sizeof(StandardStationInBuffer));
-    }
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             initAtXJ();
@@ -287,9 +283,17 @@ void SMAMTreeWidget::deleteStandardStation()
 
 void SMAMTreeWidget::showAddNewReceiverDialog()
 {
-	AddReceiverDialog* dialog = new AddReceiverDialog(tree);
-	connect(dialog, SIGNAL(confirmButtonClicked(Receiver*)), this, SLOT(addNewReceiver(Receiver*)));
-	dialog->show();
+    if (((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
+        QMessageBox::warning(tree,
+                             tr("提示"),
+                             tr("超过最大单个基准站所能容纳接收机数目。"),
+                             QMessageBox::Ok);
+    }
+    else {
+        AddReceiverDialog* dialog = new AddReceiverDialog(tree);
+        connect(dialog, SIGNAL(confirmButtonClicked(Receiver*)), this, SLOT(addNewReceiver(Receiver*)));
+        dialog->show();
+    }
 }
 
 void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
@@ -460,7 +464,7 @@ void SMAMTreeWidget::addNewCenter(OtherCenter* center)
     centerDetail.appendChild(root.createTextNode(center->getDetail()));
     newCenter.appendChild(centerDetail);
 
-    centerRoot.appendChild(newCenter);
+    otherCenterRoot.appendChild(newCenter);
 
     writeConfigFile();
 }
@@ -477,7 +481,7 @@ void SMAMTreeWidget::modifyCenter(OtherCenter* center)
     addWidgetToContainer(tree->currentItem());
 
     int index = tree->currentIndex().row();
-    QDomNode centerNode = centerRoot.childNodes().at(index);
+    QDomNode centerNode = otherCenterRoot.childNodes().at(index);
 
     QDomElement centerName = root.createElement("CENTERNAME");
     centerName.appendChild(root.createTextNode(center->getCenterName()));
@@ -508,7 +512,7 @@ void SMAMTreeWidget::deleteCenter()
                                    QMessageBox::Cancel | QMessageBox::Ok);
     if (ret == QMessageBox::Ok) {
         otherCenterList.removeAt(tree->currentIndex().row());
-        centerRoot.removeChild(centerRoot.childNodes().at(tree->currentIndex().row()));
+        otherCenterRoot.removeChild(otherCenterRoot.childNodes().at(tree->currentIndex().row()));
         delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
         writeConfigFile();
     }
@@ -569,16 +573,16 @@ void SMAMTreeWidget::initAtXJ()
         stationNode = stationNode.nextSibling();
     }
 
-    centerTreeRoot = new QTreeWidgetItem(10);
-    centerTreeRoot->setText(0, tr("其他中心管理"));
-    centerTreeRoot->setIcon(0, QIcon(":/center_root"));
+    otherCenterTreeRoot = new QTreeWidgetItem(10);
+    otherCenterTreeRoot->setText(0, tr("其他中心管理"));
+    otherCenterTreeRoot->setIcon(0, QIcon(":/center_root"));
 
-    centerRoot = root.namedItem("BDLSS").namedItem("CENTERS");
-    if (centerRoot.isNull()) {
-        centerRoot = root.createElement("CENTERS");
-        root.namedItem("BDLSS").appendChild(centerRoot);
+    otherCenterRoot = root.namedItem("BDLSS").namedItem("CENTERS");
+    if (otherCenterRoot.isNull()) {
+        otherCenterRoot = root.createElement("CENTERS");
+        root.namedItem("BDLSS").appendChild(otherCenterRoot);
     }
-    QDomNode centerNode = centerRoot.firstChild();
+    QDomNode centerNode = otherCenterRoot.firstChild();
     while (!centerNode.isNull()) {
         if (centerNode.isElement()) {
             OtherCenter* center = new OtherCenter();
@@ -587,7 +591,7 @@ void SMAMTreeWidget::initAtXJ()
             center->setPort(centerNode.namedItem("IPPORT").toElement().text());
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
-            QTreeWidgetItem* centerTreeNode = new CenterTreeWidgetItem(centerTreeRoot, center);
+            QTreeWidgetItem* centerTreeNode = new CenterTreeWidgetItem(otherCenterTreeRoot, center);
             otherCenterList << center;
         }
         centerNode = centerNode.nextSibling();
@@ -599,14 +603,23 @@ void SMAMTreeWidget::initAtXJ()
 
 	tree->setColumnCount(1);
     tree->addTopLevelItem(standardStationTreeRoot);
-    tree->addTopLevelItem(centerTreeRoot);
+    tree->addTopLevelItem(otherCenterTreeRoot);
     tree->addTopLevelItem(memoryTreeRoot);
 	tree->setContextMenuPolicy(Qt::CustomContextMenu);
     standardStationTreeRoot->setExpanded(true);
-    centerTreeRoot->setExpanded(true);
+    otherCenterTreeRoot->setExpanded(true);
 
 	connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenuAtXJ(QPoint)));
 	connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(addWidgetToContainer(QTreeWidgetItem*)));
+
+    //Init shared buffer and write buffer
+    if (FindMemoryInfoFunc != 0) {
+        void* bufferPointer = FindMemoryInfoFunc(STANDARD_SHAREDBUFFER_ID, STANDARD_SHAREDBUFFER_MAXITEMCOUNT * sizeof(StandardStationInBuffer));
+        standardBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_WRITE, bufferPointer, sizeof(StandardStationInBuffer));
+        void* otherCenterBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID, OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
+        otherCenterBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_WRITE, otherCenterBufferPointer, sizeof(OtherCenterInBuffer));
+        writeSharedBuffer();
+    }
 }
 
 QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
@@ -647,11 +660,44 @@ void SMAMTreeWidget::writeConfigFile()
     ((MainMonitorWidget*) systemMonitorWidget)->updateView();
 
     addWidgetToContainer(tree->currentItem());
+    writeSharedBuffer();
 
 	QFile file(STANDARD_CONFIGFILE_PATH);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate))
 		return;
 	QTextStream out(&file);
 	root.save(out, 2);
-	file.close();
+    file.close();
+}
+
+void SMAMTreeWidget::writeSharedBuffer()
+{
+    switch (deploymentType) {
+        case DeploymentType::XJ_CENTER:
+        {
+            StandardStationInBuffer standard[standardStationList.size()];
+            for (int i = 0; i < standardStationList.size(); i++) {
+                standard[i] = standardStationList[i]->toStandardStationInBuffer();
+            }
+            if (standardBuffer != 0) {
+                standardBuffer->writeData(&standard, standardStationList.size());
+            }
+            OtherCenterInBuffer otherCenter[otherCenterList.size()];
+            for (int i = 0; i < otherCenterList.size(); i++) {
+                otherCenter[i] = otherCenterList[i]->toOtherCenterInBuffer();
+            }
+            if (otherCenterBuffer != 0) {
+                otherCenterBuffer->writeData(&otherCenter, otherCenterList.size());
+            }
+            break;
+        }
+        case DeploymentType::BJ_CENTER:
+        {
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }

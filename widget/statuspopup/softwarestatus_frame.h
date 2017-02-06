@@ -27,10 +27,10 @@ signals:
 
 private:
 	Ui::SoftwareStatusFrame *ui;
-    int* dllStatus;
-    int* preDllStatus;
-    QPushButton* buttons[6];
-    bool status;
+    int dllStatus[DLL_COUNT];
+    int preDllStatus[DLL_COUNT];
+    QPushButton* buttons[DLL_COUNT];
+    bool componentStatus[DLL_COUNT];
 };
 
 #endif // SOFTWARESTATUS_FRAME_H

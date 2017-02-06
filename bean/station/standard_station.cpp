@@ -58,15 +58,16 @@ QList<Receiver *> StandardStation::getReceivers() const
 StandardStationInBuffer StandardStation::toStandardStationInBuffer()
 {
     StandardStationInBuffer standardStationInBuffer;
-    standardStationInBuffer.stationName = stationName;
-    standardStationInBuffer.ipAddress = ipAddress;
+    qMemCopy(standardStationInBuffer.stationName, stationName.toStdString().c_str(), stationName.length());
+    qMemCopy(standardStationInBuffer.detail, detail.toStdString().c_str(), detail.length());
+    qMemCopy(standardStationInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
     standardStationInBuffer.port = port;
     standardStationInBuffer.deploymentType = (quint8) type;
-    standardStationInBuffer.detail = detail;
     standardStationInBuffer.casterMode = (quint8) mode;
     standardStationInBuffer.serviceThreadCount = serviceThreadCount;
-    foreach (Receiver* receiver, receivers) {
-        standardStationInBuffer.receivers << receiver->toReceiverInBuffer();
+    standardStationInBuffer.receiverCount = receivers.size();
+    for (int i = 0; i < receivers.size(); i++) {
+        standardStationInBuffer.receivers[i] = receivers[i]->toReceiverInBuffer();
     }
     return standardStationInBuffer;
 }

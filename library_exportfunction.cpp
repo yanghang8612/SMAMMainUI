@@ -2,9 +2,11 @@
 #include <QDebug>
 
 #include "library_exportfunction.h"
-#include "mainframework_header.h"
+#include "main_component_header.h"
 #include "widget/mid/systemmanager_widget.h"
 #include "utilies/shared_buffer.h"
+
+int shabi = 1;
 
 MySharedMemoryWriteThread::MySharedMemoryWriteThread(void* sharedMemoryPointer, quint32 bufferSize) :
         QThread(),

@@ -5,7 +5,7 @@
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"
 #include "common.h"
-#include "mainframework_header.h"
+#include "main_component_header.h"
 #include "library_exportfunction.h"
 
 FINDMEMORYINFOFUNC FindMemoryInfoFunc = 0;
@@ -30,8 +30,10 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	timerID = startTimer(1000);
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
-    for (int i = 0; i < 6; ++i) {
-        messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 1520));
+    if (FindMemoryInfoFunc != 0) {
+        for (int i = 0; i < 6; i++) {
+            messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 1520));
+        }
     }
     QTimer* messageReceiverTimer = new QTimer(this);
     connect(messageReceiverTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
@@ -39,7 +41,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
 
-    softwareStatus = new StatusPushButton(QIcon(":/status_red"), tr("软件运行状态"), this);
+    softwareStatus = new StatusPushButton(QIcon(":/status_green"), tr("软件运行状态"), this);
     ui->statusContainer->addWidget(softwareStatus);
 }
 
@@ -51,8 +53,8 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
+//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
 	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
 
 	QDateTime time = QDateTime::currentDateTime();
@@ -66,7 +68,7 @@ void SystemManagerWidget::addMessageToInfoContainer()
     for (int i = 0; i < 6; ++i) {
         while (true) {
             SoftWorkStatus status;
-            if (messageBuffers[i]->readData(&status, sizeof(status)) == 0) {
+            if (messageBuffers[i] == 0 || messageBuffers[i]->readData(&status, sizeof(status)) == 0) {
                 break;
             }
             ui->infoOutputTable->setRowCount(currentRowCount + 1);
