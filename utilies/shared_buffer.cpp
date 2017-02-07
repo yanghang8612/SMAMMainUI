@@ -85,7 +85,7 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
                 length = bufferCapacity - readPointer;
                 qMemCopy(dataToRead, dataStartPointer + readPointer, length);
                 readPointer = 0;
-                return length + readData(dataToRead + length, lengthOrCountToRead - length);
+                return length + readData((char*) dataToRead + length, lengthOrCountToRead - length);
             }
         }
         qMemCopy(dataToRead, dataStartPointer + readPointer, length);
@@ -95,6 +95,9 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
     else if (type == COVER_BUFFER) {
         qMemCopy(dataToRead, dataStartPointer, itemSize * lengthOrCountToRead);
         return lengthOrCountToRead;
+    }
+    else {
+        return -1;
     }
 }
 
@@ -114,7 +117,7 @@ quint32 SharedBuffer::writeData(const void* dataFromWrite, quint32 lengthOrCount
         }
         else {
             qMemCopy(dataStartPointer + header->writePointer, dataFromWrite, bufferTailLength);
-            qMemCopy(dataStartPointer, dataFromWrite + bufferTailLength, lengthOrCountFromWrite - bufferTailLength);
+            qMemCopy(dataStartPointer, (char*) dataFromWrite + bufferTailLength, lengthOrCountFromWrite - bufferTailLength);
             header->writePointer = lengthOrCountFromWrite - bufferTailLength;
         }
     }

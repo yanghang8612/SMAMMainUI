@@ -46,7 +46,7 @@ int get_rmem(pid_t p)
 
 int get_total_mem()
 {
-	char* file = "/proc/meminfo";//文件名
+    char file[] = "/proc/meminfo";//文件名
 
 	FILE *fd;         //定义文件指针fd
 	char line_buff[256] = {0};  //读取行的缓冲区

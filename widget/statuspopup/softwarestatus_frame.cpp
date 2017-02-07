@@ -29,14 +29,15 @@ SoftwareStatusFrame::~SoftwareStatusFrame()
 
 void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
 {
+    Q_UNUSED(event);
 //    for (int i = 0; i < DLL_COUNT; i++) {
 //        qDebug() << dllStatus[i] << preDllStatus[i];
 //    }
     if (DllStatusReadFunc != 0) {
         DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
-        for (int i = 0; i < COMPONENT_COUNT; i++) {
+        for (quint32 i = 0; i < COMPONENT_COUNT; i++) {
             componentStatus[i] = true;
-            for (int j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
+            for (quint32 j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
                 int index = COMPONENT_STATUSARRAY_INDEX[i] + j;
                 if (dllStatus[index] == preDllStatus[index]) {
                     componentStatus[i] = false;
@@ -47,7 +48,7 @@ void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
         }
         qMemCopy(preDllStatus, dllStatus, DLL_COUNT * sizeof(int));
         bool status = true;
-        for (int i = 0; i < DLL_COUNT; i++) {
+        for (quint32 i = 0; i < DLL_COUNT; i++) {
             status &= componentStatus[i];
         }
         emit isEveryComponentNormal(status);

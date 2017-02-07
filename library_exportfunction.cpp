@@ -39,14 +39,14 @@ void MySharedMemoryWriteThread::run()
         }
         qMemSet(status->messageContent, 0, sizeof(status->messageContent));
         qMemCopy(status->messageContent, message, qstrlen(message));
-        qDebug() << "In write thread, message length is" << qstrlen(status->messageContent) << "message is" << QString(status->messageContent);
+        //qDebug() << "In write thread, message length is" << qstrlen(status->messageContent) << "message is" << QString(status->messageContent);
         //buffer.writeData(status, sizeof(SoftWorkStatus));
         DllStatusWriteFunc(51);
         DllStatusWriteFunc(52);
         DllStatusWriteFunc(53);
         DllStatusWriteFunc(54);
         SoftWorkStatusWriteFunc(6, *status);
-        sleep(1);
+        sleep(qrand() % 3 + 1);
     }
 }
 
@@ -73,6 +73,8 @@ void MySharedMemoryReadThread::run()
 
 extern "C" bool DllMain(int argc, char* argv[])
 {
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
     qDebug() << "SMAM DllMain function called.";
     void* myFirstSharedMemoryPointer = FindMemoryInfoFunc(7, 1520);
     //void* myFirstSharedMemoryPointer = new quint8[1080];
@@ -86,6 +88,8 @@ extern "C" bool DllMain(int argc, char* argv[])
 
 extern "C" bool DllInit(int argc, char* argv[])
 {
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
     qDebug() << "SMAM DllInit function called.";
     return true;
 }

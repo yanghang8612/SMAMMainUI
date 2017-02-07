@@ -283,7 +283,7 @@ void SMAMTreeWidget::deleteStandardStation()
 
 void SMAMTreeWidget::showAddNewReceiverDialog()
 {
-    if (((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
+    if ((quint32) ((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
         QMessageBox::warning(tree,
                              tr("提示"),
                              tr("超过最大单个基准站所能容纳接收机数目。"),
@@ -391,7 +391,7 @@ void SMAMTreeWidget::showAddNewIGMASStationDialog()
 
 void SMAMTreeWidget::addNewIGMASStationDialog(IGMASStation* station)
 {
-
+    Q_UNUSED(station);
 }
 
 void SMAMTreeWidget::showModifyIGMASStationDialog()
@@ -401,7 +401,7 @@ void SMAMTreeWidget::showModifyIGMASStationDialog()
 
 void SMAMTreeWidget::modifyIGMASStation(IGMASStation* station)
 {
-
+    Q_UNUSED(station);
 }
 
 void SMAMTreeWidget::deleteIGMASStation()
@@ -416,7 +416,7 @@ void SMAMTreeWidget::showAddNewIGSStationDialog()
 
 void SMAMTreeWidget::addNewIGSStationDialog(IGSStation* station)
 {
-
+    Q_UNUSED(station);
 }
 
 void SMAMTreeWidget::showModifyIGSStationDialog()
@@ -426,7 +426,7 @@ void SMAMTreeWidget::showModifyIGSStationDialog()
 
 void SMAMTreeWidget::modifyIGSStation(IGSStation* station)
 {
-
+    Q_UNUSED(station);
 }
 
 void SMAMTreeWidget::deleteIGSStation()
@@ -566,6 +566,7 @@ void SMAMTreeWidget::initAtXJ()
 
 					//Create receiver node of QTreewidget
 					QTreeWidgetItem* receiverTreeNode = new ReceiverTreeWidgetItem(stationTreeNode, receiver);
+                    Q_UNUSED(receiverTreeNode);
 				}
 				receiverNode = receiverNode.nextSibling();
 			}
@@ -592,6 +593,7 @@ void SMAMTreeWidget::initAtXJ()
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
             QTreeWidgetItem* centerTreeNode = new CenterTreeWidgetItem(otherCenterTreeRoot, center);
+            Q_UNUSED(centerTreeNode);
             otherCenterList << center;
         }
         centerNode = centerNode.nextSibling();
