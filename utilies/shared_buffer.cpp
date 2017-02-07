@@ -43,6 +43,7 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
         header = 0;
         dataStartPointer = (quint8*) headerPointer + 4;
         itemCount = (quint32*) headerPointer;
+        this->itemSize = itemSize;
     }
     else {
         qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
