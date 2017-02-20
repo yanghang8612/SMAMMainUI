@@ -19,7 +19,7 @@
      <x>280</x>
      <y>10</y>
      <width>200</width>
-     <height>110</height>
+     <height>150</height>
     </rect>
    </property>
    <property name="title">
@@ -57,6 +57,16 @@
     </item>
     <item row="1" column="1">
      <widget class="QLineEdit" name="receiverLatitudeEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_6">
+      <property name="text">
+       <string>高度：</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="receiverHeightEdit"/>
     </item>
    </layout>
   </widget>

@@ -11,6 +11,7 @@ struct ReceiverInBuffer {
     quint16 port;
     float longitude;
     float latitude;
+    float height;
 };
 
 struct StandardStationInBuffer {
@@ -31,13 +32,18 @@ struct OtherCenterInBuffer {
     quint16 port;
 };
 
-struct iGSStationInBuffer {
-    char stationName[64];
+struct IGMASStationInBuffer {
+    bool isAvailable;
     char ipAddress[16];
-    quint16 port;
+    int port;
+    char mount[4];
+    int memID;
+    double longitude;
+    double latitude;
+    double height;
 };
 
-struct iGMASStationInBuffer {
+struct IGSStationInBuffer {
     char stationName[64];
     char ipAddress[16];
     quint16 port;

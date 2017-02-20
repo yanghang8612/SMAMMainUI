@@ -1,10 +1,12 @@
 #include "igmas_treewidgetitem.h"
 
-IGMASTreeWidgetItem::IGMASTreeWidgetItem(IGMASStation* station, QTreeWidgetItem* parent) :
-	QTreeWidgetItem(parent),
+IGMASTreeWidgetItem::IGMASTreeWidgetItem(QTreeWidgetItem* parent, int type, IGMASStation* station) :
+    QTreeWidgetItem(parent, type),
 	station(station)
 {
-	this->setText(0, station->getStationName());
+    this->setText(0, station->getMount());
+    this->setIcon(0, QIcon(":/igmas_station"));
+    this->setData(0, Qt::UserRole, QVariant::fromValue((void*) station));
 }
 
 IGMASTreeWidgetItem::~IGMASTreeWidgetItem()

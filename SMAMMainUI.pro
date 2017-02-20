@@ -9,7 +9,7 @@ QT       += core gui xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SMAMMainUI
-TEMPLATE = lib
+TEMPLATE = app
 
 
 SOURCES += main.cpp \
@@ -29,7 +29,6 @@ SOURCES += main.cpp \
     bean/station/igmas_station.cpp \
     widget/centerinfo_widget.cpp \
     widget/mainmonitor_widget.cpp \
-    widget/stationinfo_widget.cpp \
     widget/receiverinfo_widget.cpp \
     widget/dialog/add_center_dialog.cpp \
     widget/dialog/modify_center_dialog.cpp \
@@ -56,7 +55,11 @@ SOURCES += main.cpp \
     widget/graphicsitem/usersnode.cpp \
     library_exportfunction.cpp \
     utilies/shared_buffer.cpp \
-    widget/sharedmemoryinfo_widget.cpp
+    widget/sharedmemoryinfo_widget.cpp \
+    widget/dialog/add_igmasstation_dialog.cpp \
+    widget/dialog/modify_igmasstation_dialog.cpp \
+    widget/standardstationinfo_widget.cpp \
+    widget/igmasstationinfo_widget.cpp
 
 HEADERS  += \
     common.h \
@@ -76,7 +79,6 @@ HEADERS  += \
     bean/station/igmas_station.h \
     widget/centerinfo_widget.h \
     widget/mainmonitor_widget.h \
-    widget/stationinfo_widget.h \
     widget/receiverinfo_widget.h \
     widget/dialog/add_center_dialog.h \
     widget/dialog/modify_center_dialog.h \
@@ -105,13 +107,16 @@ HEADERS  += \
     widget/sharedmemoryinfo_widget.h \
     library_exportfunction.h \
     main_component_header.h \
-    smam_component_header.h
+    smam_component_header.h \
+    widget/dialog/add_igmasstation_dialog.h \
+    widget/dialog/modify_igmasstation_dialog.h \
+    widget/standardstationinfo_widget.h \
+    widget/igmasstationinfo_widget.h
 
 FORMS    += \
     smam_mainwindow.ui \
     widget/centerinfo_widget.ui \
     widget/mainmonitor_widget.ui \
-    widget/stationinfo_widget.ui \
     widget/receiverinfo_widget.ui \
     widget/dialog/add_center_dialog.ui \
     widget/dialog/modify_center_dialog.ui \
@@ -121,7 +126,11 @@ FORMS    += \
     widget/dialog/modify_receiver_dialog.ui \
     widget/statuspopup/softwarestatus_frame.ui \
     widget/mid/systemmanager_widget.ui \
-    widget/sharedmemoryinfo_widget.ui
+    widget/sharedmemoryinfo_widget.ui \
+    widget/dialog/add_igmasstation_dialog.ui \
+    widget/dialog/modify_igmasstation_dialog.ui \
+    widget/standardstationinfo_widget.ui \
+    widget/igmasstationinfo_widget.ui
 
 RESOURCES += \
     res/icon.qrc \

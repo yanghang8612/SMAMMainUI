@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include <QDebug>
 
 #include "sharedmemoryinfo_widget.h"
@@ -42,8 +43,26 @@ void SharedMemoryInfoWidget::on_viewButton_clicked()
         return;
     }
     else {
-        void* sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 180);
-        buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
+        if (FindMemoryInfoFunc == 0)
+            return;
+        void* sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 100);
+        if (ui->bufferTypeBox->currentIndex() == 1) {
+            buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
+            if (buffer->getBufferSize() == 0)
+                QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
+            return;
+        }
+        else {
+            if (ui->itemSizeEdit->text().isEmpty()) {
+                QMessageBox::warning(this, tr("提示"), tr("请输入覆盖缓冲区中单个结构体的sizeof结果"), QMessageBox::Ok);
+                return;
+            }
+            buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
+            if (buffer->getItemCount() == 0) {
+                QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
+                return;
+            }
+        }
         updateView();
     }
 }
@@ -92,22 +111,40 @@ void SharedMemoryInfoWidget::updateView()
     if (buffer == 0) {
         return;
     }
-    ui->bufferSizeEdit->setText(QString::number(buffer->getBufferSize()));
-    ui->blockSizeEdit->setText(QString::number(buffer->getBlockSize()));
-    ui->writePointerEdit->setText(QString::number(buffer->getWritePointer()));
-    ui->readWriteLockEdit->setText(QString::number(buffer->getReadWriteLock()));
-    ui->stationIDEdit->setText(QString::number(buffer->getStationID()));
-    ui->ipAddressEdit->setText(QString::number(buffer->getIPAddress()));
-    ui->memoryHexInfoTable->setRowCount((int)(buffer->getBufferSize() / 16) + 1);
-    ui->memoryCharInfoTable->setRowCount((int)(buffer->getBufferSize() / 16) + 1);
-    quint8* dataStartPointer = (quint8*) buffer->getDataStartPointer();
-    for (quint32 i = 0; i < buffer->getBufferSize(); i++) {
-        quint8 singleByte = *(dataStartPointer + i);
-        QTableWidgetItem* hexItem = new QTableWidgetItem(((singleByte > 15) ? "" : "0") + QString::number(singleByte, 16).toUpper());
-        hexItem->setTextAlignment(Qt::AlignCenter);
-        QTableWidgetItem* charItem = new QTableWidgetItem(((qint8) singleByte <= 0) ? "-" : QString(singleByte));
-        charItem->setTextAlignment(Qt::AlignCenter);
-        ui->memoryHexInfoTable->setItem(i / 16, i % 16, hexItem);
-        ui->memoryCharInfoTable->setItem(i / 16, i % 16, charItem);
+    if (ui->bufferTypeBox->currentIndex() == 0) {
+        ui->bufferSizeEdit->setText(QString::number(buffer->getBufferSize()));
+        ui->blockSizeEdit->setText(QString::number(buffer->getBlockSize()));
+        ui->writePointerEdit->setText(QString::number(buffer->getWritePointer()));
+        ui->readWriteLockEdit->setText(QString::number(buffer->getReadWriteLock()));
+        ui->stationIDEdit->setText(QString::number(buffer->getStationID()));
+        ui->ipAddressEdit->setText(QString::number(buffer->getIPAddress()));
+        ui->memoryHexInfoTable->setRowCount((int)(buffer->getBufferSize() / 16) + 1);
+        ui->memoryCharInfoTable->setRowCount((int)(buffer->getBufferSize() / 16) + 1);
+        quint8* dataStartPointer = (quint8*) buffer->getDataStartPointer();
+        for (quint32 i = 0; i < buffer->getBufferSize(); i++) {
+            quint8 singleByte = *(dataStartPointer + i);
+            QTableWidgetItem* hexItem = new QTableWidgetItem(((singleByte > 15) ? "" : "0") + QString::number(singleByte, 16).toUpper());
+            hexItem->setTextAlignment(Qt::AlignCenter);
+            QTableWidgetItem* charItem = new QTableWidgetItem(((qint8) singleByte <= 0) ? "-" : QString(singleByte));
+            charItem->setTextAlignment(Qt::AlignCenter);
+            ui->memoryHexInfoTable->setItem(i / 16, i % 16, hexItem);
+            ui->memoryCharInfoTable->setItem(i / 16, i % 16, charItem);
+        }
+    }
+    else {
+        ui->bufferSizeEdit->setText(QString::number(buffer->getItemCount()));
+        quint32 bufferSize = buffer->getItemCount() * buffer->getItemSize();
+        ui->memoryHexInfoTable->setRowCount((int)(bufferSize / 16) + 1);
+        ui->memoryCharInfoTable->setRowCount((int)(bufferSize / 16) + 1);
+        quint8* dataStartPointer = (quint8*) buffer->getDataStartPointer();
+        for (quint32 i = 0; i < buffer->getBufferSize(); i++) {
+            quint8 singleByte = *(dataStartPointer + i);
+            QTableWidgetItem* hexItem = new QTableWidgetItem(((singleByte > 15) ? "" : "0") + QString::number(singleByte, 16).toUpper());
+            hexItem->setTextAlignment(Qt::AlignCenter);
+            QTableWidgetItem* charItem = new QTableWidgetItem(((qint8) singleByte <= 0) ? "-" : QString(singleByte));
+            charItem->setTextAlignment(Qt::AlignCenter);
+            ui->memoryHexInfoTable->setItem(i / 16, i % 16, hexItem);
+            ui->memoryCharInfoTable->setItem(i / 16, i % 16, charItem);
+        }
     }
 }

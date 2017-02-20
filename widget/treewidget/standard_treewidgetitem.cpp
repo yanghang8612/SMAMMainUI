@@ -1,8 +1,8 @@
 #include "standard_treewidgetitem.h"
 
-StandardTreeWidgetItem::StandardTreeWidgetItem(QTreeWidgetItem* parent, StandardStation* station) :
-	QTreeWidgetItem(parent, 01),
-	parent(parent), station(station)
+StandardTreeWidgetItem::StandardTreeWidgetItem(QTreeWidgetItem* parent, int type, StandardStation* station) :
+    QTreeWidgetItem(parent, type),
+    station(station)
 {
 	this->setText(0, station->getStationName());
 	this->setIcon(0, QIcon(":/standard_station"));

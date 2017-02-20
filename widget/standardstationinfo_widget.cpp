@@ -1,8 +1,8 @@
-#include "stationinfo_widget.h"
-#include "ui_stationinfo_widget.h"
+#include "standardstationinfo_widget.h"
+#include "ui_standardstationinfo_widget.h"
 #include "common.h"
 
-StationInfoWidget::StationInfoWidget(QWidget *parent) :
+StandardStationInfoWidget::StandardStationInfoWidget(QWidget *parent) :
 	QTabWidget(parent),
 	ui(new Ui::StationInfoWidget)
 {
@@ -16,12 +16,12 @@ StationInfoWidget::StationInfoWidget(QWidget *parent) :
 	ui->receiverTable->verticalHeader()->setVisible(false);
 }
 
-StationInfoWidget::~StationInfoWidget()
+StandardStationInfoWidget::~StandardStationInfoWidget()
 {
 	delete ui;
 }
 
-void StationInfoWidget::setStation(StandardStation* station)
+void StandardStationInfoWidget::setStation(StandardStation* station)
 {
 	this->station = station;
 	ui->stationNameEdit->setText(station->getStationName());

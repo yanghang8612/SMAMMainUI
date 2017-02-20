@@ -24,8 +24,7 @@ public:
 signals:
 
 private slots:
-	void showRightMenuAtBJ(QPoint pos);
-	void showRightMenuAtXJ(QPoint pos);
+    void showRightMenu(QPoint pos);
 	void addWidgetToContainer(QTreeWidgetItem* item);
 
 	void showAddNewStandardStationDialog();
@@ -45,7 +44,7 @@ private slots:
 	void deleteReceiver();
 
     void showAddNewIGMASStationDialog();
-    void addNewIGMASStationDialog(IGMASStation* station);
+    void addNewIGMASStation(IGMASStation* station);
 
     void showModifyIGMASStationDialog();
     void modifyIGMASStation(IGMASStation* station);
@@ -53,7 +52,7 @@ private slots:
     void deleteIGMASStation();
 
     void showAddNewIGSStationDialog();
-    void addNewIGSStationDialog(IGSStation * station);
+    void addNewIGSStation(IGSStation * station);
 
     void showModifyIGSStationDialog();
     void modifyIGSStation(IGSStation * station);
@@ -73,7 +72,7 @@ private:
     QList<IGMASStation*> iGMASStationList;
     QList<IGSStation*> iGSStationList;
     QList<OtherCenter*> otherCenterList;
-    SharedBuffer* standardBuffer;
+    SharedBuffer* standardStationBuffer;
     SharedBuffer* iGMASStationBuffer;
     SharedBuffer* iGSStationBuffer;
     SharedBuffer* otherCenterBuffer;
@@ -91,7 +90,7 @@ private:
 
     QDomDocument root;
     QDomNode standardStationRoot;
-    QDomNode iGMASStationiRoot;
+    QDomNode iGMASStationRoot;
     QDomNode iGSStationRoot;
     QDomNode otherCenterRoot;
 

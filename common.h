@@ -18,8 +18,8 @@ namespace CasterMode {
 	};
 }
 
-const QString STANDARD_CONFIGFILE_PATH = "caster-config.xml";
-const QString IGMAS_CONFIGFILE_PATH = "iGMAS-collector-cfg.xml";
+const QString XJ_CONFIGFILE_PATH = "xj-config.xml";
+const QString BJ_CONFIGFILE_PATH = "bj-config.xml";
 const QString DATE_FORMAT_STRING = "yyyy-MM-dd";
 const QString TIME_FORMAT_STRING = "hh:mm:ss";
 const QString DATETIME_FORMAT_STRING = "yyyy-MM-dd hh:mm:ss";
@@ -32,6 +32,8 @@ const quint32 STANDARD_SHAREDBUFFER_ID = 1601;
 const quint32 STANDARD_SHAREDBUFFER_MAXITEMCOUNT = 200;
 const quint32 OTHERCENTER_SHAREDBUFFER_ID = 1602;
 const quint32 OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT = 200;
+const quint32 IGMAS_SHAREDBUFFER_ID = 1603;
+const quint32 IGMAS_SHAREDBUFFER_MAXITEMCOUNT = 20;
 
 const quint32 DLLSTATUS_CHECK_TIMEINTERVAL = 3000;
 const quint32 MESSAGE_CHECK_TIMEINTERVAL = 100;

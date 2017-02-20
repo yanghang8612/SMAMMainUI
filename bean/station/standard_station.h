@@ -13,6 +13,16 @@ class StandardStation : public BaseStation
 public:
 	StandardStation();
 
+    QString getStationName() const;
+    void setStationName(const QString& value);
+
+    QString getDetail() const;
+    void setDetail(const QString& value);
+
+    DeploymentType::Value getType() const;
+    void setType(const DeploymentType::Value& value);
+    void setType(const QString& value);
+
 	CasterMode::Value getMode() const;
 	void setMode(const CasterMode::Value& value);
 	void setMode(const QString& value);
@@ -28,6 +38,9 @@ public:
     StandardStationInBuffer toStandardStationInBuffer();
 
 private:
+    QString stationName;
+    QString detail;
+    DeploymentType::Value type;
     CasterMode::Value mode;
     quint8 serviceThreadCount;
 	QList<Receiver*> receivers;

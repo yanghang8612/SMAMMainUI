@@ -16,11 +16,17 @@ public:
     static bool checkIPPortString(const QString& s);
     static bool checkLongitudeString(const QString& s);
     static bool checkLatitudeString(const QString& s);
+    static bool checkHeightString(const QString& s);
+    static bool checkMountString(const QString& s);
+    static bool checkMemIDString(const QString& s);
 
     static const QRegExp nameRX;
     static const QRegExp ipAddressRX;
     static const QRegExp longitudeRX;
     static const QRegExp latitudeRX;
+    static const QRegExp heightRX;
+    static const QRegExp mountRX;
+    static const QRegExp memIDRX;
 };
 
 #endif // GENERALFUNCTIONS_H

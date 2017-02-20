@@ -6,7 +6,7 @@
 #include "widget/mid/systemmanager_widget.h"
 #include "utilies/shared_buffer.h"
 
-int shabi = 1;
+static SystemManagerWidget* widget = 0;
 
 MySharedMemoryWriteThread::MySharedMemoryWriteThread(void* sharedMemoryPointer, quint32 bufferSize) :
         QThread(),
@@ -77,10 +77,9 @@ extern "C" bool DllMain(int argc, char* argv[])
     Q_UNUSED(argv);
     qDebug() << "SMAM DllMain function called.";
     void* myFirstSharedMemoryPointer = FindMemoryInfoFunc(7, 1520);
-    //void* myFirstSharedMemoryPointer = new quint8[1080];
-    qDebug() << "Alloc shared memory address :" << myFirstSharedMemoryPointer;
     MySharedMemoryWriteThread* writeThread = new MySharedMemoryWriteThread(myFirstSharedMemoryPointer, 1520);
     writeThread->start();
+    widget = new SystemManagerWidget((DeploymentType::Value) 1, 0);
 //    MySharedMemoryReadThread* readThread = new MySharedMemoryReadThread(myFirstSharedMemoryPointer);
 //    readThread->start();
     return true;
@@ -114,5 +113,6 @@ extern "C" bool DllContraryInit()
 
 extern "C" QWidget* getUIWidget(QWidget* parent = 0)
 {
-    return new SystemManagerWidget((DeploymentType::Value) 0, parent);
+    widget->setParent(parent);
+    return widget;
 }

@@ -21,7 +21,7 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
     this->mode = mode;
     if (type == LOOP_BUFFER) {
         commonInit(headerPointer);
-        bufferCapacity = bufferSize - sizeof(SharedBufferHeader);
+        this->bufferCapacity = bufferSize - sizeof(SharedBufferHeader);
         header->bufferSize = bufferSize;
         header->blockSize = blockSize;
         header->writePointer = 0;
@@ -40,9 +40,9 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
     this->type = type;
     this->mode = mode;
     if (type == COVER_BUFFER) {
-        header = 0;
-        dataStartPointer = (quint8*) headerPointer + 4;
-        itemCount = (quint32*) headerPointer;
+        this->header = 0;
+        this->dataStartPointer = (quint8*) headerPointer + 4;
+        this->itemCount = (quint32*) headerPointer;
         this->itemSize = itemSize;
     }
     else {
@@ -181,6 +181,12 @@ quint32 SharedBuffer::getItemCount() const
 {
     return *itemCount;
 }
+
+quint32 SharedBuffer::getItemSize() const
+{
+    return itemSize;
+}
+
 
 void SharedBuffer::commonInit(void* headerPointer)
 {

@@ -4,8 +4,7 @@
 
 ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
 	QDialog(parent),
-    ui(new Ui::ModifyCenterDialog),
-    center(center)
+    ui(new Ui::ModifyCenterDialog), center(center)
 {
     ui->setupUi(this);
     ui->centerNameEdit->setText(center->getCenterName());

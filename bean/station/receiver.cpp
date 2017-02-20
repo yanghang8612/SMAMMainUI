@@ -70,6 +70,21 @@ void Receiver::setLatitude(const QString& value)
     latitude = value.toFloat();
 }
 
+float Receiver::getHeight() const
+{
+    return height;
+}
+
+void Receiver::setHeight(float value)
+{
+    height = value;
+}
+
+void Receiver::setHeight(const QString& value)
+{
+    height = value.toFloat();
+}
+
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
@@ -78,8 +93,10 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     receiverInBuffer.port = port;
     receiverInBuffer.longitude = longitude;
     receiverInBuffer.latitude = latitude;
+    receiverInBuffer.height = height;
     return receiverInBuffer;
 }
+
 
 
 

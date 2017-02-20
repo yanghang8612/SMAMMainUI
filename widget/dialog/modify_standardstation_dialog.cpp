@@ -15,6 +15,7 @@ ModifyStandardStationDialog::ModifyStandardStationDialog(StandardStation* statio
 	ui->stationThreadCountEdit->setValue(station->getServiceThreadCount());
 	ui->stationDetailEdit->setText(station->getDetail());
 	setWindowTitle(tr("编辑基准站"));
+
     ui->stationNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
     ui->stationIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }

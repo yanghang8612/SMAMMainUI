@@ -36,24 +36,54 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>258</width>
-      <height>35</height>
+      <x>20</x>
+      <y>0</y>
+      <width>291</width>
+      <height>71</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="memoryIDEdit"/>
+     </item>
+     <item row="1" column="2" colspan="2">
+      <widget class="QLineEdit" name="itemSizeEdit"/>
+     </item>
+     <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>内存ID</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QLineEdit" name="memoryIDEdit"/>
+     <item row="0" column="3">
+      <widget class="QPushButton" name="autoUpdateButton">
+       <property name="text">
+        <string>开始刷新</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
      </item>
-     <item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QComboBox" name="bufferTypeBox">
+       <item>
+        <property name="text">
+         <string>循环缓冲区</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>覆盖缓冲区</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="0" column="2">
       <widget class="QPushButton" name="viewButton">
        <property name="text">
         <string>查看</string>
@@ -65,10 +95,10 @@
    <widget class="QWidget" name="layoutWidget1">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>10</y>
-      <width>593</width>
-      <height>74</height>
+      <x>330</x>
+      <y>0</y>
+      <width>641</width>
+      <height>71</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -172,25 +202,6 @@
       </widget>
      </item>
     </layout>
-   </widget>
-   <widget class="QPushButton" name="autoUpdateButton">
-    <property name="geometry">
-     <rect>
-      <x>192</x>
-      <y>50</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>开始刷新</string>
-    </property>
-    <property name="checkable">
-     <bool>true</bool>
-    </property>
-    <property name="checked">
-     <bool>false</bool>
-    </property>
    </widget>
    <widget class="QTableWidget" name="memoryCharInfoTable">
     <property name="geometry">

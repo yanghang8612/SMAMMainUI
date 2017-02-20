@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AddReceiverDialog</class>
- <widget class="QDialog" name="AddReceiverDialog">
-  <property name="windowModality">
-   <enum>Qt::ApplicationModal</enum>
-  </property>
+ <class>AddIGMASStationDialog</class>
+ <widget class="QDialog" name="AddIGMASStationDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +10,69 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QGroupBox" name="infoContainer">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>250</width>
+     <height>150</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>iGMAS测站信息</string>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>MOUNT：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="stationMountEdit"/>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>IP：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="stationIPEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>Port：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="stationPortEdit"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QWidget" name="horizontalLayoutWidget">
    <property name="geometry">
     <rect>
@@ -58,7 +118,7 @@
     </rect>
    </property>
    <property name="title">
-    <string>接收机位置</string>
+    <string>iGMAS测站位置</string>
    </property>
    <layout class="QGridLayout" name="gridLayout">
     <property name="topMargin">
@@ -78,7 +138,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QLineEdit" name="receiverLongitudeEdit"/>
+     <widget class="QLineEdit" name="stationLongitudeEdit"/>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_5">
@@ -91,7 +151,7 @@
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="receiverLatitudeEdit"/>
+     <widget class="QLineEdit" name="stationLatitudeEdit"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_6">
@@ -101,67 +161,65 @@
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="receiverHeightEdit"/>
+     <widget class="QLineEdit" name="stationHeightEdit"/>
     </item>
    </layout>
   </widget>
-  <widget class="QGroupBox" name="infoContainer">
+  <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>10</y>
-     <width>250</width>
-     <height>150</height>
+     <y>170</y>
+     <width>470</width>
+     <height>50</height>
     </rect>
    </property>
    <property name="title">
-    <string>接收机信息</string>
+    <string>iGMAS测站配置</string>
    </property>
-   <layout class="QGridLayout" name="gridLayout_2">
+   <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1,1">
     <property name="topMargin">
      <number>0</number>
     </property>
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item>
+     <widget class="QLabel" name="label_8">
       <property name="text">
-       <string>名称：</string>
+       <string>可用性：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="receiverNameEdit"/>
+    <item>
+     <widget class="QComboBox" name="stationAvailableBox">
+      <item>
+       <property name="text">
+        <string>不可用</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>可用</string>
+       </property>
+      </item>
+     </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_2">
+    <item>
+     <widget class="QLabel" name="label_7">
       <property name="text">
-       <string>IP：</string>
+       <string>内存ID：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="receiverIPEdit"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Port：</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="receiverPortEdit"/>
+    <item>
+     <widget class="QLineEdit" name="stationMemIDEdit"/>
     </item>
    </layout>
   </widget>

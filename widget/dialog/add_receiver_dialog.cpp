@@ -13,6 +13,7 @@ AddReceiverDialog::AddReceiverDialog(QWidget *parent) :
     ui->receiverIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
     ui->receiverLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
     ui->receiverLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
+    ui->receiverHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
 }
 
 AddReceiverDialog::~AddReceiverDialog()
@@ -62,12 +63,21 @@ void AddReceiverDialog::on_confirmButton_clicked()
         ui->receiverLatitudeEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
+    if (!GeneralFunctions::checkHeightString(ui->receiverHeightEdit->text())) {
+        ui->receiverHeightEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->receiverHeightEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
 	Receiver* receiver = new Receiver();
 	receiver->setReceiverName(ui->receiverNameEdit->text());
 	receiver->setIpAddress(ui->receiverIPEdit->text());
 	receiver->setPort(ui->receiverPortEdit->text());
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());
 	receiver->setLatitude(ui->receiverLatitudeEdit->text());
+    receiver->setHeight(ui->receiverHeightEdit->text());
 
 	emit confirmButtonClicked(receiver);
 

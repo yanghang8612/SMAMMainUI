@@ -8,11 +8,10 @@
 class CenterTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    CenterTreeWidgetItem(QTreeWidgetItem* parent, OtherCenter* center);
+    CenterTreeWidgetItem(QTreeWidgetItem* parent, int type, OtherCenter* center);
     ~CenterTreeWidgetItem();
 
 private:
-    QTreeWidgetItem* parent;
     OtherCenter* center;
 };
 

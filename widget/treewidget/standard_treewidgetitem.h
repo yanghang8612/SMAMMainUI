@@ -8,11 +8,10 @@
 class StandardTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-	StandardTreeWidgetItem(QTreeWidgetItem* parent = 0, StandardStation* station = 0);
+    StandardTreeWidgetItem(QTreeWidgetItem* parent, int type, StandardStation* station);
 	~StandardTreeWidgetItem();
 
 private:
-	QTreeWidgetItem* parent;
 	StandardStation* station;
 };
 

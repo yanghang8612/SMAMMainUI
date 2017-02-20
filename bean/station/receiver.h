@@ -28,14 +28,19 @@ public:
 	void setLatitude(float value);
 	void setLatitude(const QString& value);
 
+    float getHeight() const;
+    void setHeight(float value);
+    void setHeight(const QString& value);
+
     ReceiverInBuffer toReceiverInBuffer();
 
 private:
-	QString receiverName;
-	QString ipAddress;
-	quint16 port;
+    QString receiverName;
+    QString ipAddress;
+    quint16 port;
 	float longitude;
 	float latitude;
+    float height;
 };
 
 #endif // RECEIVER_H

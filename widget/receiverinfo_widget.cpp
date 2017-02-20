@@ -1,6 +1,5 @@
 #include "receiverinfo_widget.h"
 #include "ui_receiverinfo_widget.h"
-#include "dialog/add_standardstation_dialog.h"
 
 ReceiverInfoWidget::ReceiverInfoWidget(QWidget *parent) :
 	QTabWidget(parent),
@@ -24,4 +23,5 @@ void ReceiverInfoWidget::setReceiver(Receiver* receiver)
 	ui->receiverPortEdit->setText(QString::number(receiver->getPort()));
 	ui->receiverLongitudeEdit->setText(QString::number(receiver->getLongitude()));
 	ui->receiverLatitudeEdit->setText(QString::number(receiver->getLatitude()));
+    ui->receiverHeightEdit->setText(QString::number(receiver->getHeight()));
 }

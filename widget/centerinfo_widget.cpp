@@ -1,7 +1,3 @@
-#include <QChar>
-#include <QMenu>
-#include <QMessageBox>
-
 #include "centerinfo_widget.h"
 #include "ui_centerinfo_widget.h"
 

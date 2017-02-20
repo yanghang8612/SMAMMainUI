@@ -5,6 +5,46 @@ StandardStation::StandardStation()
 
 }
 
+QString StandardStation::getStationName() const
+{
+    return stationName;
+}
+
+void StandardStation::setStationName(const QString& value)
+{
+    stationName = value;
+}
+
+QString StandardStation::getDetail() const
+{
+    return detail;
+}
+
+void StandardStation::setDetail(const QString& value)
+{
+    detail = value;
+}
+
+DeploymentType::Value StandardStation::getType() const
+{
+    return type;
+}
+
+void StandardStation::setType(const DeploymentType::Value& value)
+{
+    type = value;
+}
+
+void StandardStation::setType(const QString& value)
+{
+    if (value.toInt() == 0) {
+        type = DeploymentType::XJ_CENTER;
+    }
+    else if (value.toInt() == 1) {
+        type = DeploymentType::BJ_CENTER;
+    }
+}
+
 CasterMode::Value StandardStation::getMode() const
 {
     return mode;
@@ -65,7 +105,7 @@ StandardStationInBuffer StandardStation::toStandardStationInBuffer()
     standardStationInBuffer.deploymentType = (quint8) type;
     standardStationInBuffer.casterMode = (quint8) mode;
     standardStationInBuffer.serviceThreadCount = serviceThreadCount;
-    standardStationInBuffer.receiverCount = receivers.size();
+    standardStationInBuffer.receiverCount = (quint8) receivers.size();
     for (int i = 0; i < receivers.size(); i++) {
         standardStationInBuffer.receivers[i] = receivers[i]->toReceiverInBuffer();
     }

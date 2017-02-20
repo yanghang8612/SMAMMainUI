@@ -9,13 +9,13 @@ namespace Ui {
 	class StationInfoWidget;
 }
 
-class StationInfoWidget : public QTabWidget
+class StandardStationInfoWidget : public QTabWidget
 {
 	Q_OBJECT
 
 public:
-	explicit StationInfoWidget(QWidget *parent = 0);
-	~StationInfoWidget();
+    explicit StandardStationInfoWidget(QWidget *parent = 0);
+    ~StandardStationInfoWidget();
 
 	void setStation(StandardStation* station);
 

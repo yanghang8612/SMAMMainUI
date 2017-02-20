@@ -48,6 +48,7 @@ public:
     void* getDataStartPointer() const;
 
     quint32 getItemCount() const;
+    quint32 getItemSize() const;
 
 private:
     BufferType type;
