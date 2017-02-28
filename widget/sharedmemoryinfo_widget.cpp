@@ -28,7 +28,7 @@ SharedMemoryInfoWidget::~SharedMemoryInfoWidget()
 
 void SharedMemoryInfoWidget::timerEvent(QTimerEvent* event)
 {
-    Q_UNUSED(event)
+    Q_UNUSED(event);
     updateView();
 }
 
@@ -46,18 +46,19 @@ void SharedMemoryInfoWidget::on_viewButton_clicked()
         if (FindMemoryInfoFunc == 0)
             return;
         void* sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 100);
-        if (ui->bufferTypeBox->currentIndex() == 1) {
+        if (ui->bufferTypeBox->currentIndex() == 0) {
             buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
-            if (buffer->getBufferSize() == 0)
+            if (buffer->getBufferSize() == 0) {
                 QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
-            return;
+                return;
+            }
         }
         else {
             if (ui->itemSizeEdit->text().isEmpty()) {
                 QMessageBox::warning(this, tr("提示"), tr("请输入覆盖缓冲区中单个结构体的sizeof结果"), QMessageBox::Ok);
                 return;
             }
-            buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
+            buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer, ui->itemSizeEdit->text().toUInt());
             if (buffer->getItemCount() == 0) {
                 QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
                 return;
@@ -137,7 +138,7 @@ void SharedMemoryInfoWidget::updateView()
         ui->memoryHexInfoTable->setRowCount((int)(bufferSize / 16) + 1);
         ui->memoryCharInfoTable->setRowCount((int)(bufferSize / 16) + 1);
         quint8* dataStartPointer = (quint8*) buffer->getDataStartPointer();
-        for (quint32 i = 0; i < buffer->getBufferSize(); i++) {
+        for (quint32 i = 0; i < bufferSize; i++) {
             quint8 singleByte = *(dataStartPointer + i);
             QTableWidgetItem* hexItem = new QTableWidgetItem(((singleByte > 15) ? "" : "0") + QString::number(singleByte, 16).toUpper());
             hexItem->setTextAlignment(Qt::AlignCenter);

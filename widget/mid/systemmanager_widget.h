@@ -40,7 +40,7 @@ private:
     QWidget* contentWidget;
     StatusPushButton* softwareStatus;
     int timerID;
-    SharedBuffer* messageBuffers[6];
+    SharedBuffer* messageBuffers[COMPONENT_COUNT];
 };
 
 #endif // SYSTEMMANAGER_WIDGET_H

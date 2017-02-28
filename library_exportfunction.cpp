@@ -17,13 +17,13 @@ MySharedMemoryWriteThread::MySharedMemoryWriteThread(void* sharedMemoryPointer, 
 void MySharedMemoryWriteThread::run()
 {
     //SharedBuffer buffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_WRITE, sharedMemoryPointer, bufferSize, 1);
+    SoftWorkStatus status;
     while (true) {
-        SoftWorkStatus* status = new SoftWorkStatus;
         qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
-        status->messageType = qrand() % 3 + 1;
-        status->messageTime = time(0);
+        status.messageType = qrand() % 3 + 1;
+        status.messageTime = time(0);
         const char* message;
-        switch (status->messageType) {
+        switch (status.messageType) {
             case 1:
                 message = QString(tr("这是一条正常消息")).toStdString().c_str();
                 break;
@@ -37,16 +37,16 @@ void MySharedMemoryWriteThread::run()
                 message = QString(tr("这是一条空消息")).toStdString().c_str();
                 break;
         }
-        qMemSet(status->messageContent, 0, sizeof(status->messageContent));
-        qMemCopy(status->messageContent, message, qstrlen(message));
+        qMemSet(status.messageContent, 0, sizeof(status.messageContent));
+        qMemCopy(status.messageContent, message, qstrlen(message));
         //qDebug() << "In write thread, message length is" << qstrlen(status->messageContent) << "message is" << QString(status->messageContent);
         //buffer.writeData(status, sizeof(SoftWorkStatus));
         DllStatusWriteFunc(51);
         DllStatusWriteFunc(52);
         DllStatusWriteFunc(53);
         DllStatusWriteFunc(54);
-        SoftWorkStatusWriteFunc(6, *status);
-        sleep(qrand() % 3 + 1);
+        SoftWorkStatusWriteFunc(6, status);
+        sleep(15);
     }
 }
 
@@ -79,7 +79,7 @@ extern "C" bool DllMain(int argc, char* argv[])
     void* myFirstSharedMemoryPointer = FindMemoryInfoFunc(7, 1520);
     MySharedMemoryWriteThread* writeThread = new MySharedMemoryWriteThread(myFirstSharedMemoryPointer, 1520);
     writeThread->start();
-    widget = new SystemManagerWidget((DeploymentType::Value) 1, 0);
+    widget = new SystemManagerWidget(DeploymentType::BJ_CENTER, 0);
 //    MySharedMemoryReadThread* readThread = new MySharedMemoryReadThread(myFirstSharedMemoryPointer);
 //    readThread->start();
     return true;

@@ -27,6 +27,8 @@ public:
     static const QRegExp heightRX;
     static const QRegExp mountRX;
     static const QRegExp memIDRX;
+
+    static bool writeMessageToFont(const QString& message);
 };
 
 #endif // GENERALFUNCTIONS_H

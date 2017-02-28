@@ -744,6 +744,7 @@ void SMAMTreeWidget::initAtBJ()
                                               SharedBuffer::ONLY_WRITE,
                                               iGMASStationBufferPointer,
                                               sizeof(IGMASStationInBuffer));
+
         void* otherCenterBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                             OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
 
@@ -892,7 +893,7 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
             configFile.close();
             return doc;
         }
-	}
+    }
 	QString errorStr;
     int errorLine, errorColumn;
 	QDomDocument doc;
