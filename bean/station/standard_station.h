@@ -16,9 +16,6 @@ public:
     QString getStationName() const;
     void setStationName(const QString& value);
 
-    QString getDetail() const;
-    void setDetail(const QString& value);
-
     DeploymentType::Value getType() const;
     void setType(const DeploymentType::Value& value);
     void setType(const QString& value);
@@ -39,7 +36,6 @@ public:
 
 private:
     QString stationName;
-    QString detail;
     DeploymentType::Value type;
     CasterMode::Value mode;
     quint8 serviceThreadCount;

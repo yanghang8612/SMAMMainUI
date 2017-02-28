@@ -12,6 +12,7 @@ struct ReceiverInBuffer {
     float longitude;
     float latitude;
     float height;
+    char detail[256];
 };
 
 struct StandardStationInBuffer {

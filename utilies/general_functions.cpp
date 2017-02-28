@@ -14,22 +14,25 @@ GeneralFunctions::GeneralFunctions()
 
 bool GeneralFunctions::checkNameString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return nameRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkIPAddressString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return ipAddressRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkIPPortString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     bool ok;
     int port = s.toInt(&ok);
     if (!ok || port > 65535 || port < 0)
@@ -40,35 +43,40 @@ bool GeneralFunctions::checkIPPortString(const QString& s)
 
 bool GeneralFunctions::checkLongitudeString(const QString &s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return longitudeRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkLatitudeString(const QString &s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return latitudeRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkHeightString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return heightRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkMountString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return mountRX.exactMatch(s);
 }
 
 bool GeneralFunctions::checkMemIDString(const QString& s)
 {
-    if (s == 0)
+    if (s == 0) {
         return false;
+    }
     return memIDRX.exactMatch(s);
 }

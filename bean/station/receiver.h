@@ -32,6 +32,9 @@ public:
     void setHeight(float value);
     void setHeight(const QString& value);
 
+    QString getDetail() const;
+    void setDetail(const QString& value);
+
     ReceiverInBuffer toReceiverInBuffer();
 
 private:
@@ -41,6 +44,7 @@ private:
 	float longitude;
 	float latitude;
     float height;
+    QString detail;
 };
 
 #endif // RECEIVER_H

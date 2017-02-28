@@ -13,6 +13,7 @@ ModifyReceiverDialog::ModifyReceiverDialog(Receiver* receiver, QWidget *parent) 
 	ui->receiverLongitudeEdit->setText(QString::number(receiver->getLongitude()));
 	ui->receiverLatitudeEdit->setText(QString::number(receiver->getLatitude()));
     ui->receiverHeightEdit->setText(QString::number(receiver->getHeight()));
+    ui->receiverDetailEdit->setText(receiver->getDetail());
     setWindowTitle(tr("编辑接收机"));
 
     ui->receiverNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
@@ -83,6 +84,7 @@ void ModifyReceiverDialog::on_confirmButton_clicked()
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());
 	receiver->setLatitude(ui->receiverLatitudeEdit->text());
     receiver->setHeight(ui->receiverHeightEdit->text());
+    receiver->setDetail(ui->receiverDetailEdit->toPlainText());
 
 	emit confirmButtonClicked(receiver);
 

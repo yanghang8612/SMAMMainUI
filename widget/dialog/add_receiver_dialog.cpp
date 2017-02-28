@@ -78,6 +78,7 @@ void AddReceiverDialog::on_confirmButton_clicked()
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());
 	receiver->setLatitude(ui->receiverLatitudeEdit->text());
     receiver->setHeight(ui->receiverHeightEdit->text());
+    receiver->setDetail(ui->receiverDetailEdit->toPlainText());
 
 	emit confirmButtonClicked(receiver);
 

@@ -15,16 +15,6 @@ void StandardStation::setStationName(const QString& value)
     stationName = value;
 }
 
-QString StandardStation::getDetail() const
-{
-    return detail;
-}
-
-void StandardStation::setDetail(const QString& value)
-{
-    detail = value;
-}
-
 DeploymentType::Value StandardStation::getType() const
 {
     return type;

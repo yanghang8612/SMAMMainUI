@@ -257,7 +257,7 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 	newStandardStation.appendChild(stationDetail);
 
 	QDomElement receiverList = root.createElement("RECEIVERS");
-	newStandardStation.appendChild(receiverList);
+    newStandardStation.appendChild(receiverList);
 
     standardStationRoot.appendChild(newStandardStation);
 
@@ -371,6 +371,10 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
     receiverHeight.appendChild(root.createTextNode(QString::number(receiver->getHeight())));
     newReceiver.appendChild(receiverHeight);
 
+    QDomElement receiverDetail = root.createElement("DETAIL");
+    receiverDetail.appendChild(root.createTextNode(receiver->getDetail()));
+    newReceiver.appendChild(receiverDetail);
+
     standardStationRoot.childNodes().at(tree->currentIndex().row()).namedItem("RECEIVERS").appendChild(newReceiver);
 
 	writeConfigFile();
@@ -414,6 +418,10 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
     QDomElement receiverHeight = root.createElement("HEIGHT");
     receiverHeight.appendChild(root.createTextNode(QString::number(receiver->getHeight())));
     receiverNode.replaceChild(receiverHeight, receiverNode.namedItem("HEIGHT"));
+
+    QDomElement receiverDetail = root.createElement("DETAIL");
+    receiverDetail.appendChild(root.createTextNode(receiver->getDetail()));
+    receiverNode.replaceChild(receiverDetail, receiverNode.namedItem("DETAIL"));
 
 	writeConfigFile();
 }
@@ -789,6 +797,7 @@ void SMAMTreeWidget::initAtXJ()
 					receiver->setLongitude(receiverNode.namedItem("LONGITUDE").toElement().text());
 					receiver->setLatitude(receiverNode.namedItem("LATITUDE").toElement().text());
                     receiver->setHeight(receiverNode.namedItem("HEIGHT").toElement().text());
+                    receiver->setDetail(receiverNode.namedItem("DETAIL").toElement().text());
 					station->addReceiver(receiver);
 
 					//Create receiver node of QTreewidget
@@ -866,9 +875,9 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
 {
 	QFile configFile(filePath);
     if (!configFile.open(QIODevice::ReadOnly | QFile::Text)) {
-        qDebug() << "Configfile " << filePath << " is not existed, create it.";
+        qDebug() << "Configfile" << filePath << "is not existed, create it.";
         if (!configFile.open(QIODevice::ReadWrite | QFile::Text)) {
-            qDebug() << "Create configfile " << filePath << " error.";
+            qDebug() << "Create configfile" << filePath << "error.";
         }
         else {
             QDomDocument doc;
@@ -888,7 +897,7 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
     int errorLine, errorColumn;
 	QDomDocument doc;
 	if (!doc.setContent(&configFile, false, &errorStr, &errorLine, &errorColumn)) {
-        qDebug()<<"QDomDocument setcontent error, the errormessage is " << errorStr;
+        qDebug()<<"QDomDocument setcontent error, the errormessage is" << errorStr;
     }
 	configFile.close();
     return doc;

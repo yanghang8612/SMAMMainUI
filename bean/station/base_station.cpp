@@ -30,4 +30,14 @@ void BaseStation::setPort(const QString& value)
 	port = value.toUInt();
 }
 
+QString BaseStation::getDetail() const
+{
+    return detail;
+}
+
+void BaseStation::setDetail(const QString& value)
+{
+    detail = value;
+}
+
 

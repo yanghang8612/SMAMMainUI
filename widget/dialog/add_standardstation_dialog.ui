@@ -53,8 +53,8 @@
     <rect>
      <x>20</x>
      <y>220</y>
-     <width>561</width>
-     <height>121</height>
+     <width>560</width>
+     <height>120</height>
     </rect>
    </property>
    <property name="title">
@@ -71,8 +71,8 @@
     <rect>
      <x>30</x>
      <y>20</y>
-     <width>181</width>
-     <height>191</height>
+     <width>190</width>
+     <height>190</height>
     </rect>
    </property>
   </widget>
@@ -81,8 +81,8 @@
     <rect>
      <x>240</x>
      <y>10</y>
-     <width>331</width>
-     <height>201</height>
+     <width>330</width>
+     <height>200</height>
     </rect>
    </property>
    <property name="title">

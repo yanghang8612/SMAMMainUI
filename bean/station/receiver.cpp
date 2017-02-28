@@ -85,6 +85,16 @@ void Receiver::setHeight(const QString& value)
     height = value.toFloat();
 }
 
+QString Receiver::getDetail() const
+{
+    return detail;
+}
+
+void Receiver::setDetail(const QString& value)
+{
+    detail = value;
+}
+
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
@@ -94,8 +104,11 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     receiverInBuffer.longitude = longitude;
     receiverInBuffer.latitude = latitude;
     receiverInBuffer.height = height;
+    qMemCopy(receiverInBuffer.detail, detail.toStdString().c_str(), detail.length());
     return receiverInBuffer;
 }
+
+
 
 
 
