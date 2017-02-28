@@ -1,4 +1,7 @@
+#include <QDateTime>
+
 #include "general_functions.h"
+#include "main_component_header.h"
 
 const QRegExp GeneralFunctions::nameRX("^[a-zA-Z0-9].+$");
 const QRegExp GeneralFunctions::ipAddressRX("^(?:(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1-9]?\\d)$");
@@ -71,4 +74,17 @@ bool GeneralFunctions::checkMemIDString(const QString& s)
     if (s == 0)
         return false;
     return memIDRX.exactMatch(s);
+}
+
+bool GeneralFunctions::writeMessageToFont(const QString &message)
+{
+    SoftWorkStatus status;
+    status.messageType = 1;
+    status.messageTime = QDateTime::currentDateTime().toTime_t();
+    qMemSet(status.messageContent, 0, sizeof(status.messageContent));
+    qMemCopy(status.messageContent, message.toStdString().c_str(), message.length());
+
+    if (SoftWorkStatusWriteFunc != 0) {
+        SoftWorkStatusWriteFunc(6, status);
+    }
 }

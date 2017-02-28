@@ -21,8 +21,6 @@ class SMAMTreeWidget : public QObject
 public:
     SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container);
 
-signals:
-
 private slots:
     void showRightMenu(QPoint pos);
 	void addWidgetToContainer(QTreeWidgetItem* item);

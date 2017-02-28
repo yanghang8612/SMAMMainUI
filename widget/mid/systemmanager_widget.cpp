@@ -20,6 +20,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	QWidget(parent),
 	ui(new Ui::SystemManagerWidget)
 {
+    qDebug() << sizeof(IGMASStationInBuffer);
     deploymentType = type;
 	ui->setupUi(this);
 	ui->infoOutputTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
@@ -32,8 +33,13 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
     if (FindMemoryInfoFunc != 0) {
-        for (int i = 0; i < 6; i++) {
-            messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 1520));
+        for (int i = 0; i < COMPONENT_COUNT; i++) {
+            messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 0));
+        }
+    }
+    else {
+        for (int i = 0; i < COMPONENT_COUNT; i++) {
+            messageBuffers[i] = 0;
         }
     }
     QTimer* messageReceiverTimer = new QTimer(this);
