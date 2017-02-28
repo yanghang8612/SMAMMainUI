@@ -9,6 +9,16 @@ class OtherCenter : public BaseCenter
 public:
     OtherCenter();
     OtherCenterInBuffer toOtherCenterInBuffer();
+
+    QString getUserName() const;
+    void setUserName(const QString& value);
+
+    QString getPassword() const;
+    void setPassword(const QString& value);
+
+private:
+    QString userName;
+    QString password;
 };
 
 #endif // OTHERCENTER_H

@@ -20,7 +20,6 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	QWidget(parent),
 	ui(new Ui::SystemManagerWidget)
 {
-    qDebug() << sizeof(IGMASStationInBuffer);
     deploymentType = type;
 	ui->setupUi(this);
 	ui->infoOutputTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);

@@ -7,6 +7,7 @@
 
 struct ReceiverInBuffer {
     char receiverName[64];
+    char password[64];
     char ipAddress[16];
     quint16 port;
     float longitude;
@@ -18,8 +19,6 @@ struct ReceiverInBuffer {
 struct StandardStationInBuffer {
     char stationName[64];
     char detail[256];
-    char ipAddress[16];
-    quint16 port;
     quint8 deploymentType;
     quint8 casterMode;
     quint8 serviceThreadCount;
@@ -29,8 +28,10 @@ struct StandardStationInBuffer {
 
 struct OtherCenterInBuffer {
     char centerName[64];
+    char userName[64];
+    char password[64];
     char ipAddress[16];
-    quint16 port;
+    char detail[256];
 };
 
 struct IGMASStationInBuffer {

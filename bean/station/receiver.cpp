@@ -15,6 +15,16 @@ void Receiver::setReceiverName(const QString& value)
 	receiverName = value;
 }
 
+QString Receiver::getPassword() const
+{
+    return password;
+}
+
+void Receiver::setPassword(const QString& value)
+{
+    password = value;
+}
+
 QString Receiver::getIpAddress() const
 {
     return ipAddress;
@@ -107,6 +117,8 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     qMemCopy(receiverInBuffer.detail, detail.toStdString().c_str(), detail.length());
     return receiverInBuffer;
 }
+
+
 
 
 

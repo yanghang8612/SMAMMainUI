@@ -58,10 +58,26 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="centerIPEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>名称：</string>
+        <string>IP：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -77,14 +93,24 @@
         <cursorShape>ArrowCursor</cursorShape>
        </property>
        <property name="readOnly">
-        <bool>false</bool>
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>名称：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>IP：</string>
+        <string>用户名：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -92,22 +118,22 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="centerIPEdit">
+      <widget class="QLineEdit" name="centerUserNameEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="cursor">
         <cursorShape>ArrowCursor</cursorShape>
        </property>
-       <property name="styleSheet">
-        <string notr="true"/>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>PORT：</string>
+        <string>密码：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -115,12 +141,18 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="centerPortEdit">
+      <widget class="QLineEdit" name="centerPasswordEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="cursor">
         <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>

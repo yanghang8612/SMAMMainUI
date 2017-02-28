@@ -13,12 +13,15 @@ public:
 	QString getReceiverName() const;
 	void setReceiverName(const QString& value);
 
+    QString getPassword() const;
+    void setPassword(const QString& value);
+
 	QString getIpAddress() const;
 	void setIpAddress(const QString& value);
 
 	quint16 getPort() const;
 	void setPort(const quint16& value);
-	void setPort(const QString& value);
+    void setPort(const QString& value);
 
 	float getLongitude() const;
 	void setLongitude(float value);
@@ -39,6 +42,7 @@ public:
 
 private:
     QString receiverName;
+    QString password;
     QString ipAddress;
     quint16 port;
 	float longitude;

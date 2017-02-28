@@ -9,7 +9,6 @@ AddReceiverDialog::AddReceiverDialog(QWidget *parent) :
 	ui->setupUi(this);
 	setWindowTitle(tr("添加接收机"));
 
-    ui->receiverNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
     ui->receiverIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
     ui->receiverLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
     ui->receiverLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
@@ -23,14 +22,6 @@ AddReceiverDialog::~AddReceiverDialog()
 
 void AddReceiverDialog::on_confirmButton_clicked()
 {
-    if (!GeneralFunctions::checkNameString(ui->receiverNameEdit->text())) {
-        ui->receiverNameEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->receiverNameEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     if (!GeneralFunctions::checkIPAddressString(ui->receiverIPEdit->text())) {
         ui->receiverIPEdit->setStyleSheet("QLineEdit{border-color:red}");
         return;
@@ -73,6 +64,7 @@ void AddReceiverDialog::on_confirmButton_clicked()
 
 	Receiver* receiver = new Receiver();
 	receiver->setReceiverName(ui->receiverNameEdit->text());
+    receiver->setPassword(ui->receiverPasswordEdit->text());
 	receiver->setIpAddress(ui->receiverIPEdit->text());
 	receiver->setPort(ui->receiverPortEdit->text());
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());

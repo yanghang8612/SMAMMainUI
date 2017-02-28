@@ -7,8 +7,8 @@ StandardStationInfoWidget::StandardStationInfoWidget(QWidget *parent) :
 	ui(new Ui::StationInfoWidget)
 {
 	ui->setupUi(this);
-	ui->receiverTable->horizontalHeader()->resizeSection(1, 150);
-	ui->receiverTable->horizontalHeader()->resizeSection(2, 150);
+    ui->receiverTable->horizontalHeader()->resizeSection(1, 100);
+    ui->receiverTable->horizontalHeader()->resizeSection(2, 250);
 	ui->receiverTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
 	ui->receiverTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 	ui->receiverTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -24,9 +24,7 @@ StandardStationInfoWidget::~StandardStationInfoWidget()
 void StandardStationInfoWidget::setStation(StandardStation* station)
 {
 	this->station = station;
-	ui->stationNameEdit->setText(station->getStationName());
-	ui->stationIPEdit->setText(station->getIpAddress());
-	ui->stationPortEdit->setText(QString::number(station->getPort()));
+    ui->stationNameEdit->setText(station->getStationName());
 	if (station->getMode() == CasterMode::IMMEDIATE_CASTER) {
 		ui->stationModeEdit->setText(tr("IMMEDIATE_CASTER"));
 	}
@@ -34,6 +32,7 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
 		ui->stationModeEdit->setText(tr("PROCESS_CASTER"));
 	}
 	ui->stationThreadCountEdit->setText(QString::number(station->getServiceThreadCount()));
+    ui->receiverCountEdit->setText(QString::number(station->getReceivers().size()));
 	ui->stationDetail->setText(station->getDetail());
 
 	int index = 0;
@@ -42,7 +41,9 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
 		ui->receiverTable->setItem(index, 0, new QTableWidgetItem(receiver->getReceiverName()));
 		ui->receiverTable->setItem(index, 1, new QTableWidgetItem("TCP/IP"));
 		ui->receiverTable->setItem(index, 2, new QTableWidgetItem(
-									   QString::number(receiver->getLongitude()) + " | " + QString::number(receiver->getLatitude())));
+                                       QString::number(receiver->getLongitude()) + tr("° | ") +
+                                       QString::number(receiver->getLatitude()) + tr("° | ") +
+                                       QString::number(receiver->getHeight()) + "m"));
 		ui->receiverTable->setItem(index, 3, new QTableWidgetItem(tr("离线")));
 		index++;
 	}

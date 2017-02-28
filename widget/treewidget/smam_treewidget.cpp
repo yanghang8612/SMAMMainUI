@@ -229,16 +229,8 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
 	QDomElement newStandardStation = root.createElement("STATION");
 
 	QDomElement stationName = root.createElement("STATIONNAME");
-	stationName.appendChild(root.createTextNode(station->getStationName()));
-	newStandardStation.appendChild(stationName);
-
-	QDomElement stationIP = root.createElement("IPADDRESS");
-	stationIP.appendChild(root.createTextNode(station->getIpAddress()));
-	newStandardStation.appendChild(stationIP);
-
-	QDomElement stationPort = root.createElement("IPPORT");
-	stationPort.appendChild(root.createTextNode(QString::number(station->getPort())));
-	newStandardStation.appendChild(stationPort);
+    stationName.appendChild(root.createTextNode(station->getStationName()));
+    newStandardStation.appendChild(stationName);
 
 	QDomElement stationMode = root.createElement("STATIONMODE");
 	stationMode.appendChild(root.createTextNode(QString::number((int) station->getMode())));
@@ -280,15 +272,7 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 
 	QDomElement stationName = root.createElement("STATIONNAME");
 	stationName.appendChild(root.createTextNode(station->getStationName()));
-	standardStationNode.replaceChild(stationName, standardStationNode.namedItem("STATIONNAME"));
-
-	QDomElement stationIP = root.createElement("IPADDRESS");
-	stationIP.appendChild(root.createTextNode(station->getIpAddress()));
-	standardStationNode.replaceChild(stationIP, standardStationNode.namedItem("IPADDRESS"));
-
-	QDomElement stationPort = root.createElement("IPPORT");
-	stationPort.appendChild(root.createTextNode(QString::number(station->getPort())));
-	standardStationNode.replaceChild(stationPort, standardStationNode.namedItem("IPPORT"));
+    standardStationNode.replaceChild(stationName, standardStationNode.namedItem("STATIONNAME"));
 
 	QDomElement stationMode = root.createElement("STATIONMODE");
 	stationMode.appendChild(root.createTextNode(QString::number((int) station->getMode())));
@@ -351,6 +335,10 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
 	newReceiver.appendChild(receiverName);
 
+    QDomElement receiverPassword = root.createElement("PASSWORD");
+    receiverPassword.appendChild(root.createTextNode(receiver->getPassword()));
+    newReceiver.appendChild(receiverPassword);
+
 	QDomElement receiverIP = root.createElement("IPADDRESS");
 	receiverIP.appendChild(root.createTextNode(receiver->getIpAddress()));
 	newReceiver.appendChild(receiverIP);
@@ -398,6 +386,10 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
 	receiverNode.replaceChild(receiverName, receiverNode.namedItem("RECEIVERNAME"));
+
+    QDomElement receiverPassword = root.createElement("PASSWORD");
+    receiverPassword.appendChild(root.createTextNode(receiver->getPassword()));
+    receiverNode.replaceChild(receiverPassword, receiverNode.namedItem("PASSWORD"));
 
 	QDomElement receiverIP = root.createElement("IPADDRESS");
 	receiverIP.appendChild(root.createTextNode(receiver->getIpAddress()));
@@ -592,13 +584,17 @@ void SMAMTreeWidget::addNewCenter(OtherCenter* center)
     centerName.appendChild(root.createTextNode(center->getCenterName()));
     newCenter.appendChild(centerName);
 
+    QDomElement userName = root.createElement("USERNAME");
+    userName.appendChild(root.createTextNode(center->getUserName()));
+    newCenter.appendChild(userName);
+
+    QDomElement centerPassword = root.createElement("PASSWORD");
+    centerPassword.appendChild(root.createTextNode(center->getPassword()));
+    newCenter.appendChild(centerPassword);
+
     QDomElement centerIP = root.createElement("IPADDRESS");
     centerIP.appendChild(root.createTextNode(center->getIpAddress()));
     newCenter.appendChild(centerIP);
-
-    QDomElement centerPort = root.createElement("IPPORT");
-    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
-    newCenter.appendChild(centerPort);
 
     QDomElement centerDetail = root.createElement("DETAIL");
     centerDetail.appendChild(root.createTextNode(center->getDetail()));
@@ -627,13 +623,17 @@ void SMAMTreeWidget::modifyCenter(OtherCenter* center)
     centerName.appendChild(root.createTextNode(center->getCenterName()));
     centerNode.replaceChild(centerName, centerNode.namedItem("CENTERNAME"));
 
+    QDomElement userName = root.createElement("USERNAME");
+    userName.appendChild(root.createTextNode(center->getUserName()));
+    centerNode.replaceChild(userName, centerNode.namedItem("USERNAME"));
+
+    QDomElement centerPassword = root.createElement("PASSWORD");
+    centerPassword.appendChild(root.createTextNode(center->getPassword()));
+    centerNode.replaceChild(centerPassword, centerNode.namedItem("PASSWORD"));
+
     QDomElement centerIP = root.createElement("IPADDRESS");
     centerIP.appendChild(root.createTextNode(center->getIpAddress()));
     centerNode.replaceChild(centerIP, centerNode.namedItem("IPADDRESS"));
-
-    QDomElement centerPort = root.createElement("IPPORT");
-    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
-    centerNode.replaceChild(centerPort, centerNode.namedItem("IPPORT"));
 
     QDomElement centerDetail = root.createElement("DETAIL");
     centerDetail.appendChild(root.createTextNode(center->getDetail()));
@@ -711,8 +711,9 @@ void SMAMTreeWidget::initAtBJ()
         if (centerNode.isElement()) {
             OtherCenter* center = new OtherCenter();
             center->setCenterName(centerNode.namedItem("CENTERNAME").toElement().text());
+            center->setUserName(centerNode.namedItem("USERNAME").toElement().text());
+            center->setPassword(centerNode.namedItem("PASSWORD").toElement().text());
             center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
-            center->setPort(centerNode.namedItem("IPPORT").toElement().text());
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
             //Create other center node of QTreewidget
@@ -754,6 +755,10 @@ void SMAMTreeWidget::initAtBJ()
                                              sizeof(OtherCenterInBuffer));
         writeSharedBuffer();
     }
+    else {
+        iGMASStationBuffer = 0;
+        otherCenterBuffer = 0;
+    }
 }
 
 void SMAMTreeWidget::initAtXJ()
@@ -793,6 +798,7 @@ void SMAMTreeWidget::initAtXJ()
 				if (receiverNode.isElement()) {
                     Receiver* receiver = new Receiver();
 					receiver->setReceiverName(receiverNode.namedItem("RECEIVERNAME").toElement().text());
+                    receiver->setPassword(receiverNode.namedItem("PASSWORD").toElement().text());
 					receiver->setIpAddress(receiverNode.namedItem("IPADDRESS").toElement().text());
 					receiver->setPort(receiverNode.namedItem("IPPORT").toElement().text());
 					receiver->setLongitude(receiverNode.namedItem("LONGITUDE").toElement().text());
@@ -827,8 +833,9 @@ void SMAMTreeWidget::initAtXJ()
         if (centerNode.isElement()) {
             OtherCenter* center = new OtherCenter();
             center->setCenterName(centerNode.namedItem("CENTERNAME").toElement().text());
+            center->setUserName(centerNode.namedItem("USERNAME").toElement().text());
+            center->setPassword(centerNode.namedItem("PASSWORD").toElement().text());
             center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
-            center->setPort(centerNode.namedItem("IPPORT").toElement().text());
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
             //Create other center node of QTreewidget
@@ -869,6 +876,10 @@ void SMAMTreeWidget::initAtXJ()
                                              otherCenterBufferPointer,
                                              sizeof(OtherCenterInBuffer));
         writeSharedBuffer();
+    }
+    else {
+        standardStationBuffer = 0;
+        otherCenterBuffer = 0;
     }
 }
 

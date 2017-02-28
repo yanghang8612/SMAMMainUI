@@ -8,7 +8,6 @@ AddCenterDialog::AddCenterDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("添加其他中心"));
-    ui->centerNameEdit->setValidator(new QRegExpValidator(GeneralFunctions::nameRX, this));
     ui->centerIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }
 
@@ -19,14 +18,6 @@ AddCenterDialog::~AddCenterDialog()
 
 void AddCenterDialog::on_confirmButton_clicked()
 {
-    if (!GeneralFunctions::checkNameString(ui->centerNameEdit->text())) {
-        ui->centerNameEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->centerNameEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     if (!GeneralFunctions::checkIPAddressString(ui->centerIPEdit->text())) {
         ui->centerIPEdit->setStyleSheet("QLineEdit{border-color:red}");
         return;
@@ -35,18 +26,11 @@ void AddCenterDialog::on_confirmButton_clicked()
         ui->centerIPEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
-    if (!GeneralFunctions::checkIPPortString(ui->centerPortEdit->text())) {
-        ui->centerPortEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->centerPortEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     OtherCenter* center = new OtherCenter();
     center->setCenterName(ui->centerNameEdit->text());
+    center->setUserName(ui->centerUserNameEdit->text());
+    center->setPassword(ui->centerPasswordEdit->text());
     center->setIpAddress(ui->centerIPEdit->text());
-    center->setPort(ui->centerPortEdit->text());
     center->setDetail(ui->centerDetailEdit->toPlainText());
 
     emit confirmButtonClicked(center);

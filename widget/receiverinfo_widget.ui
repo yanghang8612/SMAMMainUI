@@ -65,7 +65,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>接收机IP：    </string>
+        <string>接收机IP(DEC)：    </string>
        </property>
        <property name="buddy">
         <cstring>receiverIPEdit</cstring>
@@ -88,7 +88,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>接收机端口：</string>
+        <string>接收机端口(DEC)：</string>
        </property>
        <property name="buddy">
         <cstring>receiverPortEdit</cstring>
@@ -135,7 +135,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>经度：</string>
+        <string>经度(度)：</string>
        </property>
       </widget>
      </item>
@@ -155,7 +155,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>纬度：</string>
+        <string>纬度(度)：</string>
        </property>
       </widget>
      </item>
@@ -175,7 +175,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
-        <string>高度：</string>
+        <string>高度(米)：</string>
        </property>
       </widget>
      </item>

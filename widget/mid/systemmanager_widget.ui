@@ -60,7 +60,7 @@ QDialog {
   padding: 5px;
 }</string>
       </property>
-      <layout class="QHBoxLayout" name="headerLayout" stretch="3,7,3,3,3,4">
+      <layout class="QHBoxLayout" name="headerLayout" stretch="2,2,6,3,3,3,4">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -94,7 +94,31 @@ QDialog {
             <enum>QLCDNumber::Dec</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>2843</number>
+            <number>2222</number>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>注册用户数</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLCDNumber" name="registeredUserCount">
+           <property name="mode">
+            <enum>QLCDNumber::Dec</enum>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>2333</number>
            </property>
           </widget>
          </item>

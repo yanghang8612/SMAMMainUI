@@ -17,7 +17,8 @@ void CenterInfoWidget::setCenter(OtherCenter* center)
 {
     this->center = center;
     ui->centerNameEdit->setText(center->getCenterName());
+    ui->centerUserNameEdit->setText(center->getUserName());
+    ui->centerPasswordEdit->setText(center->getPassword());
     ui->centerIPEdit->setText(center->getIpAddress());
-    ui->centerPortEdit->setText(QString::number(center->getPort()));
     ui->centerDetailEdit->setText(center->getDetail());
 }
