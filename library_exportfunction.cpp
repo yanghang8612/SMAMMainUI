@@ -41,12 +41,15 @@ void MySharedMemoryWriteThread::run()
         qMemCopy(status.messageContent, message, qstrlen(message));
         //qDebug() << "In write thread, message length is" << qstrlen(status->messageContent) << "message is" << QString(status->messageContent);
         //buffer.writeData(status, sizeof(SoftWorkStatus));
+        DllStatusWriteFunc(01);
+        DllStatusWriteFunc(02);
+        DllStatusWriteFunc(03);
         DllStatusWriteFunc(51);
         DllStatusWriteFunc(52);
         DllStatusWriteFunc(53);
         DllStatusWriteFunc(54);
-        SoftWorkStatusWriteFunc(6, status);
-        sleep(15);
+        //SoftWorkStatusWriteFunc(6, status);
+        sleep(1);
     }
 }
 
@@ -79,7 +82,7 @@ extern "C" bool DllMain(int argc, char* argv[])
     void* myFirstSharedMemoryPointer = FindMemoryInfoFunc(7, 1520);
     MySharedMemoryWriteThread* writeThread = new MySharedMemoryWriteThread(myFirstSharedMemoryPointer, 1520);
     writeThread->start();
-    widget = new SystemManagerWidget(DeploymentType::BJ_CENTER, 0);
+    widget = new SystemManagerWidget(DeploymentType::XJ_CENTER, 0);
 //    MySharedMemoryReadThread* readThread = new MySharedMemoryReadThread(myFirstSharedMemoryPointer);
 //    readThread->start();
     return true;

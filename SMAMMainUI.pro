@@ -9,7 +9,7 @@ QT       += core gui xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SMAMMainUI
-TEMPLATE = app
+TEMPLATE = lib
 
 
 SOURCES += main.cpp \
@@ -111,7 +111,8 @@ HEADERS  += \
     widget/dialog/add_igmasstation_dialog.h \
     widget/dialog/modify_igmasstation_dialog.h \
     widget/standardstationinfo_widget.h \
-    widget/igmasstationinfo_widget.h
+    widget/igmasstationinfo_widget.h \
+    ../static_library/static_library.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -137,3 +138,16 @@ RESOURCES += \
     res/img.qrc \
     res/echarts.qrc
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-static_library-unknown-Debug/release/ -lstatic_library
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-static_library-unknown-Debug/debug/ -lstatic_library
+else:unix: LIBS += -L$$PWD/../build-static_library-unknown-Debug/ -lstatic_library
+
+INCLUDEPATH += $$PWD/../build-static_library-unknown-Debug
+DEPENDPATH += $$PWD/../build-static_library-unknown-Debug
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/release/libstatic_library.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/debug/libstatic_library.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/release/static_library.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/debug/static_library.lib
+else:unix: PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/libstatic_library.a

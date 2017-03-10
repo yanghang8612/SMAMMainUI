@@ -6,6 +6,8 @@
 #include "main_component_header.h"
 #include "smam_component_header.h"
 
+#include "../static_library/static_library.h"
+
 extern "C" bool DllMain(int argc, char* argv[]);
 
 int main(int argc, char* argv[])
@@ -18,6 +20,8 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
 
     QApplication::setStyle("Cleanlooks");
+
+    Static_library library;
 
     SMAMMainWindow w;
     w.show();
