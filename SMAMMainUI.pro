@@ -9,7 +9,7 @@ QT       += core gui xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SMAMMainUI
-TEMPLATE = lib
+TEMPLATE = app
 
 
 SOURCES += main.cpp \
@@ -137,17 +137,3 @@ RESOURCES += \
     res/icon.qrc \
     res/img.qrc \
     res/echarts.qrc
-
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../build-static_library-unknown-Debug/release/ -lstatic_library
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../build-static_library-unknown-Debug/debug/ -lstatic_library
-else:unix: LIBS += -L$$PWD/../build-static_library-unknown-Debug/ -lstatic_library
-
-INCLUDEPATH += $$PWD/../build-static_library-unknown-Debug
-DEPENDPATH += $$PWD/../build-static_library-unknown-Debug
-
-win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/release/libstatic_library.a
-else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/debug/libstatic_library.a
-else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/release/static_library.lib
-else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/debug/static_library.lib
-else:unix: PRE_TARGETDEPS += $$PWD/../build-static_library-unknown-Debug/libstatic_library.a

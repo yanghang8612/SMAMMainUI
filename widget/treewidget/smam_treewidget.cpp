@@ -860,13 +860,13 @@ void SMAMTreeWidget::initAtXJ()
 
     //Init shared buffer and write buffer
     if (FindMemoryInfoFunc != 0) {
-        void* standardStationBufferPointer = FindMemoryInfoFunc(STANDARD_SHAREDBUFFER_ID,
-                                                 STANDARD_SHAREDBUFFER_MAXITEMCOUNT * sizeof(StandardStationInBuffer));
+        void* receiverBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
+                                                 RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
 
-        standardStationBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
+        receiverBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
                                           SharedBuffer::ONLY_WRITE,
-                                          standardStationBufferPointer,
-                                          sizeof(StandardStationInBuffer));
+                                          receiverBufferPointer,
+                                          sizeof(ReceiverInBuffer));
 
         void* otherCenterBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                             OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
@@ -878,7 +878,7 @@ void SMAMTreeWidget::initAtXJ()
         writeSharedBuffer();
     }
     else {
-        standardStationBuffer = 0;
+        receiverBuffer = 0;
         otherCenterBuffer = 0;
     }
 }
@@ -944,12 +944,18 @@ void SMAMTreeWidget::writeSharedBuffer()
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
         {
-            StandardStationInBuffer standard[standardStationList.size()];
+            int receiverCount = 0;
             for (int i = 0; i < standardStationList.size(); i++) {
-                standard[i] = standardStationList[i]->toStandardStationInBuffer();
+                receiverCount += standardStationList[i]->getReceivers().size();
             }
-            if (standardStationBuffer != 0) {
-                standardStationBuffer->writeData(&standard, standardStationList.size());
+            ReceiverInBuffer receiver[receiverCount];
+            for (int i = 0, index = 0; i < standardStationList.size(); i++) {
+                for (int j = 0; i < standardStationList[i]->getReceivers().size(); j++) {
+                    receiver[index++] = standardStationList[i]->getReceivers()[j]->toReceiverInBuffer();
+                }
+            }
+            if (receiverBuffer != 0) {
+                receiverBuffer->writeData(&receiver, receiverCount);
             }
             OtherCenterInBuffer otherCenter[otherCenterList.size()];
             for (int i = 0; i < otherCenterList.size(); i++) {

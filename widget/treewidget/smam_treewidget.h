@@ -70,7 +70,7 @@ private:
     QList<IGMASStation*> iGMASStationList;
     QList<IGSStation*> iGSStationList;
     QList<OtherCenter*> otherCenterList;
-    SharedBuffer* standardStationBuffer;
+    SharedBuffer* receiverBuffer;
     SharedBuffer* iGMASStationBuffer;
     SharedBuffer* iGSStationBuffer;
     SharedBuffer* otherCenterBuffer;
