@@ -108,6 +108,7 @@ void Receiver::setDetail(const QString& value)
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
+    qMemSet(&receiverInBuffer, 0, sizeof(ReceiverInBuffer));
     qMemCopy(receiverInBuffer.receiverName, receiverName.toStdString().c_str(), receiverName.length());
     qMemCopy(receiverInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
     receiverInBuffer.port = port;

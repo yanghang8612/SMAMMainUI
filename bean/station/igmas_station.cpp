@@ -98,6 +98,7 @@ void IGMASStation::setHeight(const QString& value)
 IGMASStationInBuffer IGMASStation::toiGMASStationInBuffer()
 {
     IGMASStationInBuffer iGMASStationInBuffer;
+    qMemSet(&iGMASStationInBuffer, 0, sizeof(IGMASStationInBuffer));
     iGMASStationInBuffer.isAvailable = isAvailable;
     qMemSet(iGMASStationInBuffer.ipAddress, 0, sizeof(iGMASStationInBuffer.ipAddress));
     qMemCopy(iGMASStationInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());

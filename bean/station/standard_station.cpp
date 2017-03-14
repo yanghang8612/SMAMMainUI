@@ -88,6 +88,7 @@ QList<Receiver *> StandardStation::getReceivers() const
 StandardStationInBuffer StandardStation::toStandardStationInBuffer()
 {
     StandardStationInBuffer standardStationInBuffer;
+    qMemSet(&standardStationInBuffer, 0, sizeof(StandardStationInBuffer));
     qMemCopy(standardStationInBuffer.stationName, stationName.toStdString().c_str(), stationName.length());
     qMemCopy(standardStationInBuffer.detail, detail.toStdString().c_str(), detail.length());
     standardStationInBuffer.deploymentType = (quint8) type;

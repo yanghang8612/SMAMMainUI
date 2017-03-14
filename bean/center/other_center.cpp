@@ -28,6 +28,7 @@ void OtherCenter::setPassword(const QString& value)
 OtherCenterInBuffer OtherCenter::toOtherCenterInBuffer()
 {
     OtherCenterInBuffer otherCenterInBuffer;
+    qMemSet(&otherCenterInBuffer, 0, sizeof(OtherCenterInBuffer));
     qMemCopy(otherCenterInBuffer.centerName, centerName.toStdString().c_str(), centerName.length());
     qMemCopy(otherCenterInBuffer.userName, userName.toStdString().c_str(), userName.length());
     qMemCopy(otherCenterInBuffer.password, password.toStdString().c_str(), password.length());
