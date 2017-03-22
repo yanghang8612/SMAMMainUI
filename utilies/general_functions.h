@@ -11,6 +11,14 @@ private:
     GeneralFunctions();
 
 public:
+    static const QRegExp nameRX;
+    static const QRegExp ipAddressRX;
+    static const QRegExp longitudeRX;
+    static const QRegExp latitudeRX;
+    static const QRegExp heightRX;
+    static const QRegExp mountRX;
+    static const QRegExp memIDRX;
+
     static bool checkNameString(const QString& s);
     static bool checkIPAddressString(const QString& s);
     static bool checkIPPortString(const QString& s);
@@ -20,15 +28,7 @@ public:
     static bool checkMountString(const QString& s);
     static bool checkMemIDString(const QString& s);
 
-    static const QRegExp nameRX;
-    static const QRegExp ipAddressRX;
-    static const QRegExp longitudeRX;
-    static const QRegExp latitudeRX;
-    static const QRegExp heightRX;
-    static const QRegExp mountRX;
-    static const QRegExp memIDRX;
-
-    static bool writeMessageToFront(const QString& message);
+    static void writeMessageToFront(const QString& message);
 };
 
 #endif // GENERALFUNCTIONS_H

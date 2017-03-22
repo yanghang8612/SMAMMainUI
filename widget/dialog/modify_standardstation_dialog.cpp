@@ -9,8 +9,6 @@ ModifyStandardStationDialog::ModifyStandardStationDialog(StandardStation* statio
 {
 	ui->setupUi(this);
     ui->stationNameEdit->setText(station->getStationName());
-	ui->stationModeBox->setCurrentIndex(station->getMode());
-	ui->stationThreadCountEdit->setValue(station->getServiceThreadCount());
 	ui->stationDetailEdit->setText(station->getDetail());
     setWindowTitle(tr("编辑基准站"));
 }
@@ -23,8 +21,6 @@ ModifyStandardStationDialog::~ModifyStandardStationDialog()
 void ModifyStandardStationDialog::on_confirmButton_clicked()
 {
     station->setStationName(ui->stationNameEdit->text());
-	station->setMode(CasterMode::Value(ui->stationModeBox->currentIndex()));
-	station->setServiceThreadCount(ui->stationThreadCountEdit->text());
 	station->setDetail(ui->stationDetailEdit->toPlainText());
 
 	emit confirmButtonClicked(station);

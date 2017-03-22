@@ -38,6 +38,10 @@
 
 extern DeploymentType::Value deploymentType;
 
+extern void* receiverSharedBufferPointer;
+extern void* otherCenterSharedBufferPointer;
+extern void* iGMASSharedBufferPointer;
+
 SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     tree(tree), container(container),
     currentContentWidget(0)
@@ -53,11 +57,31 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
             qDebug() << "No match deploymenttype.";
             break;
     }
-    systemMonitorWidget = new MainMonitorWidget(&standardStationList, &otherCenterList);
+    systemMonitorWidget = new MainMonitorWidget(this);
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
     connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenu(QPoint)));
     connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(addWidgetToContainer(QTreeWidgetItem*)));
+}
+
+const QList<OtherCenter*>& SMAMTreeWidget::getOtherCenterList() const
+{
+    return otherCenterList;
+}
+
+const QList<IGSStation*>& SMAMTreeWidget::getIGSStationList() const
+{
+    return iGSStationList;
+}
+
+const QList<IGMASStation*>& SMAMTreeWidget::getIGMASStationList() const
+{
+    return iGMASStationList;
+}
+
+const QList<StandardStation*>& SMAMTreeWidget::getStandardStationList() const
+{
+    return standardStationList;
 }
 
 void SMAMTreeWidget::showRightMenu(QPoint pos)
@@ -232,14 +256,6 @@ void SMAMTreeWidget::addNewStandardStation(StandardStation* station)
     stationName.appendChild(root.createTextNode(station->getStationName()));
     newStandardStation.appendChild(stationName);
 
-	QDomElement stationMode = root.createElement("STATIONMODE");
-	stationMode.appendChild(root.createTextNode(QString::number((int) station->getMode())));
-	newStandardStation.appendChild(stationMode);
-
-	QDomElement stationThreadCount = root.createElement("SERVICETHREADCOUNT");
-	stationThreadCount.appendChild(root.createTextNode(QString::number(station->getServiceThreadCount())));
-	newStandardStation.appendChild(stationThreadCount);
-
 	QDomElement stationType = root.createElement("DEPLOYMENTTYPE");
     stationType.appendChild(root.createTextNode(QString::number((int) deploymentType)));
 	newStandardStation.appendChild(stationType);
@@ -273,14 +289,6 @@ void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 	QDomElement stationName = root.createElement("STATIONNAME");
 	stationName.appendChild(root.createTextNode(station->getStationName()));
     standardStationNode.replaceChild(stationName, standardStationNode.namedItem("STATIONNAME"));
-
-	QDomElement stationMode = root.createElement("STATIONMODE");
-	stationMode.appendChild(root.createTextNode(QString::number((int) station->getMode())));
-	standardStationNode.replaceChild(stationMode, standardStationNode.namedItem("STATIONMODE"));
-
-	QDomElement stationThreadCount = root.createElement("SERVICETHREADCOUNT");
-	stationThreadCount.appendChild(root.createTextNode(QString::number(station->getServiceThreadCount())));
-	standardStationNode.replaceChild(stationThreadCount, standardStationNode.namedItem("SERVICETHREADCOUNT"));
 
 	QDomElement stationType = root.createElement("DEPLOYMENTTYPE");
     stationType.appendChild(root.createTextNode(QString::number((int) deploymentType)));
@@ -330,6 +338,10 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
     tree->currentItem()->addChild(new ReceiverTreeWidgetItem(tree->currentItem(), RECEIVER_TREEITEM_TYPE, receiver));
 
 	QDomElement newReceiver = root.createElement("RECEIVER");
+
+    QDomElement receiverMemID = root.createElement("MEMID");
+    receiverMemID.appendChild(root.createTextNode(QString::number(0)));
+    newReceiver.appendChild(receiverMemID);
 
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
@@ -382,6 +394,10 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
     int parentNodeIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
 	int nodeIndex = tree->currentIndex().row();
     QDomNode receiverNode = standardStationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS").childNodes().at(nodeIndex);
+
+    QDomElement receiverMemID = root.createElement("MEMID");
+    receiverMemID.appendChild(root.createTextNode(QString::number(receiver->getMemID())));
+    receiverNode.replaceChild(receiverMemID, receiverNode.namedItem("MEMID"));
 
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
 	receiverName.appendChild(root.createTextNode(receiver->getReceiverName()));
@@ -737,28 +753,17 @@ void SMAMTreeWidget::initAtBJ()
     otherCenterTreeRoot->setExpanded(true);
 
     //Init shared buffer and write buffer
-    if (FindMemoryInfoFunc != 0) {
-        void* iGMASStationBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
-                                                      IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
 
-        iGMASStationBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                              SharedBuffer::ONLY_WRITE,
-                                              iGMASStationBufferPointer,
-                                              sizeof(IGMASStationInBuffer));
+    iGMASStationBuffer = (iGMASSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                SharedBuffer::ONLY_WRITE,
+                                                                                iGMASSharedBufferPointer,
+                                                                                sizeof(IGMASStationInBuffer));
 
-        void* otherCenterBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
-                                                            OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
-
-        otherCenterBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                             SharedBuffer::ONLY_WRITE,
-                                             otherCenterBufferPointer,
-                                             sizeof(OtherCenterInBuffer));
-        writeSharedBuffer();
-    }
-    else {
-        iGMASStationBuffer = 0;
-        otherCenterBuffer = 0;
-    }
+    otherCenterBuffer = (otherCenterSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                     SharedBuffer::ONLY_WRITE,
+                                                                                     otherCenterSharedBufferPointer,
+                                                                                     sizeof(OtherCenterInBuffer));
+    writeSharedBuffer();
 }
 
 void SMAMTreeWidget::initAtXJ()
@@ -781,11 +786,7 @@ void SMAMTreeWidget::initAtXJ()
 	while (!stationNode.isNull()) {
 		if (stationNode.isElement()) {
             StandardStation* station = new StandardStation();
-			station->setStationName(stationNode.namedItem("STATIONNAME").toElement().text());
-			station->setIpAddress(stationNode.namedItem("IPADDRESS").toElement().text());
-			station->setPort(stationNode.namedItem("IPPORT").toElement().text());
-			station->setMode(stationNode.namedItem("STATIONMODE").toElement().text());
-			station->setServiceThreadCount(stationNode.namedItem("SERVICETHREADCOUNT").toElement().text());
+            station->setStationName(stationNode.namedItem("STATIONNAME").toElement().text());
 			station->setType(stationNode.namedItem("DEPLOYMENTTYPE").toElement().text());
 			station->setDetail(stationNode.namedItem("DETAIL").toElement().text());
 
@@ -797,6 +798,7 @@ void SMAMTreeWidget::initAtXJ()
 			while (!receiverNode.isNull()) {
 				if (receiverNode.isElement()) {
                     Receiver* receiver = new Receiver();
+                    receiver->setMemID(receiverNode.namedItem("MEMID").toElement().text());
 					receiver->setReceiverName(receiverNode.namedItem("RECEIVERNAME").toElement().text());
                     receiver->setPassword(receiverNode.namedItem("PASSWORD").toElement().text());
 					receiver->setIpAddress(receiverNode.namedItem("IPADDRESS").toElement().text());
@@ -859,28 +861,16 @@ void SMAMTreeWidget::initAtXJ()
     otherCenterTreeRoot->setExpanded(true);
 
     //Init shared buffer and write buffer
-    if (FindMemoryInfoFunc != 0) {
-        void* receiverBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
-                                                 RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
+    receiverBuffer = (receiverSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                         SharedBuffer::ONLY_WRITE,
+                                                                         receiverSharedBufferPointer,
+                                                                         sizeof(ReceiverInBuffer));
 
-        receiverBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                          SharedBuffer::ONLY_WRITE,
-                                          receiverBufferPointer,
-                                          sizeof(ReceiverInBuffer));
-
-        void* otherCenterBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
-                                                            OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
-
-        otherCenterBuffer = new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                             SharedBuffer::ONLY_WRITE,
-                                             otherCenterBufferPointer,
-                                             sizeof(OtherCenterInBuffer));
-        writeSharedBuffer();
-    }
-    else {
-        receiverBuffer = 0;
-        otherCenterBuffer = 0;
-    }
+    otherCenterBuffer = (otherCenterSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                     SharedBuffer::ONLY_WRITE,
+                                                                                     otherCenterSharedBufferPointer,
+                                                                                     sizeof(OtherCenterInBuffer));
+    writeSharedBuffer();
 }
 
 QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
@@ -950,8 +940,8 @@ void SMAMTreeWidget::writeSharedBuffer()
             }
             ReceiverInBuffer receiver[receiverCount];
             for (int i = 0, index = 0; i < standardStationList.size(); i++) {
-                for (int j = 0; i < standardStationList[i]->getReceivers().size(); j++) {
-                    receiver[index++] = standardStationList[i]->getReceivers()[j]->toReceiverInBuffer();
+                for (int j = 0; j < standardStationList[i]->getReceivers().size(); j++) {
+                    receiver[index++] = standardStationList[i]->getReceivers().at(j)->toReceiverInBuffer();
                 }
             }
             if (receiverBuffer != 0) {

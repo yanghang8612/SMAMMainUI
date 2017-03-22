@@ -25,13 +25,6 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
 {
 	this->station = station;
     ui->stationNameEdit->setText(station->getStationName());
-	if (station->getMode() == CasterMode::IMMEDIATE_CASTER) {
-		ui->stationModeEdit->setText(tr("IMMEDIATE_CASTER"));
-	}
-	else if (station->getMode() == CasterMode::PROCESS_CASTER) {
-		ui->stationModeEdit->setText(tr("PROCESS_CASTER"));
-	}
-	ui->stationThreadCountEdit->setText(QString::number(station->getServiceThreadCount()));
     ui->receiverCountEdit->setText(QString::number(station->getReceivers().size()));
 	ui->stationDetail->setText(station->getDetail());
 

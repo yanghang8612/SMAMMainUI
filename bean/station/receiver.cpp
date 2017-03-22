@@ -5,6 +5,21 @@ Receiver::Receiver()
 
 }
 
+int Receiver::getMemID() const
+{
+    return memID;
+}
+
+void Receiver::setMemID(int value)
+{
+    memID = value;
+}
+
+void Receiver::setMemID(const QString &value)
+{
+    memID = value.toInt();
+}
+
 QString Receiver::getReceiverName() const
 {
 	return receiverName;
@@ -109,7 +124,9 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
     qMemSet(&receiverInBuffer, 0, sizeof(ReceiverInBuffer));
+    receiverInBuffer.memID = memID;
     qMemCopy(receiverInBuffer.receiverName, receiverName.toStdString().c_str(), receiverName.length());
+    qMemCopy(receiverInBuffer.password, password.toStdString().c_str(), password.length());
     qMemCopy(receiverInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
     receiverInBuffer.port = port;
     receiverInBuffer.longitude = longitude;
@@ -118,6 +135,7 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     qMemCopy(receiverInBuffer.detail, detail.toStdString().c_str(), detail.length());
     return receiverInBuffer;
 }
+
 
 
 

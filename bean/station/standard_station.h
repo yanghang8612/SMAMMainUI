@@ -20,14 +20,6 @@ public:
     void setType(const DeploymentType::Value& value);
     void setType(const QString& value);
 
-	CasterMode::Value getMode() const;
-	void setMode(const CasterMode::Value& value);
-	void setMode(const QString& value);
-
-	quint8 getServiceThreadCount() const;
-	void setServiceThreadCount(const quint8& value);
-	void setServiceThreadCount(const QString& value);
-
 	void addReceiver(Receiver* receiver);
     void removerReceiver(quint8 index);
     QList<Receiver*> getReceivers() const;
@@ -37,8 +29,6 @@ public:
 private:
     QString stationName;
     DeploymentType::Value type;
-    CasterMode::Value mode;
-    quint8 serviceThreadCount;
 	QList<Receiver*> receivers;
 };
 

@@ -83,11 +83,12 @@ quint8 Edge::getStatus() const
     return status;
 }
 
-void Edge::setStatus(const quint8& value)
+Edge* Edge::setStatus(const quint8& value)
 {
     status = value;
     prepareGeometryChange();
     update();
+    return this;
 }
 
 

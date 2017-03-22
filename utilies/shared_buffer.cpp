@@ -60,13 +60,10 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
     if (mode == ONLY_WRITE) {
         return -1;
     }
-    if (lengthOrCountToRead == 0) {
-        return 0;
-    }
     //qDebug() << "Read Pointer is" << readPointer;
     if (type == LOOP_BUFFER) {
         quint32 length = 0;
-        if (readPointer == header->writePointer) {
+        if (lengthOrCountToRead == 0 || readPointer == header->writePointer) {
             return 0;
         }
         else if (readPointer < header->writePointer) {
@@ -93,8 +90,14 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
         return length;
     }
     else if (type == COVER_BUFFER) {
-        qMemCopy(dataToRead, dataStartPointer, itemSize * lengthOrCountToRead);
-        return lengthOrCountToRead;
+        if (lengthOrCountToRead == 0) {
+            qMemCopy(dataToRead, dataStartPointer, itemSize * (*itemCount));
+            return *itemCount;
+        }
+        else {
+            qMemCopy(dataToRead, dataStartPointer, itemSize * lengthOrCountToRead);
+            return lengthOrCountToRead;
+        }
     }
     else {
         return -1;

@@ -6,6 +6,7 @@
 #define MAX_RECEIVER_COUNT 5
 
 struct ReceiverInBuffer {
+    int memID;
     char receiverName[64];
     char password[64];
     char ipAddress[16];
@@ -20,8 +21,6 @@ struct StandardStationInBuffer {
     char stationName[64];
     char detail[256];
     quint8 deploymentType;
-    quint8 casterMode;
-    quint8 serviceThreadCount;
     quint8 receiverCount;
     ReceiverInBuffer receivers[MAX_RECEIVER_COUNT];
 };

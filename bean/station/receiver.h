@@ -10,6 +10,10 @@ class Receiver
 public:
 	Receiver();
 
+    int getMemID() const;
+    void setMemID(int value);
+    void setMemID(const QString& value);
+
 	QString getReceiverName() const;
 	void setReceiverName(const QString& value);
 
@@ -41,6 +45,7 @@ public:
     ReceiverInBuffer toReceiverInBuffer();
 
 private:
+    int memID;
     QString receiverName;
     QString password;
     QString ipAddress;

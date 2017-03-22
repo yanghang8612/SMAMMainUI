@@ -84,7 +84,7 @@ bool GeneralFunctions::checkMemIDString(const QString& s)
     return memIDRX.exactMatch(s);
 }
 
-bool GeneralFunctions::writeMessageToFront(const QString &message)
+void GeneralFunctions::writeMessageToFront(const QString& message)
 {
     SoftWorkStatus status;
     status.messageType = 1;

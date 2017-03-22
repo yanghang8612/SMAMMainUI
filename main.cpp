@@ -23,6 +23,7 @@ int main(int argc, char* argv[])
     w.show();
 
     //DllMain(0, 0);
+    qDebug() << sizeof(ReceiverInBuffer);
 
     return a.exec();
 }

@@ -7,7 +7,7 @@
 #include "ui_systemmanager_widget.h"
 #include "common.h"
 #include "main_component_header.h"
-#include "library_exportfunction.h"
+#include "utilies/cpumem_info.h"
 
 FINDMEMORYINFOFUNC FindMemoryInfoFunc = 0;
 DLLSTATUSREADFUNC  DllStatusReadFunc = 0;
@@ -16,11 +16,12 @@ SOFTWORKSTATUSWRITEFUNC SoftWorkStatusWriteFunc = 0;
 
 DeploymentType::Value deploymentType;
 
+extern void* componentStateSharedBufferPointer[COMPONENT_COUNT];
+
 SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::SystemManagerWidget)
-{
-    deploymentType = type;
+{   
 	ui->setupUi(this);
 	ui->infoOutputTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
 	ui->infoOutputTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
@@ -28,39 +29,32 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	ui->infoOutputTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	ui->infoOutputTable->setSelectionMode(QAbstractItemView::NoSelection);
 
-	timerID = startTimer(1000);
+    deploymentType = type;
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        messageBuffers[i] = 0;
+    }
+
+    startTimer(1000);
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
-    if (FindMemoryInfoFunc != 0) {
-        for (int i = 0; i < COMPONENT_COUNT; i++) {
-            messageBuffers[i] = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, FindMemoryInfoFunc(i + 2, 0));
-        }
-    }
-    else {
-        for (int i = 0; i < COMPONENT_COUNT; i++) {
-            messageBuffers[i] = 0;
-        }
-    }
     QTimer* messageReceiverTimer = new QTimer(this);
     connect(messageReceiverTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
     messageReceiverTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
-
     softwareStatus = new StatusPushButton(QIcon(":/status_green"), tr("软件运行状态"), this);
     ui->statusContainer->addWidget(softwareStatus);
 }
 
 SystemManagerWidget::~SystemManagerWidget()
 {
-    killTimer(timerID);
 	delete ui;
 }
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
+    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
 	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
 
 	QDateTime time = QDateTime::currentDateTime();
@@ -70,6 +64,13 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
 
 void SystemManagerWidget::addMessageToInfoContainer()
 {
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        if (messageBuffers[i] == 0) {
+            messageBuffers[i] = (componentStateSharedBufferPointer[i] == 0) ? 0 : new SharedBuffer(SharedBuffer::LOOP_BUFFER,
+                                                                                                   SharedBuffer::ONLY_READ,
+                                                                                                   componentStateSharedBufferPointer[i]);
+        }
+    }
 	int currentRowCount = ui->infoOutputTable->rowCount();
     for (int i = 0; i < 6; ++i) {
         while (true) {

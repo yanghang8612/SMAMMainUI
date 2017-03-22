@@ -17,11 +17,16 @@ ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :
         formattedReceiverName.insert(i * 5, '\n');
     }
 
-    qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()), Qt::QueuedConnection);
-    int r = qrand() % 5;
-    timer->start((r + 5) * 1000);
+//    qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
+//    timer = new QTimer(this);
+//    connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()), Qt::QueuedConnection);
+//    int r = qrand() % 5;
+    //    timer->start((r + 5) * 1000);
+}
+
+QString ReceiverNode::getReceiverIPAddress() const
+{
+    return receiver->getIpAddress();
 }
 
 QRectF ReceiverNode::boundingRect() const

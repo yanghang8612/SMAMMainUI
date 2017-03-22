@@ -11,13 +11,6 @@ namespace DeploymentType {
 	};
 }
 
-namespace CasterMode {
-	enum Value {
-		IMMEDIATE_CASTER,
-		PROCESS_CASTER
-	};
-}
-
 const QString XJ_CONFIGFILE_PATH = "xj-config.xml";
 const QString BJ_CONFIGFILE_PATH = "bj-config.xml";
 const QString DATE_FORMAT_STRING = "yyyy-MM-dd";
@@ -35,8 +28,12 @@ const quint32 OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT = 200;
 const quint32 IGMAS_SHAREDBUFFER_ID = 1603;
 const quint32 IGMAS_SHAREDBUFFER_MAXITEMCOUNT = 20;
 
+const quint32 RECEIVER_STATE_SHAREDBUFFER_ID = 102;
+const quint32 RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT = 200;
+
 const quint32 DLLSTATUS_CHECK_TIMEINTERVAL = 3000;
 const quint32 MESSAGE_CHECK_TIMEINTERVAL = 100;
+const quint32 RECEIVER_STATE_CHECK_TIMEINTERVAL = 1000;
 const quint32 COMPONENT_COUNT = 6;
 const quint32 DLL_COUNT = 24;
 const quint32 COMPONENT_DLL_COUNT[COMPONENT_COUNT] = {3, 2, 6, 4, 5, 4};

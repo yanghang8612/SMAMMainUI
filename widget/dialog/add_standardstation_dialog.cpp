@@ -19,8 +19,6 @@ void AddStandardStationDialog::on_confirmButton_clicked()
 {
 	StandardStation* station = new StandardStation();
     station->setStationName(ui->stationNameEdit->text());
-	station->setMode(CasterMode::Value(ui->stationModeBox->currentIndex()));
-	station->setServiceThreadCount(ui->stationThreadCountEdit->text());
 	station->setDetail(ui->stationDetailEdit->toPlainText());
 
 	emit confirmButtonClicked(station);

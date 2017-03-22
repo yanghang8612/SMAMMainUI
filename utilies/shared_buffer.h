@@ -33,7 +33,7 @@ public:
     SharedBuffer(BufferType type, BufferMode mode, void* headerPointer, quint32 itemSize);
     ~SharedBuffer();
 
-    quint32 readData(void* dataToRead, quint32 lengthOrCountToRead);
+    quint32 readData(void* dataToRead, quint32 lengthOrCountToRead = 0);
     quint32 writeData(const void* dataFromWrite, quint32 lengthOrCountFromWrite);
 
     quint32 getBufferSize() const;

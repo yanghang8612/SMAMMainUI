@@ -21,9 +21,14 @@ class SMAMTreeWidget : public QObject
 public:
     SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container);
 
+    const QList<StandardStation*>& getStandardStationList() const;
+    const QList<IGMASStation*>& getIGMASStationList() const;
+    const QList<IGSStation*>& getIGSStationList() const;
+    const QList<OtherCenter*>& getOtherCenterList() const;
+
 private slots:
     void showRightMenu(QPoint pos);
-	void addWidgetToContainer(QTreeWidgetItem* item);
+    void addWidgetToContainer(QTreeWidgetItem* item);
 
 	void showAddNewStandardStationDialog();
 	void addNewStandardStation(StandardStation* station);
