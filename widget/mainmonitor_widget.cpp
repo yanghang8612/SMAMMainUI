@@ -16,7 +16,8 @@ MainMonitorWidget::MainMonitorWidget(SMAMTreeWidget* treeWidget, QWidget* parent
     ui(new Ui::MainMonitorWidget),
     standardStationList(treeWidget->getStandardStationList()),
     iGMASStationList(treeWidget->getIGMASStationList()),
-    otherCenterList(treeWidget->getOtherCenterList())
+    otherCenterList(treeWidget->getOtherCenterList()),
+    receiverStateSharedBuffer(0)
 {
     ui->setupUi(this);
 
@@ -52,7 +53,7 @@ void MainMonitorWidget::updateView() {
     }
 }
 
-void MainMonitorWidget::timerEvent(QTimerEvent event)
+void MainMonitorWidget::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event);
     if (receiverStateSharedBuffer == 0) {

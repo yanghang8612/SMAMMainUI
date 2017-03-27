@@ -36,7 +36,7 @@ public:
     void updateView();
 
 protected:
-    void timerEvent(QTimerEvent event);
+    void timerEvent(QTimerEvent* event);
 
 private:
     Ui::MainMonitorWidget* ui;

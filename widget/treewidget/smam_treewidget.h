@@ -102,6 +102,7 @@ private:
 	QDomDocument getRootFromXMLFile(const QString& filePath);
 	void writeConfigFile();
     void writeSharedBuffer();
+    int findFreeReceiverMemID();
 };
 
 #endif // SMAMTREEWIDGET_H

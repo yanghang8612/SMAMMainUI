@@ -980,3 +980,8 @@ void SMAMTreeWidget::writeSharedBuffer()
         }
     }
 }
+
+int SMAMTreeWidget::findFreeReceiverMemID()
+{
+
+}

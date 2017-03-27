@@ -11,18 +11,19 @@ namespace DeploymentType {
 	};
 }
 
-const QString XJ_CONFIGFILE_PATH = "xj-config.xml";
-const QString BJ_CONFIGFILE_PATH = "bj-config.xml";
+const QString XJ_CONFIGFILE_PATH = "../conf/xj-config.xml";
+const QString BJ_CONFIGFILE_PATH = "../conf/bj-config.xml";
 const QString DATE_FORMAT_STRING = "yyyy-MM-dd";
 const QString TIME_FORMAT_STRING = "hh:mm:ss";
 const QString DATETIME_FORMAT_STRING = "yyyy-MM-dd hh:mm:ss";
 
-const quint32 MAX_RECEIVER_COUNT_PERSTATION = 5;
+const quint32 MAX_RECEIVER_COUNT_PERSTATION = 3;
 
 const quint32 TABLEWIDGET_HORIZONHEADER_HEIGHT = 25;
 
 const quint32 RECEIVER_SHAREDBUFFER_ID = 1601;
 const quint32 RECEIVER_SHAREDBUFFER_MAXITEMCOUNT = 200;
+const quint32 RECEIVER_SHAREDBUFFER_MEMID_START_INDEX = 200;
 const quint32 OTHERCENTER_SHAREDBUFFER_ID = 1602;
 const quint32 OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT = 200;
 const quint32 IGMAS_SHAREDBUFFER_ID = 1603;
