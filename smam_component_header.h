@@ -30,6 +30,7 @@ struct OtherCenterInBuffer {
     char userName[64];
     char password[64];
     char ipAddress[16];
+    int port;
     char detail[256];
 };
 
@@ -42,6 +43,8 @@ struct IGMASStationInBuffer {
     double longitude;
     double latitude;
     double height;
+    char userName[64];
+    char password[64];
 };
 
 struct IGSStationInBuffer {

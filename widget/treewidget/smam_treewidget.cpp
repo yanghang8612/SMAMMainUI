@@ -498,6 +498,14 @@ void SMAMTreeWidget::addNewIGMASStation(IGMASStation* station)
     stationHeight.appendChild(root.createTextNode(QString::number(station->getHeight())));
     newIGMASStation.appendChild(stationHeight);
 
+    QDomElement stationUserName = root.createElement("USERNAME");
+    stationUserName.appendChild(root.createTextNode(station->getUserName()));
+    newIGMASStation.appendChild(stationUserName);
+
+    QDomElement stationPassword = root.createElement("PASSWORD");
+    stationPassword.appendChild(root.createTextNode(station->getPassword()));
+    newIGMASStation.appendChild(stationPassword);
+
     iGMASStationRoot.appendChild(newIGMASStation);
 
     writeConfigFile();
@@ -548,6 +556,14 @@ void SMAMTreeWidget::modifyIGMASStation(IGMASStation* station)
     QDomElement stationHeight = root.createElement("HEIGHT");
     stationHeight.appendChild(root.createTextNode(QString::number(station->getHeight())));
     iGMASStationNode.replaceChild(stationHeight, iGMASStationNode.namedItem("HEIGHT"));
+
+    QDomElement stationUserName = root.createElement("USERNAME");
+    stationUserName.appendChild(root.createTextNode(station->getUserName()));
+    iGMASStationNode.replaceChild(stationUserName, iGMASStationNode.namedItem("USERNAME"));
+
+    QDomElement stationPassword = root.createElement("PASSWORD");
+    stationPassword.appendChild(root.createTextNode(station->getPassword()));
+    iGMASStationNode.replaceChild(stationPassword, iGMASStationNode.namedItem("PASSWORD"));
 
     writeConfigFile();
 }
@@ -612,6 +628,10 @@ void SMAMTreeWidget::addNewCenter(OtherCenter* center)
     centerIP.appendChild(root.createTextNode(center->getIpAddress()));
     newCenter.appendChild(centerIP);
 
+    QDomElement centerPort = root.createElement("PORT");
+    centerPort.appendChild(root.createTextNode(center->getPort()));
+    newCenter.appendChild(centerPort);
+
     QDomElement centerDetail = root.createElement("DETAIL");
     centerDetail.appendChild(root.createTextNode(center->getDetail()));
     newCenter.appendChild(centerDetail);
@@ -650,6 +670,10 @@ void SMAMTreeWidget::modifyCenter(OtherCenter* center)
     QDomElement centerIP = root.createElement("IPADDRESS");
     centerIP.appendChild(root.createTextNode(center->getIpAddress()));
     centerNode.replaceChild(centerIP, centerNode.namedItem("IPADDRESS"));
+
+    QDomElement centerPort = root.createElement("PORT");
+    centerPort.appendChild(root.createTextNode(center->getPort());
+    centerNode.replaceChild(centerPort, centerNode.namedItem("PORT"));
 
     QDomElement centerDetail = root.createElement("DETAIL");
     centerDetail.appendChild(root.createTextNode(center->getDetail()));
@@ -702,6 +726,8 @@ void SMAMTreeWidget::initAtBJ()
             station->setLongitude(iGMASStationNode.namedItem("LONGITUDE").toElement().text());
             station->setLatitude(iGMASStationNode.namedItem("LATITUDE").toElement().text());
             station->setHeight(iGMASStationNode.namedItem("HEIGHT").toElement().text());
+            station->setUserName(iGMASStationNode.namedItem("USERNAME").toElement().text());
+            station->setPassword(iGMASStationNode.namedItem("PASSWORD").toElement().text());
 
             //Create station node of QTreewidget
             QTreeWidgetItem* stationTreeNode = new IGMASTreeWidgetItem(iGMASStationTreeRoot, IGMASNODE_TREEITEM_TYPE, station);
@@ -730,6 +756,7 @@ void SMAMTreeWidget::initAtBJ()
             center->setUserName(centerNode.namedItem("USERNAME").toElement().text());
             center->setPassword(centerNode.namedItem("PASSWORD").toElement().text());
             center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
+            center->setPort(centerNode.namedItem("PORT").toElement().text());
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
             //Create other center node of QTreewidget
@@ -838,6 +865,7 @@ void SMAMTreeWidget::initAtXJ()
             center->setUserName(centerNode.namedItem("USERNAME").toElement().text());
             center->setPassword(centerNode.namedItem("PASSWORD").toElement().text());
             center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
+            center->setPort(centerNode.namedItem("PORT").toElement().text());
             center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
 
             //Create other center node of QTreewidget

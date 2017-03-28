@@ -33,6 +33,12 @@ public:
     void setHeight(double value);
     void setHeight(const QString& value);
 
+    QString getUserName() const;
+    void setUserName(const QString& value);
+
+    QString getPassword() const;
+    void setPassword(const QString& value);
+
     IGMASStationInBuffer toiGMASStationInBuffer();
 
 private:
@@ -42,6 +48,8 @@ private:
     double longitude;
     double latitude;
     double height;
+    QString userName;
+    QString password;
 };
 
 #endif // IGMASSTATION_H

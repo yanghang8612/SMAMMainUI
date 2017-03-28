@@ -95,6 +95,26 @@ void IGMASStation::setHeight(const QString& value)
     height = value.toDouble();
 }
 
+QString IGMASStation::getUserName() const
+{
+    return userName;
+}
+
+void IGMASStation::setUserName(const QString& value)
+{
+    userName = value;
+}
+
+QString IGMASStation::getPassword() const
+{
+    return password;
+}
+
+void IGMASStation::setPassword(const QString& value)
+{
+    password = value;
+}
+
 IGMASStationInBuffer IGMASStation::toiGMASStationInBuffer()
 {
     IGMASStationInBuffer iGMASStationInBuffer;
@@ -108,8 +128,14 @@ IGMASStationInBuffer IGMASStation::toiGMASStationInBuffer()
     iGMASStationInBuffer.longitude = longitude;
     iGMASStationInBuffer.latitude = latitude;
     iGMASStationInBuffer.height = height;
+    qMemSet(iGMASStationInBuffer.userName, 0, sizeof(iGMASStationInBuffer.userName));
+    qMemCopy(iGMASStationInBuffer.userName, userName.toStdString().c_str(), userName.length());
+    qMemSet(iGMASStationInBuffer.password, 0, sizeof(iGMASStationInBuffer.password));
+    qMemCopy(iGMASStationInBuffer.password, password.toStdString().c_str(), password.length());
     return iGMASStationInBuffer;
 }
+
+
 
 
 

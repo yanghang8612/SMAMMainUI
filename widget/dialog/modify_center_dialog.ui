@@ -85,20 +85,13 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
       <property name="text">
-       <string>密码：</string>
+       <string>名称：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="centerIPEdit">
-      <property name="styleSheet">
-       <string notr="true"/>
       </property>
      </widget>
     </item>
@@ -112,10 +105,27 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="centerIPEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>名称：</string>
+       <string>密码：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>用户名：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -128,18 +138,21 @@
     <item row="2" column="1">
      <widget class="QLineEdit" name="centerPasswordEdit"/>
     </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="centerUserNameEdit"/>
+    </item>
+    <item row="5" column="1">
+     <widget class="QLineEdit" name="centerPortEdit"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="label_5">
       <property name="text">
-       <string>用户名：</string>
+       <string>Port(DEC)：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="centerUserNameEdit"/>
     </item>
    </layout>
   </widget>
