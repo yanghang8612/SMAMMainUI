@@ -10,7 +10,8 @@
 #include "bean/station/igmas_station.h"
 #include "bean/center/other_center.h"
 #include "graphicsitem/receivernode.h"
-#include "graphicsitem/stationnode.h"
+#include "graphicsitem/standardnode.h"
+#include "graphicsitem/igmasnode.h"
 #include "graphicsitem/centernode.h"
 #include "graphicsitem/filenode.h"
 #include "graphicsitem/harddrivenode.h"
@@ -19,6 +20,16 @@
 struct ReceiverState {
     char ipAddress[16];
     bool isConnected;
+};
+
+struct OtherCenterState {
+    bool isConnected;
+    char ipAddress[16];
+};
+
+struct IGMASState {
+    bool isConnected;
+    char ipAddress[16];
 };
 
 namespace Ui {
@@ -44,11 +55,16 @@ private:
     const QList<IGMASStation*>& iGMASStationList;
     const QList<OtherCenter*>& otherCenterList;
     QGraphicsScene* scene;
-    QList<StationNode*> stationNodeList;
+    QList<StandardNode*> stationNodeList;
     QList<ReceiverNode*> receiverNodeList;
-    QList<CenterNode*> centerNodeList;
+    QList<IGMASNode*> iGMASNodeList;
+    QList<CenterNode*> otherCenterNodeList;
     SharedBuffer* receiverStateSharedBuffer;
+    SharedBuffer* iGMASStateSharedBuffer;
+    SharedBuffer* otherCenterStateSharedBuffer;
     ReceiverState receiverState[RECEIVER_SHAREDBUFFER_MAXITEMCOUNT];
+    IGMASState iGMASState[IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT];
+    OtherCenterState otherCenterState[OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT];
 
     void updateXJView();
     void updateBJView();

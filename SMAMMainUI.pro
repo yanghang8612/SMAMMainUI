@@ -49,7 +49,6 @@ SOURCES += \
     widget/graphicsitem/centernode.cpp \
     widget/graphicsitem/edge.cpp \
     widget/graphicsitem/receivernode.cpp \
-    widget/graphicsitem/stationnode.cpp \
     widget/graphicsitem/filenode.cpp \
     widget/graphicsitem/harddrivenode.cpp \
     widget/graphicsitem/usersnode.cpp \
@@ -71,7 +70,9 @@ SOURCES += \
     widget/receiverinfo_widget.cpp \
     widget/sharedmemoryinfo_widget.cpp \
     widget/standardstationinfo_widget.cpp \
-    widget/igmasstationinfo_widget.cpp
+    widget/igmasstationinfo_widget.cpp \
+    widget/graphicsitem/standardnode.cpp \
+    widget/graphicsitem/igmasnode.cpp
 
 
 HEADERS  += \
@@ -113,7 +114,6 @@ HEADERS  += \
     widget/graphicsitem/centernode.h \
     widget/graphicsitem/edge.h \
     widget/graphicsitem/receivernode.h \
-    widget/graphicsitem/stationnode.h \
     widget/graphicsitem/filenode.h \
     widget/graphicsitem/harddrivenode.h \
     widget/graphicsitem/usersnode.h \
@@ -135,7 +135,9 @@ HEADERS  += \
     widget/receiverinfo_widget.h \
     widget/sharedmemoryinfo_widget.h \
     widget/standardstationinfo_widget.h \
-    widget/igmasstationinfo_widget.h
+    widget/igmasstationinfo_widget.h \
+    widget/graphicsitem/standardnode.h \
+    widget/graphicsitem/igmasnode.h
 
 FORMS    += \
     smam_mainwindow.ui \

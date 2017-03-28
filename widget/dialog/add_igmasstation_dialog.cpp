@@ -80,6 +80,22 @@ void AddIGMASStationDialog::on_confirmButton_clicked()
         ui->stationMemIDEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
+    if (!GeneralFunctions::checkUserNameString(ui->stationUserNameEdit->text())) {
+        ui->stationUserNameEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationUserNameEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkPasswordString(ui->stationPasswordEdit->text())) {
+        ui->stationPasswordEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationPasswordEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
     IGMASStation* station = new IGMASStation();
     station->setIsAvailable(ui->stationAvailableBox->currentIndex());
     station->setIpAddress(ui->stationIPEdit->text());
@@ -89,6 +105,8 @@ void AddIGMASStationDialog::on_confirmButton_clicked()
     station->setLongitude(ui->stationLongitudeEdit->text());
     station->setLatitude(ui->stationLatitudeEdit->text());
     station->setHeight(ui->stationHeightEdit->text());
+    station->setUserName(ui->stationUserNameEdit->text());
+    station->setPassword(ui->stationPasswordEdit->text());
 
     emit confirmButtonClicked(station);
     QDialog::accept();

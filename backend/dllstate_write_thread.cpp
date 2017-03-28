@@ -1,5 +1,6 @@
 #include "dllstate_write_thread.h"
 #include "main_component_header.h"
+#include "common.h"
 
 DllStateWriteThread::DllStateWriteThread() :
         QThread()
@@ -16,7 +17,7 @@ void DllStateWriteThread::run()
         DllStatusWriteFunc(52);
         DllStatusWriteFunc(53);
         DllStatusWriteFunc(54);
-        sleep(1);
+        msleep(DLLSTATE_WRITE_TIMEINTERVAL);
     }
 }
 

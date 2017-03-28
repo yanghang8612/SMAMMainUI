@@ -3,9 +3,7 @@
 
 BaseNode::BaseNode(quint8 length) :
     length(length), status(0)
-{
-
-}
+{}
 
 void BaseNode::addFromEdge(Edge* e)
 {

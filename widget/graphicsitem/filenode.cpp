@@ -4,9 +4,7 @@
 
 FileNode::FileNode(quint8 length) :
     BaseNode(length)
-{
-
-}
+{}
 
 QRectF FileNode::boundingRect() const
 {

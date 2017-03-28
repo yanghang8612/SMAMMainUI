@@ -2,11 +2,14 @@
 
 #include "centernode.h"
 
-CenterNode::CenterNode(quint8 length, const QString& centerName) :
+CenterNode::CenterNode(BaseCenter* center, quint8 length) :
     BaseNode(length),
-    centerName(centerName)
-{
+    center(center)
+{}
 
+QString CenterNode::getCenterIPAddress() const
+{
+    return center->getIpAddress();
 }
 
 QRectF CenterNode::boundingRect() const
@@ -32,5 +35,5 @@ void CenterNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidg
     }
     painter->drawImage(QRectF(-length / 2, - length / 2, length, length), QImage(imageName));
     painter->setFont(QFont("Helvetica", 10, QFont::Bold));
-    painter->drawText(-length / 2 - 10, length / 2 + 2, length + 20, 15, Qt::AlignCenter, centerName);
+    painter->drawText(-length / 2 - 10, length / 2 + 2, length + 20, 15, Qt::AlignCenter, center->getCenterName());
 }

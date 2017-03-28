@@ -53,8 +53,8 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
+//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
 	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
 
 	QDateTime time = QDateTime::currentDateTime();

@@ -16,10 +16,10 @@ SoftwareStatusFrame::SoftwareStatusFrame(QWidget *parent) :
     buttons[3] = ui->dataStorageStatus;
     buttons[4] = ui->userManagerStatus;
     buttons[5] = ui->systemManagerStatus;
-    startTimer(DLLSTATUS_CHECK_TIMEINTERVAL);
     qMemSet(dllStatus, 1, sizeof(dllStatus));
     qMemSet(preDllStatus, 1, sizeof(dllStatus));
     qMemSet(componentStatus, true, sizeof(componentStatus));
+    startTimer(DLLSTATE_CHECK_TIMEINTERVAL);
 }
 
 SoftwareStatusFrame::~SoftwareStatusFrame()
@@ -38,7 +38,7 @@ void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
         for (quint32 i = 0; i < COMPONENT_COUNT; i++) {
             componentStatus[i] = true;
             for (quint32 j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
-                int index = COMPONENT_STATUSARRAY_INDEX[i] + j;
+                int index = COMPONENT_STATEARRAY_INDEX[i] + j;
                 if (dllStatus[index] == preDllStatus[index]) {
                     componentStatus[i] = false;
                     break;

@@ -18,6 +18,8 @@ public:
     static const QRegExp heightRX;
     static const QRegExp mountRX;
     static const QRegExp memIDRX;
+    static const QRegExp userNameRX;
+    static const QRegExp passwordRX;
 
     static bool checkNameString(const QString& s);
     static bool checkIPAddressString(const QString& s);
@@ -27,6 +29,8 @@ public:
     static bool checkHeightString(const QString& s);
     static bool checkMountString(const QString& s);
     static bool checkMemIDString(const QString& s);
+    static bool checkUserNameString(const QString& s);
+    static bool checkPasswordString(const QString& s);
 
     static void writeMessageToFront(const QString& message);
 };

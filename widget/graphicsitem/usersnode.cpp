@@ -4,9 +4,7 @@
 
 UsersNode::UsersNode(quint8 length) :
     BaseNode(length)
-{
-
-}
+{}
 
 QRectF UsersNode::boundingRect() const
 {

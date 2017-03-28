@@ -15,6 +15,8 @@ ModifyIGMASStationDialog::ModifyIGMASStationDialog(IGMASStation* station, QWidge
     ui->stationHeightEdit->setText(QString::number(station->getHeight()));
     ui->stationAvailableBox->setCurrentIndex((station->getIsAvailable()) ? 1 : 0);
     ui->stationMemIDEdit->setText(QString::number(station->getMemID()));
+    ui->stationUserNameEdit->setText(station->getUserName());
+    ui->stationPasswordEdit->setText(station->getPassword());
     setWindowTitle(tr("编辑iGMAS测站"));
 
     ui->stationMountEdit->setValidator(new QRegExpValidator(GeneralFunctions::mountRX, this));
@@ -88,6 +90,22 @@ void ModifyIGMASStationDialog::on_confirmButton_clicked()
         ui->stationMemIDEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
+    if (!GeneralFunctions::checkUserNameString(ui->stationUserNameEdit->text())) {
+        ui->stationUserNameEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationUserNameEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
+    if (!GeneralFunctions::checkPasswordString(ui->stationPasswordEdit->text())) {
+        ui->stationPasswordEdit->setStyleSheet("QLineEdit{border-color:red}");
+        return;
+    }
+    else {
+        ui->stationPasswordEdit->setStyleSheet("QLineEdit{border-color:white}");
+    }
+
     station->setIpAddress(ui->stationIPEdit->text());
     station->setPort(ui->stationPortEdit->text());
     station->setIsAvailable(ui->stationAvailableBox->currentIndex());
@@ -96,6 +114,8 @@ void ModifyIGMASStationDialog::on_confirmButton_clicked()
     station->setLongitude(ui->stationLongitudeEdit->text());
     station->setLatitude(ui->stationLatitudeEdit->text());
     station->setHeight(ui->stationHeightEdit->text());
+    station->setUserName(ui->stationUserNameEdit->text());
+    station->setPassword(ui->stationPasswordEdit->text());
 
     emit confirmButtonClicked(station);
     QDialog::accept();

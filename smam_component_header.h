@@ -3,7 +3,7 @@
 
 #include <QtGlobal>
 
-#define MAX_RECEIVER_COUNT 3
+#define MAX_RECEIVER_COUNT 2
 
 struct ReceiverInBuffer {
     int memID;

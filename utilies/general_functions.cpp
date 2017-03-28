@@ -10,6 +10,8 @@ const QRegExp GeneralFunctions::latitudeRX("^[+-]?(?:[1-8]?\\d)(?:\\.\\d{2,})$")
 const QRegExp GeneralFunctions::heightRX("^[+-]?(?:(?:[1-9]\\d*|0)\\.\\d{2,})$");
 const QRegExp GeneralFunctions::mountRX("^(?:[0-9A-Z]{4})$");
 const QRegExp GeneralFunctions::memIDRX("^(?:\\d+)$");
+const QRegExp GeneralFunctions::userNameRX("^[a-zA-Z0-9].+$");
+const QRegExp GeneralFunctions::passwordRX("^.{4,}$");
 
 GeneralFunctions::GeneralFunctions()
 {
@@ -82,6 +84,22 @@ bool GeneralFunctions::checkMemIDString(const QString& s)
         return false;
     }
     return memIDRX.exactMatch(s);
+}
+
+bool GeneralFunctions::checkUserNameString(const QString &s)
+{
+    if (s == 0) {
+        return false;
+    }
+    return userNameRX.exactMatch(s);
+}
+
+bool GeneralFunctions::checkPasswordString(const QString &s)
+{
+    if (s == 0) {
+        return false;
+    }
+    return passwordRX.exactMatch(s);
 }
 
 void GeneralFunctions::writeMessageToFront(const QString& message)

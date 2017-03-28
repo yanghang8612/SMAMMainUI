@@ -7,9 +7,12 @@
 #include "mainmonitor_widget.h"
 #include "ui_mainmonitor_widget.h"
 #include "graphicsitem/edge.h"
+#include "bean/center/main_center.h"
 
 extern DeploymentType::Value deploymentType;
 extern void* receiverStateSharedBufferPointer;
+extern void* iGMASStateSharedBufferPointer;
+extern void* otherCenterStateSharedBufferPointer;
 
 MainMonitorWidget::MainMonitorWidget(SMAMTreeWidget* treeWidget, QWidget* parent) :
     QTabWidget(parent),
@@ -17,7 +20,7 @@ MainMonitorWidget::MainMonitorWidget(SMAMTreeWidget* treeWidget, QWidget* parent
     standardStationList(treeWidget->getStandardStationList()),
     iGMASStationList(treeWidget->getIGMASStationList()),
     otherCenterList(treeWidget->getOtherCenterList()),
-    receiverStateSharedBuffer(0)
+    receiverStateSharedBuffer(0), iGMASStateSharedBuffer(0), otherCenterStateSharedBuffer(0)
 {
     ui->setupUi(this);
 
@@ -31,7 +34,7 @@ MainMonitorWidget::MainMonitorWidget(SMAMTreeWidget* treeWidget, QWidget* parent
     ui->monitorView->setRenderHint(QPainter::Antialiasing);
     ui->monitorView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-    startTimer(RECEIVER_STATE_CHECK_TIMEINTERVAL);
+    startTimer(DEVICE_STATE_CHECK_TIMEINTERVAL);
     updateView();
 }
 
@@ -41,6 +44,7 @@ MainMonitorWidget::~MainMonitorWidget()
 }
 
 void MainMonitorWidget::updateView() {
+    //qDebug() << "SMAMMainUI:" << "update view is invoked.";
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             updateXJView();
@@ -53,46 +57,84 @@ void MainMonitorWidget::updateView() {
     }
 }
 
-void MainMonitorWidget::timerEvent(QTimerEvent* event)
+void MainMonitorWidget::timerEvent(QTimerEvent*)
 {
-    Q_UNUSED(event);
-    if (receiverStateSharedBuffer == 0) {
-        receiverStateSharedBuffer = (receiverStateSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                                                                                   SharedBuffer::ONLY_READ,
-                                                                                                   receiverStateSharedBufferPointer,
-                                                                                                   sizeof(ReceiverState));
+    switch (deploymentType) {
+        case DeploymentType::XJ_CENTER:
+            if (receiverStateSharedBuffer == 0) {
+                receiverStateSharedBuffer = (receiverStateSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                                           SharedBuffer::ONLY_READ,
+                                                                                                           receiverStateSharedBufferPointer,
+                                                                                                           sizeof(ReceiverState));
+            }
+            else {
+                receiverStateSharedBuffer->readData((void*) receiverState);
+                for (int i = 0; i < receiverNodeList.size(); i++) {
+                    for (int j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
+                        if (qstrcmp(receiverNodeList[i]->getReceiverIPAddress().toStdString().c_str(), receiverState[j].ipAddress) == 0)
+                            receiverNodeList[i]->setStatus(receiverState[j].isConnected ? 1 : 2);
+                    }
+                }
+            }
+            break;
+        case DeploymentType::BJ_CENTER:
+            if (iGMASStateSharedBuffer == 0) {
+                iGMASStateSharedBuffer = (iGMASStateSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                                     SharedBuffer::ONLY_READ,
+                                                                                                     iGMASStateSharedBufferPointer,
+                                                                                                     sizeof(IGMASState));
+            }
+            else {
+                iGMASStateSharedBuffer->readData((void*) iGMASState);
+                for (int i = 0; i < iGMASStationList.size(); i++) {
+                    for (int j = 0; j < iGMASStateSharedBuffer->getItemCount(); j++) {
+                        if (qstrcmp(iGMASNodeList[i]->getStationIPAddress().toStdString().c_str(), iGMASState[j].ipAddress) == 0)
+                            iGMASNodeList[i]->setStatus(iGMASState[j].isConnected ? 1 : 2);
+                    }
+                }
+            }
+            break;
+    }
+    if (otherCenterStateSharedBuffer == 0) {
+        otherCenterStateSharedBuffer = (otherCenterStateSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
+                                                                                                         SharedBuffer::ONLY_READ,
+                                                                                                         otherCenterStateSharedBufferPointer,
+                                                                                                         sizeof(OtherCenterState));
     }
     else {
-        receiverStateSharedBuffer->readData((void*) receiverState);
-        for (int i = 0; i < receiverNodeList.size(); i++) {
-            for (int j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
-                if (qstrcmp(receiverNodeList[i]->getReceiverIPAddress().toStdString().c_str(), receiverState[j].ipAddress) == 0)
-                    receiverNodeList[i]->setStatus(receiverState[j].isConnected ? 1 : 2);
+        otherCenterStateSharedBuffer->readData((void*) otherCenterState);
+        for (int i = 0; i < otherCenterList.size(); i++) {
+            for (int j = 0; j < otherCenterStateSharedBuffer->getItemCount(); j++) {
+                if (qstrcmp(otherCenterNodeList[i]->getCenterIPAddress().toStdString().c_str(), otherCenterState[j].ipAddress) == 0)
+                    otherCenterNodeList[i]->setStatus(otherCenterState[j].isConnected ? 1 : 2);
             }
         }
     }
+
 }
 
 void MainMonitorWidget::updateXJView()
 {
     scene->clear();
 
-    CenterNode* centerNode = new CenterNode(60, tr("新疆中心"));
-    centerNode->setPos(200, 0);
-    scene->addItem(centerNode);
+    MainCenter* mainCenter = new MainCenter();
+    mainCenter->setCenterName(tr("新疆中心"));
+    CenterNode* mainCenterNode = new CenterNode(mainCenter, 60);
+    mainCenterNode->setPos(0, 0);
+    scene->addItem(mainCenterNode);
 
     UsersNode* usersNode = new UsersNode(50);
-    usersNode->setPos(200, -150);
+    usersNode->setPos(0, -150);
     scene->addItem(usersNode);
-    scene->addItem(new Edge(centerNode, usersNode));
+    scene->addItem(new Edge(mainCenterNode, usersNode));
 
     FileNode* fileNode = new FileNode(40);
-    fileNode->setPos(200, 150);
+    fileNode->setPos(0, 150);
     scene->addItem(fileNode);
-    scene->addItem(new Edge(centerNode, fileNode));
+    scene->addItem(new Edge(mainCenterNode, fileNode));
 
     HardDriveNode* hardDriveNode = new HardDriveNode(40);
-    hardDriveNode->setPos(300, 150);
+    hardDriveNode->setPos(150, 150);
     scene->addItem(hardDriveNode);
     scene->addItem(new Edge(fileNode, hardDriveNode));
 
@@ -102,32 +144,22 @@ void MainMonitorWidget::updateXJView()
     }
     qreal stationLength = qMin((double) 400 / stationCount, 100.0);
 
-    int maxReceiverCount = 1;
-    qreal receiverLength = 0;
-
-    for (int i = 0; i < stationCount; i++) {
-        int receiverCount = standardStationList[i]->getReceivers().size();
-        maxReceiverCount = (receiverCount > maxReceiverCount) ? receiverCount : maxReceiverCount;
-    }
-    receiverLength = qMin(stationLength / maxReceiverCount, 60.0);
-
-    QPointF topStationPoint(-100, - stationLength / 2 * (stationCount - 1));
+    QPointF topStationPoint(-200, - stationLength / 2 * (stationCount - 1));
     for (int i = 0; i < stationCount; i++) {
         StandardStation* station = standardStationList[i];
-        StationNode* stationNode = new StationNode(station, stationLength * 0.5);
+        StandardNode* stationNode = new StandardNode(station, stationLength * 0.5);
         stationNode->setPos(topStationPoint + QPointF(0, stationLength * i));
         scene->addItem(stationNode);
-        scene->addItem(new Edge(stationNode, centerNode));
+        scene->addItem(new Edge(stationNode, mainCenterNode));
         stationNodeList << stationNode;
 
         int receiverCount = station->getReceivers().size();
-        QPointF topReceiverPoint(-400, stationNode->pos().y() - receiverLength / 2 * (receiverCount - 1));
+        QPointF topReceiverPoint(-200 - stationLength * 0.55, stationNode->pos().y());
         for (int j = 0; j < receiverCount; j++) {
             Receiver* receiver = station->getReceivers().at(j);
-            ReceiverNode* receiverNode = new ReceiverNode(receiver, receiverLength * 0.8);
-            receiverNode->setPos(topReceiverPoint + QPointF(0, receiverLength * j));
+            ReceiverNode* receiverNode = new ReceiverNode(receiver, stationLength * 0.4);
+            receiverNode->setPos(topReceiverPoint - QPointF(stationLength * 0.7 * j, 0));
             scene->addItem(receiverNode);
-            scene->addItem(new Edge(receiverNode, stationNode));
             receiverNodeList << receiverNode;
         }
     }
@@ -138,19 +170,71 @@ void MainMonitorWidget::updateXJView()
     }
     qreal centerLength = 400 / centerCount;
 
-    QPointF topCenterPoint(400, - centerLength / 2 * (centerCount - 1));
+    QPointF topCenterPoint(300, - centerLength / 2 * (centerCount - 1));
     for (int i = 0; i < centerCount; i++) {
         OtherCenter* center = otherCenterList[i];
-        CenterNode* otherCenterNode = new CenterNode(60, center->getCenterName());
+        CenterNode* otherCenterNode = new CenterNode(center, 60);
         otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
-        otherCenterNode->setStatus(1);
         scene->addItem(otherCenterNode);
-        scene->addItem(new Edge(centerNode, otherCenterNode));
-        centerNodeList << centerNode;
+        scene->addItem(new Edge(mainCenterNode, otherCenterNode));
+        otherCenterNodeList << otherCenterNode;
     }
 }
 
 void MainMonitorWidget::updateBJView()
 {
+    scene->clear();
 
+    MainCenter* mainCenter = new MainCenter();
+    mainCenter->setCenterName(tr("北京中心"));
+    CenterNode* mainCenterNode = new CenterNode(mainCenter, 60);
+    mainCenterNode->setPos(0, 0);
+    scene->addItem(mainCenterNode);
+
+    UsersNode* usersNode = new UsersNode(50);
+    usersNode->setPos(0, -150);
+    scene->addItem(usersNode);
+    scene->addItem(new Edge(mainCenterNode, usersNode));
+
+    FileNode* fileNode = new FileNode(40);
+    fileNode->setPos(0, 150);
+    scene->addItem(fileNode);
+    scene->addItem(new Edge(mainCenterNode, fileNode));
+
+    HardDriveNode* hardDriveNode = new HardDriveNode(40);
+    hardDriveNode->setPos(150, 150);
+    scene->addItem(hardDriveNode);
+    scene->addItem(new Edge(fileNode, hardDriveNode));
+
+    int stationCount = iGMASStationList.size();
+    if (0 == stationCount) {
+        return;
+    }
+    qreal stationLength = qMin((double) 400 / stationCount, 100.0);
+
+    QPointF topStationPoint(-300, - stationLength / 2 * (stationCount - 1));
+    for (int i = 0; i < stationCount; i++) {
+        IGMASStation* station = iGMASStationList[i];
+        IGMASNode* stationNode = new IGMASNode(station, stationLength * 0.5);
+        stationNode->setPos(topStationPoint + QPointF(0, stationLength * i));
+        scene->addItem(stationNode);
+        scene->addItem(new Edge(stationNode, mainCenterNode));
+        iGMASNodeList << stationNode;
+    }
+
+    int centerCount = otherCenterList.size();
+    if (0 == centerCount) {
+        return;
+    }
+    qreal centerLength = 400 / centerCount;
+
+    QPointF topCenterPoint(300, - centerLength / 2 * (centerCount - 1));
+    for (int i = 0; i < centerCount; i++) {
+        OtherCenter* center = otherCenterList[i];
+        CenterNode* otherCenterNode = new CenterNode(center, 60);
+        otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
+        scene->addItem(otherCenterNode);
+        scene->addItem(new Edge(mainCenterNode, otherCenterNode));
+        otherCenterNodeList << mainCenterNode;
+    }
 }

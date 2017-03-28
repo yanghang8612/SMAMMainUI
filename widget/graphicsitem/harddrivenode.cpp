@@ -4,9 +4,7 @@
 
 HardDriveNode::HardDriveNode(quint8 length) :
     BaseNode(length)
-{
-
-}
+{}
 
 QRectF HardDriveNode::boundingRect() const
 {

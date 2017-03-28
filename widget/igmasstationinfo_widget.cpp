@@ -24,4 +24,6 @@ void IGMASStationInfoWidget::setStation(IGMASStation* station)
     ui->stationHeightEdit->setText(QString::number(station->getHeight()));
     ui->stationAvailableEdit->setText((station->getIsAvailable()) ? tr("可用") : tr("不可用"));
     ui->stationMemIDEdit->setText(QString::number(station->getMemID()));
+    ui->stationUserNameEdit->setText(station->getUserName());
+    ui->stationPasswordEdit->setText(station->getPassword());
 }

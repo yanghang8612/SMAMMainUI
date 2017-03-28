@@ -629,7 +629,7 @@ void SMAMTreeWidget::addNewCenter(OtherCenter* center)
     newCenter.appendChild(centerIP);
 
     QDomElement centerPort = root.createElement("PORT");
-    centerPort.appendChild(root.createTextNode(center->getPort()));
+    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
     newCenter.appendChild(centerPort);
 
     QDomElement centerDetail = root.createElement("DETAIL");
@@ -672,7 +672,7 @@ void SMAMTreeWidget::modifyCenter(OtherCenter* center)
     centerNode.replaceChild(centerIP, centerNode.namedItem("IPADDRESS"));
 
     QDomElement centerPort = root.createElement("PORT");
-    centerPort.appendChild(root.createTextNode(center->getPort());
+    centerPort.appendChild(root.createTextNode(QString::number(center->getPort())));
     centerNode.replaceChild(centerPort, centerNode.namedItem("PORT"));
 
     QDomElement centerDetail = root.createElement("DETAIL");
