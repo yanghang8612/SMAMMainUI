@@ -14,7 +14,7 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
 
     menu = new XJMenu(this);
 
-    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::BJ_CENTER, this);
+    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::XJ_CENTER, this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));
 
 	systemManagerSub = ui->mdiArea->addSubWindow(managerWidget);

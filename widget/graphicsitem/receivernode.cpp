@@ -2,7 +2,6 @@
 #include <QPainter>
 #include <QTimer>
 #include <QTime>
-#include <QDebug>
 
 #include "receivernode.h"
 #include "edge.h"

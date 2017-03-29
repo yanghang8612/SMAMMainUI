@@ -1,7 +1,6 @@
 ﻿#include <QCloseEvent>
 #include <QTime>
 #include <QTimer>
-#include <QDebug>
 
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"

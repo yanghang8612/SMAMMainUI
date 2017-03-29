@@ -5,6 +5,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QDomDocument>
+#include <QBitArray>
 
 #include "common.h"
 #include "standard_treewidgetitem.h"
@@ -97,12 +98,16 @@ private:
     QDomNode iGSStationRoot;
     QDomNode otherCenterRoot;
 
+    QBitArray receiverMemIdArray;
+    QBitArray iGMASStationMemIdArray;
+
 	void initAtBJ();
 	void initAtXJ();
 	QDomDocument getRootFromXMLFile(const QString& filePath);
 	void writeConfigFile();
     void writeSharedBuffer();
-    int findFreeReceiverMemID();
+    int findFreeReceiverMemId();
+    int findFreeIGMASStationMemId();
 };
 
 #endif // SMAMTREEWIDGET_H

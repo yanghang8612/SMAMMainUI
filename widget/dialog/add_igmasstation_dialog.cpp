@@ -14,7 +14,6 @@ AddIGMASStationDialog::AddIGMASStationDialog(QWidget *parent) :
     ui->stationLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
     ui->stationLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
     ui->stationHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
-    ui->stationMemIDEdit->setValidator(new QRegExpValidator(GeneralFunctions::memIDRX, this));
 }
 
 AddIGMASStationDialog::~AddIGMASStationDialog()
@@ -72,14 +71,6 @@ void AddIGMASStationDialog::on_confirmButton_clicked()
         ui->stationHeightEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
-    if (!GeneralFunctions::checkMemIDString(ui->stationMemIDEdit->text())) {
-        ui->stationMemIDEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->stationMemIDEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     if (!GeneralFunctions::checkUserNameString(ui->stationUserNameEdit->text())) {
         ui->stationUserNameEdit->setStyleSheet("QLineEdit{border-color:red}");
         return;
@@ -101,7 +92,6 @@ void AddIGMASStationDialog::on_confirmButton_clicked()
     station->setIpAddress(ui->stationIPEdit->text());
     station->setPort(ui->stationPortEdit->text());
     station->setMount(ui->stationMountEdit->text());
-    station->setMemID(ui->stationMemIDEdit->text());
     station->setLongitude(ui->stationLongitudeEdit->text());
     station->setLatitude(ui->stationLatitudeEdit->text());
     station->setHeight(ui->stationHeightEdit->text());

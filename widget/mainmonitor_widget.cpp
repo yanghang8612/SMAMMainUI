@@ -44,7 +44,7 @@ MainMonitorWidget::~MainMonitorWidget()
 }
 
 void MainMonitorWidget::updateView() {
-    //qDebug() << "SMAMMainUI:" << "update view is invoked.";
+    qDebug() << "SMAMMainUI:" << "Update view is invoked.";
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             updateXJView();
@@ -70,7 +70,7 @@ void MainMonitorWidget::timerEvent(QTimerEvent*)
             else {
                 receiverStateSharedBuffer->readData((void*) receiverState);
                 for (int i = 0; i < receiverNodeList.size(); i++) {
-                    for (int j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
+                    for (quint32 j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
                         if (qstrcmp(receiverNodeList[i]->getReceiverIPAddress().toStdString().c_str(), receiverState[j].ipAddress) == 0)
                             receiverNodeList[i]->setStatus(receiverState[j].isConnected ? 1 : 2);
                     }
@@ -87,7 +87,7 @@ void MainMonitorWidget::timerEvent(QTimerEvent*)
             else {
                 iGMASStateSharedBuffer->readData((void*) iGMASState);
                 for (int i = 0; i < iGMASStationList.size(); i++) {
-                    for (int j = 0; j < iGMASStateSharedBuffer->getItemCount(); j++) {
+                    for (quint32 j = 0; j < iGMASStateSharedBuffer->getItemCount(); j++) {
                         if (qstrcmp(iGMASNodeList[i]->getStationIPAddress().toStdString().c_str(), iGMASState[j].ipAddress) == 0)
                             iGMASNodeList[i]->setStatus(iGMASState[j].isConnected ? 1 : 2);
                     }
@@ -104,7 +104,7 @@ void MainMonitorWidget::timerEvent(QTimerEvent*)
     else {
         otherCenterStateSharedBuffer->readData((void*) otherCenterState);
         for (int i = 0; i < otherCenterList.size(); i++) {
-            for (int j = 0; j < otherCenterStateSharedBuffer->getItemCount(); j++) {
+            for (quint32 j = 0; j < otherCenterStateSharedBuffer->getItemCount(); j++) {
                 if (qstrcmp(otherCenterNodeList[i]->getCenterIPAddress().toStdString().c_str(), otherCenterState[j].ipAddress) == 0)
                     otherCenterNodeList[i]->setStatus(otherCenterState[j].isConnected ? 1 : 2);
             }

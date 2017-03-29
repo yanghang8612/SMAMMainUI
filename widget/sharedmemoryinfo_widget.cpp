@@ -1,5 +1,4 @@
 #include <QMessageBox>
-#include <QDebug>
 
 #include "sharedmemoryinfo_widget.h"
 #include "ui_sharedmemoryinfo_widget.h"

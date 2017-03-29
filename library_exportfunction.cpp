@@ -18,30 +18,39 @@ void* otherCenterStateSharedBufferPointer = 0;
 
 static SystemManagerWidget* widget = 0;
 
-extern "C" bool DllMain(int, char*)
+extern "C" bool DllMain(int args, char* argv[])
 {
-    qDebug() << "SMAM DllMain function called.";
+    qDebug() << "SMAMMainUI:" << "DllMain function called";
 
     DllStateWriteThread* dllStateWriteThread = new DllStateWriteThread();
     dllStateWriteThread->start();
 
-    receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
-                                                     RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
-
     otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                         OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
 
-    iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
-                                                  IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
+    if (args > 0 && qstrcmp(argv[0], "XJ")) {
+        receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
+                                                         RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
 
-    widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
+        widget = new SystemManagerWidget(DeploymentType::XJ_CENTER);
+    }
+    else if (args > 0 && qstrcmp(argv[0], "BJ")) {
+        iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
+                                                      IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
+
+        widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
+    }
+    else {
+        qDebug() << "SMAMMainUI:" << "No appropriate deployment type according to parameter 'argv'";
+        return false;
+    }
 
     return true;
 }
 
 extern "C" bool DllInit(int, char*)
 {
-    qDebug() << "SMAM DllInit function called.";
+    qDebug() << "SMAMMainUI:" << "DllInit function called";
 
     for (int i = 0; i < COMPONENT_COUNT; i++) {
         componentStateSharedBufferPointer[i] = FindMemoryInfoFunc(i + 2, 0);
@@ -62,19 +71,19 @@ extern "C" bool DllInit(int, char*)
 
 extern "C" bool DllStart()
 {
-    qDebug() << "SMAM DllStart function called.";
+    qDebug() << "SMAMMainUI:" << "DllStart function called";
     return true;
 }
 
 extern "C" bool DllStop()
 {
-    qDebug() << "SMAM DllStop function called.";
+    qDebug() << "SMAMMainUI:" << "DllStop function called";
     return true;
 }
 
 extern "C" bool DllContraryInit()
 {
-    qDebug() << "SMAM DllContraryInit function called.";
+    qDebug() << "SMAMMainUI:" << "DllContraryInit function called";
     return true;
 }
 

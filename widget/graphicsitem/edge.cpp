@@ -140,7 +140,6 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 
 void Edge::doSomething()
 {
-    //qDebug() << sourcePoint.x() << timer->interval();
     prepareGeometryChange();
     update();
 }
