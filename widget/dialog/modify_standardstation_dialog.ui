@@ -111,6 +111,13 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>stationNameEdit</tabstop>
+  <tabstop>stationDetailEdit</tabstop>
+  <tabstop>confirmButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>graphicsView</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

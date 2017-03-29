@@ -197,6 +197,18 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>receiverNameEdit</tabstop>
+  <tabstop>receiverPasswordEdit</tabstop>
+  <tabstop>receiverIPEdit</tabstop>
+  <tabstop>receiverPortEdit</tabstop>
+  <tabstop>receiverLongitudeEdit</tabstop>
+  <tabstop>receiverLatitudeEdit</tabstop>
+  <tabstop>receiverHeightEdit</tabstop>
+  <tabstop>receiverDetailEdit</tabstop>
+  <tabstop>confirmButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

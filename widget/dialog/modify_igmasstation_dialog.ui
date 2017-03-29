@@ -274,6 +274,20 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>stationMountEdit</tabstop>
+  <tabstop>stationIPEdit</tabstop>
+  <tabstop>stationPortEdit</tabstop>
+  <tabstop>stationLongitudeEdit</tabstop>
+  <tabstop>stationLatitudeEdit</tabstop>
+  <tabstop>stationHeightEdit</tabstop>
+  <tabstop>stationMemIDEdit</tabstop>
+  <tabstop>stationUserNameEdit</tabstop>
+  <tabstop>stationPasswordEdit</tabstop>
+  <tabstop>confirmButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>stationAvailableBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

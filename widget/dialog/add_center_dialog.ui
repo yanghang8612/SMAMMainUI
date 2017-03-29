@@ -157,6 +157,16 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>centerNameEdit</tabstop>
+  <tabstop>centerUserNameEdit</tabstop>
+  <tabstop>centerPasswordEdit</tabstop>
+  <tabstop>centerIPEdit</tabstop>
+  <tabstop>centerPortEdit</tabstop>
+  <tabstop>centerDetailEdit</tabstop>
+  <tabstop>confirmButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
