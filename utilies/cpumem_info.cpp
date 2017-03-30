@@ -10,8 +10,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <unistd.h>   //头文件
+#include <unistd.h>
 #include <assert.h>
+
 #include "utilies/cpumem_info.h"
 
 int get_phy_mem(const pid_t p)

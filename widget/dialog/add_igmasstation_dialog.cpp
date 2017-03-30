@@ -1,5 +1,6 @@
 #include "add_igmasstation_dialog.h"
 #include "ui_add_igmasstation_dialog.h"
+
 #include "utilies/general_functions.h"
 
 AddIGMASStationDialog::AddIGMASStationDialog(QWidget *parent) :

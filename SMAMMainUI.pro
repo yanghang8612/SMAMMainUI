@@ -72,7 +72,8 @@ SOURCES += \
     widget/standardstationinfo_widget.cpp \
     widget/igmasstationinfo_widget.cpp \
     widget/graphicsitem/standardnode.cpp \
-    widget/graphicsitem/igmasnode.cpp
+    widget/graphicsitem/igmasnode.cpp \
+    widget/dialog/modify_component_state_check_intervals_dialog.cpp
 
 
 HEADERS  += \
@@ -137,7 +138,9 @@ HEADERS  += \
     widget/standardstationinfo_widget.h \
     widget/igmasstationinfo_widget.h \
     widget/graphicsitem/standardnode.h \
-    widget/graphicsitem/igmasnode.h
+    widget/graphicsitem/igmasnode.h \
+    other_component_header.h \
+    widget/dialog/modify_component_state_check_intervals_dialog.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -160,7 +163,8 @@ FORMS    += \
     widget/receiverinfo_widget.ui \
     widget/sharedmemoryinfo_widget.ui \
     widget/standardstationinfo_widget.ui \
-    widget/igmasstationinfo_widget.ui
+    widget/igmasstationinfo_widget.ui \
+    widget/dialog/modify_component_state_check_intervals_dialog.ui
 
 RESOURCES += \
     res/icon.qrc \

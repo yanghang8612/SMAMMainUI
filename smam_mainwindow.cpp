@@ -1,5 +1,6 @@
 ﻿#include "smam_mainwindow.h"
 #include "ui_smam_mainwindow.h"
+
 #include "menu/bj_menu.h"
 #include "menu/xj_menu.h"
 #include "widget/mid/systemmanager_widget.h"

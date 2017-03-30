@@ -1,9 +1,7 @@
 ﻿#include "standard_station.h"
 
 StandardStation::StandardStation()
-{
-
-}
+{}
 
 QString StandardStation::getStationName() const
 {

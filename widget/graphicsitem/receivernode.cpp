@@ -4,6 +4,7 @@
 #include <QTime>
 
 #include "receivernode.h"
+
 #include "edge.h"
 
 ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :

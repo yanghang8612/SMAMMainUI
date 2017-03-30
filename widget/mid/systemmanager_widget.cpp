@@ -4,6 +4,7 @@
 
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"
+
 #include "common.h"
 #include "main_component_header.h"
 #include "utilies/cpumem_info.h"
@@ -16,6 +17,8 @@ SOFTWORKSTATUSWRITEFUNC SoftWorkStatusWriteFunc = 0;
 DeploymentType::Value deploymentType;
 
 extern void* componentStateSharedBufferPointer[COMPONENT_COUNT];
+extern void* userRegisterInfoSharedBufferPointer;
+extern void* userRealtimeInfoSharedBufferPointer;
 
 SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *parent) :
 	QWidget(parent),
@@ -41,7 +44,8 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
     messageReceiverTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
-    softwareStatus = new StatusPushButton(QIcon(":/status_green"), tr("软件运行状态"), this);
+    softwareStatus = new StatusPushButton(treeWidget->getComponentStateCheckIntervals(), QIcon(":/status_green"), tr("软件运行状态"), this);
+    connect(softwareStatus, SIGNAL(componentStateCheckIntervalsChanged()), treeWidget, SLOT(updateComponentStateCheckIntervals()));
     ui->statusContainer->addWidget(softwareStatus);
 }
 
@@ -54,11 +58,19 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
 //    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
 //    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
-	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
 
 	QDateTime time = QDateTime::currentDateTime();
 	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
 	ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
+
+    if (deploymentType == DeploymentType::XJ_CENTER) {
+        if (userRegisterInfoSharedBufferPointer != 0) {
+            ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));
+        }
+        if (userRealtimeInfoSharedBufferPointer != 0) {
+            ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
+        }
+    }
 }
 
 void SystemManagerWidget::addMessageToInfoContainer()

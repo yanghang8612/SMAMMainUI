@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 
 #include "edge.h"
+
 #include "basenode.h"
 
 Edge::Edge(BaseNode* sourceNode, BaseNode* destNode) :

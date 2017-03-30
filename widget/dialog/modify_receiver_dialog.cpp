@@ -1,5 +1,6 @@
 #include "modify_receiver_dialog.h"
 #include "ui_modify_receiver_dialog.h"
+
 #include "utilies/general_functions.h"
 
 ModifyReceiverDialog::ModifyReceiverDialog(Receiver* receiver, QWidget *parent) :

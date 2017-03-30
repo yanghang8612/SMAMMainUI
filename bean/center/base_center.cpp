@@ -1,9 +1,8 @@
 #include "base_center.h"
 
 BaseCenter::BaseCenter()
-{
+{}
 
-}
 QString BaseCenter::getCenterName() const
 {
     return centerName;

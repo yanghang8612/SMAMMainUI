@@ -1,5 +1,6 @@
 #include "add_receiver_dialog.h"
 #include "ui_add_receiver_dialog.h"
+
 #include "utilies/general_functions.h"
 
 AddReceiverDialog::AddReceiverDialog(QWidget *parent) :

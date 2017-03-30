@@ -27,7 +27,11 @@ public:
     const QList<IGSStation*>& getIGSStationList() const;
     const QList<OtherCenter*>& getOtherCenterList() const;
 
+    QList<int>& getComponentStateCheckIntervals();
+
 private slots:
+    void updateComponentStateCheckIntervals();
+
     void showRightMenu(QPoint pos);
     void addWidgetToContainer(QTreeWidgetItem* item);
 
@@ -97,13 +101,17 @@ private:
     QDomNode iGMASStationRoot;
     QDomNode iGSStationRoot;
     QDomNode otherCenterRoot;
+    QDomNode settingRoot;
 
     QBitArray receiverMemIdArray;
     QBitArray iGMASStationMemIdArray;
 
+    QList<int> componentStateCheckIntervals;
+
 	void initAtBJ();
 	void initAtXJ();
 	QDomDocument getRootFromXMLFile(const QString& filePath);
+    void getComponentStateCheckIntervalFromXML();
 	void writeConfigFile();
     void writeSharedBuffer();
     int findFreeReceiverMemId();

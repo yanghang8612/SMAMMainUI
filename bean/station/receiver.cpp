@@ -1,9 +1,7 @@
 #include "receiver.h"
 
 Receiver::Receiver()
-{
-
-}
+{}
 
 int Receiver::getMemID() const
 {

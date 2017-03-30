@@ -1,5 +1,6 @@
 #include "add_center_dialog.h"
 #include "ui_add_center_dialog.h"
+
 #include "utilies/general_functions.h"
 
 AddCenterDialog::AddCenterDialog(QWidget *parent) :

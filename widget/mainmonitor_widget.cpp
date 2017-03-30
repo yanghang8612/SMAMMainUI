@@ -3,9 +3,10 @@
 #include <QCloseEvent>
 #include <QDebug>
 
-#include "common.h"
 #include "mainmonitor_widget.h"
 #include "ui_mainmonitor_widget.h"
+
+#include "common.h"
 #include "graphicsitem/edge.h"
 #include "bean/center/main_center.h"
 

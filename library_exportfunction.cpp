@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "main_component_header.h"
+#include "other_component_header.h"
 #include "backend/dllstate_write_thread.h"
 #include "widget/mid/systemmanager_widget.h"
 
@@ -15,6 +16,9 @@ void* componentStateSharedBufferPointer[COMPONENT_COUNT];
 void* receiverStateSharedBufferPointer = 0;
 void* iGMASStateSharedBufferPointer = 0;
 void* otherCenterStateSharedBufferPointer = 0;
+
+void* userRegisterInfoSharedBufferPointer = 0;
+void* userRealtimeInfoSharedBufferPointer = 0;
 
 static SystemManagerWidget* widget = 0;
 
@@ -58,13 +62,27 @@ extern "C" bool DllInit(int, char*)
 
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
-            receiverStateSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_STATE_SHAREDBUFFER_ID, RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+            receiverStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                   RECEIVER_STATE_SHAREDBUFFER_ID,
+                                                   RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
+
+            userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_ID,
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo));
+
+            userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_ID,
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserLoginInfo));
             break;
         case DeploymentType::BJ_CENTER:
-            iGMASStateSharedBufferPointer = FindMemoryInfoFunc(IGMAS_STATE_SHAREDBUFFER_ID, IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+            iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                IGMAS_STATE_SHAREDBUFFER_ID,
+                                                IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState));
             break;
     }
-    otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_STATE_SHAREDBUFFER_ID, OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+    otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
+                                              OTHERCENTER_STATE_SHAREDBUFFER_ID,
+                                              OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState));
 
     return true;
 }

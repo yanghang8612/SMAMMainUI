@@ -1,6 +1,7 @@
 #include <QDateTime>
 
 #include "general_functions.h"
+
 #include "main_component_header.h"
 
 const QRegExp GeneralFunctions::nameRX("^[a-zA-Z0-9].+$");

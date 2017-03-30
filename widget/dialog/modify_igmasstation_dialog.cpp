@@ -1,5 +1,6 @@
 #include "modify_igmasstation_dialog.h"
 #include "ui_modify_igmasstation_dialog.h"
+
 #include "utilies/general_functions.h"
 
 ModifyIGMASStationDialog::ModifyIGMASStationDialog(IGMASStation* station, QWidget* parent) :

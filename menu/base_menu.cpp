@@ -13,8 +13,7 @@
 
 BaseMenu::BaseMenu(QMainWindow* mainWindow) :
 	mainWindow(mainWindow)
-{
-}
+{}
 
 QMenu* BaseMenu::getMenuByName(const QString& menuName)
 {

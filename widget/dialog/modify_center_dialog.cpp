@@ -1,5 +1,6 @@
 #include "modify_center_dialog.h"
 #include "ui_modify_center_dialog.h"
+
 #include "utilies/general_functions.h"
 
 ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :

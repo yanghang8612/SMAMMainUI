@@ -4,8 +4,9 @@
 #include <QFile>
 #include <QDebug>
 
-#include "main_component_header.h"
 #include "smam_treewidget.h"
+
+#include "main_component_header.h"
 #include "widget/centerinfo_widget.h"
 #include "widget/igmasstationinfo_widget.h"
 #include "widget/mainmonitor_widget.h"
@@ -46,6 +47,8 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     tree(tree), container(container),
     currentContentWidget(0)
 {
+    receiverMemIdArray.resize(RECEIVER_SHAREDBUFFER_MAXITEMCOUNT);
+    iGMASStationMemIdArray.resize(IGMAS_SHAREDBUFFER_MAXITEMCOUNT);
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             initAtXJ();
@@ -57,11 +60,10 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
             qDebug() << "SMAMMainUI:" << "No match deploymenttype";
             break;
     }
+    getComponentStateCheckIntervalFromXML();
     systemMonitorWidget = new MainMonitorWidget(this);
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
-    receiverMemIdArray.resize(RECEIVER_SHAREDBUFFER_MAXITEMCOUNT);
-    iGMASStationMemIdArray.resize(IGMAS_SHAREDBUFFER_MAXITEMCOUNT);
     connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenu(QPoint)));
     connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(addWidgetToContainer(QTreeWidgetItem*)));
 }
@@ -84,6 +86,22 @@ const QList<IGMASStation*>& SMAMTreeWidget::getIGMASStationList() const
 const QList<StandardStation*>& SMAMTreeWidget::getStandardStationList() const
 {
     return standardStationList;
+}
+
+QList<int>& SMAMTreeWidget::getComponentStateCheckIntervals()
+{
+    return componentStateCheckIntervals;
+}
+
+void SMAMTreeWidget::updateComponentStateCheckIntervals()
+{
+    QDomNode intervalRoot = settingRoot.namedItem("INTERVALS");
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        QDomElement componentNode = root.createElement(COMPONENT_NAME[i]);
+        componentNode.appendChild(root.createTextNode(QString::number(componentStateCheckIntervals[i])));
+        intervalRoot.replaceChild(componentNode, intervalRoot.namedItem(COMPONENT_NAME[i]));
+    }
+    writeConfigFile();
 }
 
 void SMAMTreeWidget::showRightMenu(QPoint pos)
@@ -761,6 +779,7 @@ void SMAMTreeWidget::initAtBJ()
             //Create station node of QTreewidget
             QTreeWidgetItem* stationTreeNode = new IGMASTreeWidgetItem(iGMASStationTreeRoot, IGMASNODE_TREEITEM_TYPE, station);
             Q_UNUSED(stationTreeNode);
+            iGMASStationMemIdArray.setBit(station->getMemID() - IGMAS_SHAREDBUFFER_MEMID_START_INDEX);
             iGMASStationList << station;
         }
         iGMASStationNode = iGMASStationNode.nextSibling();
@@ -868,6 +887,7 @@ void SMAMTreeWidget::initAtXJ()
 					//Create receiver node of QTreewidget
                     QTreeWidgetItem* receiverTreeNode = new ReceiverTreeWidgetItem(stationTreeNode, RECEIVER_TREEITEM_TYPE, receiver);
                     Q_UNUSED(receiverTreeNode);
+                    receiverMemIdArray.setBit(receiver->getMemID() - RECEIVER_SHAREDBUFFER_MEMID_START_INDEX);
 				}
 				receiverNode = receiverNode.nextSibling();
 			}
@@ -944,6 +964,16 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
             doc.appendChild(instruction);
             QDomElement rootElement = doc.createElement("BDLSS");
             doc.appendChild(rootElement);
+            QDomElement settingElement = doc.createElement("SETTINGS");
+            rootElement.appendChild(settingElement);
+            QDomElement intervalElement = doc.createElement("INTERVALS");
+            settingElement.appendChild(intervalElement);
+
+            for (int i = 0; i < COMPONENT_COUNT; i++) {
+                QDomElement componentElement = doc.createElement(COMPONENT_NAME[i]);
+                componentElement.appendChild(doc.createTextNode("3"));
+                intervalElement.appendChild(componentElement);
+            }
 
             QTextStream out(&configFile);
             out.setCodec("UTF-8");
@@ -960,6 +990,17 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
     }
 	configFile.close();
     return doc;
+}
+
+void SMAMTreeWidget::getComponentStateCheckIntervalFromXML()
+{
+    settingRoot = root.namedItem("BDLSS").namedItem("SETTINGS");
+    QDomNode intervalRoot = settingRoot.namedItem("INTERVALS");
+    QDomNode componentNode = intervalRoot.firstChild();
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        componentStateCheckIntervals.append(componentNode.toElement().text().toInt());
+        componentNode = componentNode.nextSibling();
+    }
 }
 
 void SMAMTreeWidget::writeConfigFile()
