@@ -9,7 +9,6 @@ AddCenterDialog::AddCenterDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("添加其他中心"));
-    ui->centerIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }
 
 AddCenterDialog::~AddCenterDialog()

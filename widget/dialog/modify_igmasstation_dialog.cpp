@@ -18,12 +18,6 @@ ModifyIGMASStationDialog::ModifyIGMASStationDialog(IGMASStation* station, QWidge
     ui->stationUserNameEdit->setText(station->getUserName());
     ui->stationPasswordEdit->setText(station->getPassword());
     setWindowTitle(tr("编辑iGMAS测站"));
-
-    ui->stationMountEdit->setValidator(new QRegExpValidator(GeneralFunctions::mountRX, this));
-    ui->stationIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
-    ui->stationLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
-    ui->stationLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
-    ui->stationHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
 }
 
 ModifyIGMASStationDialog::~ModifyIGMASStationDialog()

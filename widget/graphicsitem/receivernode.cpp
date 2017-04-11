@@ -24,9 +24,9 @@ ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :
     //    timer->start((r + 5) * 1000);
 }
 
-QString ReceiverNode::getReceiverIPAddress() const
+QString ReceiverNode::getReceiverMount() const
 {
-    return receiver->getIpAddress();
+    return receiver->getMount();
 }
 
 QRectF ReceiverNode::boundingRect() const

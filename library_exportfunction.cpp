@@ -32,13 +32,13 @@ extern "C" bool DllMain(int args, char* argv[])
     otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                         OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
 
-    if (args > 0 && qstrcmp(argv[0], "XJ")) {
+    if (args > 0 && qstrcmp(argv[0], "XJ") == 0) {
         receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
                                                          RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
 
         widget = new SystemManagerWidget(DeploymentType::XJ_CENTER);
     }
-    else if (args > 0 && qstrcmp(argv[0], "BJ")) {
+    else if (args > 0 && qstrcmp(argv[0], "BJ") == 0) {
         iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
                                                       IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
 

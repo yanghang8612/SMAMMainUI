@@ -30,8 +30,8 @@ struct UserLoginInfo {
 };//101
 
 struct ReceiverState {
-    char ipAddress[16];
     bool isConnected;
+    char mount[8];
 };//102
 
 struct OtherCenterState {

@@ -9,12 +9,6 @@ AddIGMASStationDialog::AddIGMASStationDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle(tr("添加iGMAS测站"));
-
-    ui->stationMountEdit->setValidator(new QRegExpValidator(GeneralFunctions::mountRX, this));
-    ui->stationIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
-    ui->stationLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
-    ui->stationLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
-    ui->stationHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
 }
 
 AddIGMASStationDialog::~AddIGMASStationDialog()

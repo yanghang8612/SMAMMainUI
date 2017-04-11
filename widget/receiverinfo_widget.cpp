@@ -21,6 +21,7 @@ void ReceiverInfoWidget::setReceiver(Receiver* receiver)
 	ui->receiverNameEdit->setText(receiver->getReceiverName());
 	ui->receiverIPEdit->setText(receiver->getIpAddress());
 	ui->receiverPortEdit->setText(QString::number(receiver->getPort()));
+    ui->receiverMountEdit->setText(receiver->getMount());
 	ui->receiverLongitudeEdit->setText(QString::number(receiver->getLongitude()));
 	ui->receiverLatitudeEdit->setText(QString::number(receiver->getLatitude()));
     ui->receiverHeightEdit->setText(QString::number(receiver->getHeight()));

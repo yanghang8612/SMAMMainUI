@@ -380,6 +380,10 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 	receiverPort.appendChild(root.createTextNode(QString::number(receiver->getPort())));
 	newReceiver.appendChild(receiverPort);
 
+    QDomElement receiverMount = root.createElement("MOUNT");
+    receiverMount.appendChild(root.createTextNode(receiver->getMount()));
+    newReceiver.appendChild(receiverMount);
+
 	QDomElement receiverLongitude = root.createElement("LONGITUDE");
 	receiverLongitude.appendChild(root.createTextNode(QString::number(receiver->getLongitude())));
 	newReceiver.appendChild(receiverLongitude);
@@ -436,6 +440,10 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 	receiverPort.appendChild(root.createTextNode(QString::number(receiver->getPort())));
 	receiverNode.replaceChild(receiverPort, receiverNode.namedItem("IPPORT"));
 
+    QDomElement receiverMount = root.createElement("MOUNT");
+    receiverMount.appendChild(root.createTextNode(receiver->getMount()));
+    receiverNode.replaceChild(receiverMount, receiverNode.namedItem("MOUNT"));
+
 	QDomElement receiverLongitude = root.createElement("LONGITUDE");
 	receiverLongitude.appendChild(root.createTextNode(QString::number(receiver->getLongitude())));
 	receiverNode.replaceChild(receiverLongitude, receiverNode.namedItem("LONGITUDE"));
@@ -482,9 +490,17 @@ void SMAMTreeWidget::deleteReceiver()
 
 void SMAMTreeWidget::showAddNewIGMASStationDialog()
 {
-    AddIGMASStationDialog* dialog = new AddIGMASStationDialog(tree);
-    connect(dialog, SIGNAL(confirmButtonClicked(IGMASStation*)), this, SLOT(addNewIGMASStation(IGMASStation*)));
-    dialog->show();
+    if (iGMASStationList.size() > IGMAS_SHAREDBUFFER_MAXITEMCOUNT) {
+        QMessageBox::warning(tree,
+                             tr("提示"),
+                             tr("超过最大单个中心所能容纳的IGMAS站数目。"),
+                             QMessageBox::Ok);
+    }
+    else {
+        AddIGMASStationDialog* dialog = new AddIGMASStationDialog(tree);
+        connect(dialog, SIGNAL(confirmButtonClicked(IGMASStation*)), this, SLOT(addNewIGMASStation(IGMASStation*)));
+        dialog->show();
+    }
 }
 
 void SMAMTreeWidget::addNewIGMASStation(IGMASStation* station)
@@ -878,6 +894,7 @@ void SMAMTreeWidget::initAtXJ()
                     receiver->setPassword(receiverNode.namedItem("PASSWORD").toElement().text());
 					receiver->setIpAddress(receiverNode.namedItem("IPADDRESS").toElement().text());
 					receiver->setPort(receiverNode.namedItem("IPPORT").toElement().text());
+                    receiver->setMount(receiverNode.namedItem("MOUNT").toElement().text());
 					receiver->setLongitude(receiverNode.namedItem("LONGITUDE").toElement().text());
 					receiver->setLatitude(receiverNode.namedItem("LATITUDE").toElement().text());
                     receiver->setHeight(receiverNode.namedItem("HEIGHT").toElement().text());

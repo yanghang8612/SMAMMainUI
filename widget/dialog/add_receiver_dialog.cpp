@@ -9,11 +9,6 @@ AddReceiverDialog::AddReceiverDialog(QWidget *parent) :
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("添加接收机"));
-
-    ui->receiverIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
-    ui->receiverLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
-    ui->receiverLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
-    ui->receiverHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
 }
 
 AddReceiverDialog::~AddReceiverDialog()
@@ -68,6 +63,7 @@ void AddReceiverDialog::on_confirmButton_clicked()
     receiver->setPassword(ui->receiverPasswordEdit->text());
 	receiver->setIpAddress(ui->receiverIPEdit->text());
 	receiver->setPort(ui->receiverPortEdit->text());
+    receiver->setMount(ui->receiverMountEdit->text());
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());
 	receiver->setLatitude(ui->receiverLatitudeEdit->text());
     receiver->setHeight(ui->receiverHeightEdit->text());

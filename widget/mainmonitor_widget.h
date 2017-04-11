@@ -32,8 +32,9 @@ public:
 
     void updateView();
 
-protected:
-    void timerEvent(QTimerEvent* event);
+private slots:
+    void updateDeviceConnectState();
+    void updateDeviceTransferState();
 
 private:
     Ui::MainMonitorWidget* ui;
@@ -51,6 +52,9 @@ private:
     ReceiverState receiverState[RECEIVER_SHAREDBUFFER_MAXITEMCOUNT];
     IGMASState iGMASState[IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT];
     OtherCenterState otherCenterState[OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT];
+
+    QTimer* deviceConnectStateCheckTimer;
+    QTimer* deviceTransferStateCheckTimer;
 
     void updateXJView();
     void updateBJView();

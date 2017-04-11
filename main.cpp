@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
     QApplication::setStyle("Cleanlooks");
 
     SMAMMainWindow w;
+    char* num = new char[1000];
     w.show();
 
     //DllMain(0, 0);

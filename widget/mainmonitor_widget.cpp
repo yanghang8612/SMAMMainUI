@@ -35,8 +35,15 @@ MainMonitorWidget::MainMonitorWidget(SMAMTreeWidget* treeWidget, QWidget* parent
     ui->monitorView->setRenderHint(QPainter::Antialiasing);
     ui->monitorView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-    startTimer(DEVICE_STATE_CHECK_TIMEINTERVAL);
     updateView();
+
+    deviceConnectStateCheckTimer = new QTimer(this);
+    connect(deviceConnectStateCheckTimer, SIGNAL(timeout()), this, SLOT(updateDeviceConnectState()));
+    deviceConnectStateCheckTimer->start(DEVICE_CONNECT_STATE_CHECK_TIMEINTERVAL);
+
+    deviceTransferStateCheckTimer = new QTimer(this);
+    connect(deviceTransferStateCheckTimer, SIGNAL(timeout()), this, SLOT(updateDeviceTransferState()));
+    deviceTransferStateCheckTimer->start(DEVICE_TRANSFER_STATE_CHECK_TIMEINTERVAL);
 }
 
 MainMonitorWidget::~MainMonitorWidget()
@@ -58,7 +65,7 @@ void MainMonitorWidget::updateView() {
     }
 }
 
-void MainMonitorWidget::timerEvent(QTimerEvent*)
+void MainMonitorWidget::updateDeviceConnectState()
 {
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
@@ -69,12 +76,15 @@ void MainMonitorWidget::timerEvent(QTimerEvent*)
                                                                                                            sizeof(ReceiverState));
             }
             else {
+                *((int*) receiverStateSharedBufferPointer) = RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT;
                 receiverStateSharedBuffer->readData((void*) receiverState);
                 for (int i = 0; i < receiverNodeList.size(); i++) {
+                    bool isConnected = false;
                     for (quint32 j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
-                        if (qstrcmp(receiverNodeList[i]->getReceiverIPAddress().toStdString().c_str(), receiverState[j].ipAddress) == 0)
-                            receiverNodeList[i]->setStatus(receiverState[j].isConnected ? 1 : 2);
+                        if (qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0)
+                            isConnected = true;
                     }
+                    receiverNodeList[i]->setStatus(isConnected ? 1 : 2);
                 }
             }
             break;
@@ -111,12 +121,18 @@ void MainMonitorWidget::timerEvent(QTimerEvent*)
             }
         }
     }
+}
+
+void MainMonitorWidget::updateDeviceTransferState()
+{
 
 }
 
 void MainMonitorWidget::updateXJView()
 {
     scene->clear();
+    receiverNodeList.clear();
+    otherCenterNodeList.clear();
 
     MainCenter* mainCenter = new MainCenter();
     mainCenter->setCenterName(tr("新疆中心"));
@@ -185,6 +201,8 @@ void MainMonitorWidget::updateXJView()
 void MainMonitorWidget::updateBJView()
 {
     scene->clear();
+    iGMASNodeList.clear();
+    otherCenterNodeList.clear();
 
     MainCenter* mainCenter = new MainCenter();
     mainCenter->setCenterName(tr("北京中心"));
@@ -236,6 +254,6 @@ void MainMonitorWidget::updateBJView()
         otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
         scene->addItem(otherCenterNode);
         scene->addItem(new Edge(mainCenterNode, otherCenterNode));
-        otherCenterNodeList << mainCenterNode;
+        otherCenterNodeList << otherCenterNode;
     }
 }

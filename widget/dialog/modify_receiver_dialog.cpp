@@ -12,16 +12,12 @@ ModifyReceiverDialog::ModifyReceiverDialog(Receiver* receiver, QWidget *parent) 
     ui->receiverPasswordEdit->setText(receiver->getPassword());
 	ui->receiverIPEdit->setText(receiver->getIpAddress());
 	ui->receiverPortEdit->setText(QString::number(receiver->getPort()));
+    ui->receiverMountEdit->setText(receiver->getMount());
 	ui->receiverLongitudeEdit->setText(QString::number(receiver->getLongitude()));
 	ui->receiverLatitudeEdit->setText(QString::number(receiver->getLatitude()));
     ui->receiverHeightEdit->setText(QString::number(receiver->getHeight()));
     ui->receiverDetailEdit->setText(receiver->getDetail());
     setWindowTitle(tr("编辑接收机"));
-
-    ui->receiverIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
-    ui->receiverLongitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::longitudeRX, this));
-    ui->receiverLatitudeEdit->setValidator(new QRegExpValidator(GeneralFunctions::latitudeRX, this));
-    ui->receiverHeightEdit->setValidator(new QRegExpValidator(GeneralFunctions::heightRX, this));
 }
 
 ModifyReceiverDialog::~ModifyReceiverDialog()
@@ -75,6 +71,7 @@ void ModifyReceiverDialog::on_confirmButton_clicked()
     receiver->setPassword(ui->receiverPasswordEdit->text());
 	receiver->setIpAddress(ui->receiverIPEdit->text());
 	receiver->setPort(ui->receiverPortEdit->text());
+    receiver->setMount(ui->receiverMountEdit->text());
 	receiver->setLongitude(ui->receiverLongitudeEdit->text());
 	receiver->setLatitude(ui->receiverLatitudeEdit->text());
     receiver->setHeight(ui->receiverHeightEdit->text());

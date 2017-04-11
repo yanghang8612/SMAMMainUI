@@ -13,7 +13,7 @@ class ReceiverNode : public QObject, public BaseNode
 public:
     ReceiverNode(Receiver* receiver, quint8 length);
 
-    QString getReceiverIPAddress() const;
+    QString getReceiverMount() const;
 	virtual QRectF boundingRect() const;
 	virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 

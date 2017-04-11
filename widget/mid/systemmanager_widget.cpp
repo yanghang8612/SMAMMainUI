@@ -63,14 +63,14 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
 	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
 	ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
 
-    if (deploymentType == DeploymentType::XJ_CENTER) {
+//    if (deploymentType == DeploymentType::XJ_CENTER) {
         if (userRegisterInfoSharedBufferPointer != 0) {
             ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));
         }
         if (userRealtimeInfoSharedBufferPointer != 0) {
             ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
         }
-    }
+//    }
 }
 
 void SystemManagerWidget::addMessageToInfoContainer()

@@ -118,6 +118,16 @@ void Receiver::setDetail(const QString& value)
     detail = value;
 }
 
+QString Receiver::getMount() const
+{
+    return mount;
+}
+
+void Receiver::setMount(const QString& value)
+{
+    mount = value;
+}
+
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer receiverInBuffer;
@@ -131,8 +141,10 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     receiverInBuffer.latitude = latitude;
     receiverInBuffer.height = height;
     qMemCopy(receiverInBuffer.detail, detail.toStdString().c_str(), detail.length());
+    qMemCopy(receiverInBuffer.mount, mount.toStdString().c_str(), mount.length());
     return receiverInBuffer;
 }
+
 
 
 

@@ -44,6 +44,7 @@ SOURCES += \
     widget/dialog/modify_standardstation_dialog.cpp \
     widget/dialog/add_igmasstation_dialog.cpp \
     widget/dialog/modify_igmasstation_dialog.cpp \
+    widget/dialog/modify_component_state_check_intervals_dialog.cpp \
     #-#
     widget/graphicsitem/basenode.cpp \
     widget/graphicsitem/centernode.cpp \
@@ -73,8 +74,6 @@ SOURCES += \
     widget/igmasstationinfo_widget.cpp \
     widget/graphicsitem/standardnode.cpp \
     widget/graphicsitem/igmasnode.cpp \
-    widget/dialog/modify_component_state_check_intervals_dialog.cpp
-
 
 HEADERS  += \
     common.h \
@@ -110,6 +109,7 @@ HEADERS  += \
     widget/dialog/modify_receiver_dialog.h \
     widget/dialog/add_standardstation_dialog.h \
     widget/dialog/modify_standardstation_dialog.h \
+    widget/dialog/modify_component_state_check_intervals_dialog.h \
     #-#
     widget/graphicsitem/basenode.h \
     widget/graphicsitem/centernode.h \
@@ -139,8 +139,7 @@ HEADERS  += \
     widget/igmasstationinfo_widget.h \
     widget/graphicsitem/standardnode.h \
     widget/graphicsitem/igmasnode.h \
-    other_component_header.h \
-    widget/dialog/modify_component_state_check_intervals_dialog.h
+    other_component_header.h
 
 FORMS    += \
     smam_mainwindow.ui \
@@ -153,6 +152,7 @@ FORMS    += \
     widget/dialog/modify_receiver_dialog.ui \
     widget/dialog/add_igmasstation_dialog.ui \
     widget/dialog/modify_igmasstation_dialog.ui \
+    widget/dialog/modify_component_state_check_intervals_dialog.ui \
     #-#
     widget/mid/systemmanager_widget.ui \
     #-#
@@ -163,8 +163,7 @@ FORMS    += \
     widget/receiverinfo_widget.ui \
     widget/sharedmemoryinfo_widget.ui \
     widget/standardstationinfo_widget.ui \
-    widget/igmasstationinfo_widget.ui \
-    widget/dialog/modify_component_state_check_intervals_dialog.ui
+    widget/igmasstationinfo_widget.ui
 
 RESOURCES += \
     res/icon.qrc \

@@ -44,10 +44,13 @@ void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
                     }
                 }
                 buttons[i]->setIcon(QIcon(componentStatus[i] ? ":/status_green" : ":/status_red"));
+                qMemCopy(
+                        &preDllStatus[COMPONENT_STATEARRAY_INDEX[i]],
+                        &dllStatus[COMPONENT_STATEARRAY_INDEX[i]],
+                        COMPONENT_DLL_COUNT[i] * sizeof(int));
             }
 
         }
-        qMemCopy(preDllStatus, dllStatus, DLL_COUNT * sizeof(int));
         bool status = true;
         for (int i = 0; i < DLL_COUNT; i++) {
             status &= componentStatus[i];
