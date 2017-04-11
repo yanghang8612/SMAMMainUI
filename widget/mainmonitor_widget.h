@@ -4,11 +4,12 @@
 #include <QTabWidget>
 #include <QGraphicsScene>
 
+#include "other_component_header.h"
 #include "utilies/shared_buffer.h"
-#include "widget/treewidget/smam_treewidget.h"
 #include "bean/station/standard_station.h"
 #include "bean/station/igmas_station.h"
 #include "bean/center/other_center.h"
+#include "widget/treewidget/smam_treewidget.h"
 #include "graphicsitem/receivernode.h"
 #include "graphicsitem/standardnode.h"
 #include "graphicsitem/igmasnode.h"
@@ -16,21 +17,6 @@
 #include "graphicsitem/filenode.h"
 #include "graphicsitem/harddrivenode.h"
 #include "graphicsitem/usersnode.h"
-
-struct ReceiverState {
-    char ipAddress[16];
-    bool isConnected;
-};
-
-struct OtherCenterState {
-    bool isConnected;
-    char ipAddress[16];
-};
-
-struct IGMASState {
-    bool isConnected;
-    char ipAddress[16];
-};
 
 namespace Ui {
 class MainMonitorWidget;
@@ -46,8 +32,9 @@ public:
 
     void updateView();
 
-protected:
-    void timerEvent(QTimerEvent* event);
+private slots:
+    void updateDeviceConnectState();
+    void updateDeviceTransferState();
 
 private:
     Ui::MainMonitorWidget* ui;
@@ -65,6 +52,9 @@ private:
     ReceiverState receiverState[RECEIVER_SHAREDBUFFER_MAXITEMCOUNT];
     IGMASState iGMASState[IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT];
     OtherCenterState otherCenterState[OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT];
+
+    QTimer* deviceConnectStateCheckTimer;
+    QTimer* deviceTransferStateCheckTimer;
 
     void updateXJView();
     void updateBJView();

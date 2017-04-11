@@ -1,5 +1,6 @@
 #include "standardstationinfo_widget.h"
 #include "ui_standardstationinfo_widget.h"
+
 #include "common.h"
 
 StandardStationInfoWidget::StandardStationInfoWidget(QWidget *parent) :

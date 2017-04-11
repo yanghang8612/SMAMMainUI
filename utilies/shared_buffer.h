@@ -21,10 +21,11 @@ public:
         quint32 bufferSize;
         quint32 blockSize;
         quint32 writePointer;
-        quint8 readWriteLock;
+        quint32 readWriteLock;
         quint32 stationID;
         quint32 ipAddress;
-        quint8 remainedBufferHeader[56];
+        quint32 isDirty;
+        quint8 remainedBufferHeader[52];
     };
 
 public:
@@ -39,7 +40,9 @@ public:
     quint32 getBufferSize() const;
     quint32 getBlockSize() const;
     quint32 getWritePointer() const;
-    quint8 getReadWriteLock() const;
+    quint32 getReadWriteLock() const;
+    bool isDirty() const;
+    void setDirty();
 
     void setStationID(quint32 stationID);
     quint32 getStationID() const;

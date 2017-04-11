@@ -94,7 +94,7 @@ QDialog {
             <enum>QLCDNumber::Dec</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>2222</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -118,7 +118,7 @@ QDialog {
             <enum>QLCDNumber::Dec</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>2333</number>
+            <number>0</number>
            </property>
           </widget>
          </item>

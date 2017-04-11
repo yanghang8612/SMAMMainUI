@@ -1,5 +1,6 @@
 #include "modify_center_dialog.h"
 #include "ui_modify_center_dialog.h"
+
 #include "utilies/general_functions.h"
 
 ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
@@ -14,8 +15,6 @@ ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
     ui->centerPortEdit->setText(QString::number(center->getPort()));
     ui->centerDetailEdit->setText(center->getDetail());
     setWindowTitle(tr("编辑其他中心信息"));
-
-    ui->centerIPEdit->setValidator(new QRegExpValidator(GeneralFunctions::ipAddressRX, this));
 }
 
 ModifyCenterDialog::~ModifyCenterDialog()

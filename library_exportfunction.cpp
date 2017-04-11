@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "main_component_header.h"
+#include "other_component_header.h"
 #include "backend/dllstate_write_thread.h"
 #include "widget/mid/systemmanager_widget.h"
 
@@ -16,32 +17,44 @@ void* receiverStateSharedBufferPointer = 0;
 void* iGMASStateSharedBufferPointer = 0;
 void* otherCenterStateSharedBufferPointer = 0;
 
+void* userRegisterInfoSharedBufferPointer = 0;
+void* userRealtimeInfoSharedBufferPointer = 0;
+
 static SystemManagerWidget* widget = 0;
 
-extern "C" bool DllMain(int, char*)
+extern "C" bool DllMain(int args, char* argv[])
 {
-    qDebug() << "SMAM DllMain function called.";
+    qDebug() << "SMAMMainUI:" << "DllMain function called";
 
     DllStateWriteThread* dllStateWriteThread = new DllStateWriteThread();
     dllStateWriteThread->start();
 
-    receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
-                                                     RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
-
     otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                         OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
 
-    iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
-                                                  IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
+    if (args > 0 && qstrcmp(argv[0], "XJ") == 0) {
+        receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
+                                                         RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
 
-    widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
+        widget = new SystemManagerWidget(DeploymentType::XJ_CENTER);
+    }
+    else if (args > 0 && qstrcmp(argv[0], "BJ") == 0) {
+        iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
+                                                      IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
+
+        widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
+    }
+    else {
+        qDebug() << "SMAMMainUI:" << "No appropriate deployment type according to parameter 'argv'";
+        return false;
+    }
 
     return true;
 }
 
 extern "C" bool DllInit(int, char*)
 {
-    qDebug() << "SMAM DllInit function called.";
+    qDebug() << "SMAMMainUI:" << "DllInit function called";
 
     for (int i = 0; i < COMPONENT_COUNT; i++) {
         componentStateSharedBufferPointer[i] = FindMemoryInfoFunc(i + 2, 0);
@@ -49,32 +62,46 @@ extern "C" bool DllInit(int, char*)
 
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
-            receiverStateSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_STATE_SHAREDBUFFER_ID, RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+            receiverStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                   RECEIVER_STATE_SHAREDBUFFER_ID,
+                                                   RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
+
+            userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_ID,
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo));
+
+            userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_ID,
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserLoginInfo));
             break;
         case DeploymentType::BJ_CENTER:
-            iGMASStateSharedBufferPointer = FindMemoryInfoFunc(IGMAS_STATE_SHAREDBUFFER_ID, IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+            iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                IGMAS_STATE_SHAREDBUFFER_ID,
+                                                IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState));
             break;
     }
-    otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_STATE_SHAREDBUFFER_ID, OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * 17);
+    otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
+                                              OTHERCENTER_STATE_SHAREDBUFFER_ID,
+                                              OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState));
 
     return true;
 }
 
 extern "C" bool DllStart()
 {
-    qDebug() << "SMAM DllStart function called.";
+    qDebug() << "SMAMMainUI:" << "DllStart function called";
     return true;
 }
 
 extern "C" bool DllStop()
 {
-    qDebug() << "SMAM DllStop function called.";
+    qDebug() << "SMAMMainUI:" << "DllStop function called";
     return true;
 }
 
 extern "C" bool DllContraryInit()
 {
-    qDebug() << "SMAM DllContraryInit function called.";
+    qDebug() << "SMAMMainUI:" << "DllContraryInit function called";
     return true;
 }
 

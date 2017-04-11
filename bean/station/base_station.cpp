@@ -1,9 +1,7 @@
 #include "base_station.h"
 
 BaseStation::BaseStation()
-{
-
-}
+{}
 
 QString BaseStation::getIpAddress() const
 {

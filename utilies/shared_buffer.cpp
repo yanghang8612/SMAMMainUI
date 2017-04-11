@@ -11,7 +11,7 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
         bufferCapacity = header->bufferSize - sizeof(SharedBufferHeader);
     }
     else {
-        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+        qDebug() << "SMAMMainUI:" << "Wrong buffertype when construct sharedbuffer instance";
     }
 }
 
@@ -31,7 +31,7 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
         qMemSet(dataStartPointer, 0, bufferCapacity);
     }
     else {
-        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+        qDebug() << "SMAMMainUI:" << "Wrong buffertype when construct sharedbuffer instance";
     }
 }
 
@@ -46,7 +46,7 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
         this->itemSize = itemSize;
     }
     else {
-        qDebug() << "Wrong buffertype when construct sharedbuffer instance.";
+        qDebug() << "SMAMMainUI:" << "Wrong buffertype when construct sharedbuffer instance";
     }
 }
 
@@ -60,7 +60,7 @@ quint32 SharedBuffer::readData(void* dataToRead, quint32 lengthOrCountToRead)
     if (mode == ONLY_WRITE) {
         return -1;
     }
-    //qDebug() << "Read Pointer is" << readPointer;
+    //qDebug() << "SMAMMainUI:" << "Read Pointer is" << readPointer;
     if (type == LOOP_BUFFER) {
         quint32 length = 0;
         if (lengthOrCountToRead == 0 || readPointer == header->writePointer) {
@@ -146,7 +146,19 @@ quint32 SharedBuffer::getWritePointer() const
     return (header != 0) ? header->writePointer : 0;
 }
 
-quint8 SharedBuffer::getReadWriteLock() const
+bool SharedBuffer::isDirty() const
+{
+    return (header != 0 && header->isDirty == 1) ? true : false;
+}
+
+void SharedBuffer::setDirty()
+{
+    if (header != 0) {
+        header->isDirty = 1;
+    }
+}
+
+quint32 SharedBuffer::getReadWriteLock() const
 {
     return (header != 0) ? header->readWriteLock : 0;
 }

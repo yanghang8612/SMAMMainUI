@@ -1,9 +1,7 @@
 #include "igmas_station.h"
 
 IGMASStation::IGMASStation()
-{
-
-}
+{}
 
 bool IGMASStation::getIsAvailable() const
 {

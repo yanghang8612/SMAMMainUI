@@ -5,6 +5,7 @@
 #include <QTreeWidget>
 #include <QVBoxLayout>
 #include <QDomDocument>
+#include <QBitArray>
 
 #include "common.h"
 #include "standard_treewidgetitem.h"
@@ -26,7 +27,11 @@ public:
     const QList<IGSStation*>& getIGSStationList() const;
     const QList<OtherCenter*>& getOtherCenterList() const;
 
+    QList<int>& getComponentStateCheckIntervals();
+
 private slots:
+    void updateComponentStateCheckIntervals();
+
     void showRightMenu(QPoint pos);
     void addWidgetToContainer(QTreeWidgetItem* item);
 
@@ -96,13 +101,21 @@ private:
     QDomNode iGMASStationRoot;
     QDomNode iGSStationRoot;
     QDomNode otherCenterRoot;
+    QDomNode settingRoot;
+
+    QBitArray receiverMemIdArray;
+    QBitArray iGMASStationMemIdArray;
+
+    QList<int> componentStateCheckIntervals;
 
 	void initAtBJ();
 	void initAtXJ();
 	QDomDocument getRootFromXMLFile(const QString& filePath);
+    void getComponentStateCheckIntervalFromXML();
 	void writeConfigFile();
     void writeSharedBuffer();
-    int findFreeReceiverMemID();
+    int findFreeReceiverMemId();
+    int findFreeIGMASStationMemId();
 };
 
 #endif // SMAMTREEWIDGET_H

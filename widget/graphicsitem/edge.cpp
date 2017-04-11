@@ -8,6 +8,7 @@
 #include <QGraphicsScene>
 
 #include "edge.h"
+
 #include "basenode.h"
 
 Edge::Edge(BaseNode* sourceNode, BaseNode* destNode) :
@@ -140,7 +141,6 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 
 void Edge::doSomething()
 {
-    //qDebug() << sourcePoint.x() << timer->interval();
     prepareGeometryChange();
     update();
 }

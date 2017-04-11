@@ -4,8 +4,9 @@
 #include <QFile>
 #include <QDebug>
 
-#include "main_component_header.h"
 #include "smam_treewidget.h"
+
+#include "main_component_header.h"
 #include "widget/centerinfo_widget.h"
 #include "widget/igmasstationinfo_widget.h"
 #include "widget/mainmonitor_widget.h"
@@ -46,6 +47,8 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     tree(tree), container(container),
     currentContentWidget(0)
 {
+    receiverMemIdArray.resize(RECEIVER_SHAREDBUFFER_MAXITEMCOUNT);
+    iGMASStationMemIdArray.resize(IGMAS_SHAREDBUFFER_MAXITEMCOUNT);
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             initAtXJ();
@@ -54,9 +57,10 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
             initAtBJ();
             break;
         default:
-            qDebug() << "No match deploymenttype.";
+            qDebug() << "SMAMMainUI:" << "No match deploymenttype";
             break;
     }
+    getComponentStateCheckIntervalFromXML();
     systemMonitorWidget = new MainMonitorWidget(this);
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
@@ -82,6 +86,22 @@ const QList<IGMASStation*>& SMAMTreeWidget::getIGMASStationList() const
 const QList<StandardStation*>& SMAMTreeWidget::getStandardStationList() const
 {
     return standardStationList;
+}
+
+QList<int>& SMAMTreeWidget::getComponentStateCheckIntervals()
+{
+    return componentStateCheckIntervals;
+}
+
+void SMAMTreeWidget::updateComponentStateCheckIntervals()
+{
+    QDomNode intervalRoot = settingRoot.namedItem("INTERVALS");
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        QDomElement componentNode = root.createElement(COMPONENT_NAME[i]);
+        componentNode.appendChild(root.createTextNode(QString::number(componentStateCheckIntervals[i])));
+        intervalRoot.replaceChild(componentNode, intervalRoot.namedItem(COMPONENT_NAME[i]));
+    }
+    writeConfigFile();
 }
 
 void SMAMTreeWidget::showRightMenu(QPoint pos)
@@ -319,7 +339,7 @@ void SMAMTreeWidget::deleteStandardStation()
 
 void SMAMTreeWidget::showAddNewReceiverDialog()
 {
-    if ((quint32) ((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
+    if (((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
         QMessageBox::warning(tree,
                              tr("提示"),
                              tr("超过最大单个基准站所能容纳接收机数目。"),
@@ -339,8 +359,9 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 
 	QDomElement newReceiver = root.createElement("RECEIVER");
 
+    receiver->setMemID(findFreeReceiverMemId());
     QDomElement receiverMemID = root.createElement("MEMID");
-    receiverMemID.appendChild(root.createTextNode(QString::number(0)));
+    receiverMemID.appendChild(root.createTextNode(QString::number(receiver->getMemID())));
     newReceiver.appendChild(receiverMemID);
 
 	QDomElement receiverName = root.createElement("RECEIVERNAME");
@@ -358,6 +379,10 @@ void SMAMTreeWidget::addNewReceiver(Receiver* receiver)
 	QDomElement receiverPort = root.createElement("IPPORT");
 	receiverPort.appendChild(root.createTextNode(QString::number(receiver->getPort())));
 	newReceiver.appendChild(receiverPort);
+
+    QDomElement receiverMount = root.createElement("MOUNT");
+    receiverMount.appendChild(root.createTextNode(receiver->getMount()));
+    newReceiver.appendChild(receiverMount);
 
 	QDomElement receiverLongitude = root.createElement("LONGITUDE");
 	receiverLongitude.appendChild(root.createTextNode(QString::number(receiver->getLongitude())));
@@ -415,6 +440,10 @@ void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 	receiverPort.appendChild(root.createTextNode(QString::number(receiver->getPort())));
 	receiverNode.replaceChild(receiverPort, receiverNode.namedItem("IPPORT"));
 
+    QDomElement receiverMount = root.createElement("MOUNT");
+    receiverMount.appendChild(root.createTextNode(receiver->getMount()));
+    receiverNode.replaceChild(receiverMount, receiverNode.namedItem("MOUNT"));
+
 	QDomElement receiverLongitude = root.createElement("LONGITUDE");
 	receiverLongitude.appendChild(root.createTextNode(QString::number(receiver->getLongitude())));
 	receiverNode.replaceChild(receiverLongitude, receiverNode.namedItem("LONGITUDE"));
@@ -443,6 +472,13 @@ void SMAMTreeWidget::deleteReceiver()
                                    content,
 								   QMessageBox::Cancel | QMessageBox::Ok);
 	if (ret == QMessageBox::Ok) {
+        if (FindMemoryInfoFunc != 0) {
+            SharedBuffer(
+                        SharedBuffer::LOOP_BUFFER,
+                        SharedBuffer::ONLY_READ,
+                        FindMemoryInfoFunc(receiver->getMemID(), 0)).setDirty();
+        }
+        receiverMemIdArray.clearBit(receiver->getMemID() - RECEIVER_SHAREDBUFFER_MEMID_START_INDEX);
         int parentNodeIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
         standardStationList.at(parentNodeIndex)->removerReceiver(tree->currentIndex().row());
         QDomNode parentNode = standardStationRoot.childNodes().at(parentNodeIndex).namedItem("RECEIVERS");
@@ -454,9 +490,17 @@ void SMAMTreeWidget::deleteReceiver()
 
 void SMAMTreeWidget::showAddNewIGMASStationDialog()
 {
-    AddIGMASStationDialog* dialog = new AddIGMASStationDialog(tree);
-    connect(dialog, SIGNAL(confirmButtonClicked(IGMASStation*)), this, SLOT(addNewIGMASStation(IGMASStation*)));
-    dialog->show();
+    if (iGMASStationList.size() > IGMAS_SHAREDBUFFER_MAXITEMCOUNT) {
+        QMessageBox::warning(tree,
+                             tr("提示"),
+                             tr("超过最大单个中心所能容纳的IGMAS站数目。"),
+                             QMessageBox::Ok);
+    }
+    else {
+        AddIGMASStationDialog* dialog = new AddIGMASStationDialog(tree);
+        connect(dialog, SIGNAL(confirmButtonClicked(IGMASStation*)), this, SLOT(addNewIGMASStation(IGMASStation*)));
+        dialog->show();
+    }
 }
 
 void SMAMTreeWidget::addNewIGMASStation(IGMASStation* station)
@@ -482,6 +526,7 @@ void SMAMTreeWidget::addNewIGMASStation(IGMASStation* station)
     stationMount.appendChild(root.createTextNode(station->getMount()));
     newIGMASStation.appendChild(stationMount);
 
+    station->setMemID(findFreeIGMASStationMemId());
     QDomElement stationMemID = root.createElement("MEMID");
     stationMemID.appendChild(root.createTextNode(QString::number(station->getMemID())));
     newIGMASStation.appendChild(stationMemID);
@@ -570,7 +615,25 @@ void SMAMTreeWidget::modifyIGMASStation(IGMASStation* station)
 
 void SMAMTreeWidget::deleteIGMASStation()
 {
-
+    IGMASStation* station = (IGMASStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
+    QString content = tr("确认删除iGMAS测站 ") + station->getMount() + tr(" 吗？");
+    int ret = QMessageBox::warning(tree,
+                                   tr("提示"),
+                                   content,
+                                   QMessageBox::Cancel | QMessageBox::Ok);
+    if (ret == QMessageBox::Ok) {
+        if (FindMemoryInfoFunc != 0) {
+            SharedBuffer(
+                        SharedBuffer::LOOP_BUFFER,
+                        SharedBuffer::ONLY_READ,
+                        FindMemoryInfoFunc(station->getMemID(), 0)).setDirty();
+        }
+        iGMASStationMemIdArray.clearBit(station->getMemID() - IGMAS_SHAREDBUFFER_MEMID_START_INDEX);
+        iGMASStationList.removeAt(tree->currentIndex().row());
+        iGMASStationRoot.removeChild(iGMASStationRoot.childNodes().at(tree->currentIndex().row()));
+        delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
+        writeConfigFile();
+    }
 }
 
 void SMAMTreeWidget::showAddNewIGSStationDialog()
@@ -732,6 +795,7 @@ void SMAMTreeWidget::initAtBJ()
             //Create station node of QTreewidget
             QTreeWidgetItem* stationTreeNode = new IGMASTreeWidgetItem(iGMASStationTreeRoot, IGMASNODE_TREEITEM_TYPE, station);
             Q_UNUSED(stationTreeNode);
+            iGMASStationMemIdArray.setBit(station->getMemID() - IGMAS_SHAREDBUFFER_MEMID_START_INDEX);
             iGMASStationList << station;
         }
         iGMASStationNode = iGMASStationNode.nextSibling();
@@ -830,6 +894,7 @@ void SMAMTreeWidget::initAtXJ()
                     receiver->setPassword(receiverNode.namedItem("PASSWORD").toElement().text());
 					receiver->setIpAddress(receiverNode.namedItem("IPADDRESS").toElement().text());
 					receiver->setPort(receiverNode.namedItem("IPPORT").toElement().text());
+                    receiver->setMount(receiverNode.namedItem("MOUNT").toElement().text());
 					receiver->setLongitude(receiverNode.namedItem("LONGITUDE").toElement().text());
 					receiver->setLatitude(receiverNode.namedItem("LATITUDE").toElement().text());
                     receiver->setHeight(receiverNode.namedItem("HEIGHT").toElement().text());
@@ -839,6 +904,7 @@ void SMAMTreeWidget::initAtXJ()
 					//Create receiver node of QTreewidget
                     QTreeWidgetItem* receiverTreeNode = new ReceiverTreeWidgetItem(stationTreeNode, RECEIVER_TREEITEM_TYPE, receiver);
                     Q_UNUSED(receiverTreeNode);
+                    receiverMemIdArray.setBit(receiver->getMemID() - RECEIVER_SHAREDBUFFER_MEMID_START_INDEX);
 				}
 				receiverNode = receiverNode.nextSibling();
 			}
@@ -905,9 +971,9 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
 {
 	QFile configFile(filePath);
     if (!configFile.open(QIODevice::ReadOnly | QFile::Text)) {
-        qDebug() << "Configfile" << filePath << "is not existed, create it.";
+        qDebug() << "SMAMMainUI:" << "Configfile" << filePath << "is not existed, create it";
         if (!configFile.open(QIODevice::ReadWrite | QFile::Text)) {
-            qDebug() << "Create configfile" << filePath << "error.";
+            qDebug() << "SMAMMainUI:" << "Create configfile" << filePath << "error";
         }
         else {
             QDomDocument doc;
@@ -915,6 +981,16 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
             doc.appendChild(instruction);
             QDomElement rootElement = doc.createElement("BDLSS");
             doc.appendChild(rootElement);
+            QDomElement settingElement = doc.createElement("SETTINGS");
+            rootElement.appendChild(settingElement);
+            QDomElement intervalElement = doc.createElement("INTERVALS");
+            settingElement.appendChild(intervalElement);
+
+            for (int i = 0; i < COMPONENT_COUNT; i++) {
+                QDomElement componentElement = doc.createElement(COMPONENT_NAME[i]);
+                componentElement.appendChild(doc.createTextNode("3"));
+                intervalElement.appendChild(componentElement);
+            }
 
             QTextStream out(&configFile);
             out.setCodec("UTF-8");
@@ -927,10 +1003,21 @@ QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)
     int errorLine, errorColumn;
 	QDomDocument doc;
 	if (!doc.setContent(&configFile, false, &errorStr, &errorLine, &errorColumn)) {
-        qDebug()<<"QDomDocument setcontent error, the errormessage is" << errorStr;
+        qDebug() << "SMAMMainUI:" << "QDomDocument setcontent error, the errormessage is" << errorStr;
     }
 	configFile.close();
     return doc;
+}
+
+void SMAMTreeWidget::getComponentStateCheckIntervalFromXML()
+{
+    settingRoot = root.namedItem("BDLSS").namedItem("SETTINGS");
+    QDomNode intervalRoot = settingRoot.namedItem("INTERVALS");
+    QDomNode componentNode = intervalRoot.firstChild();
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        componentStateCheckIntervals.append(componentNode.toElement().text().toInt());
+        componentNode = componentNode.nextSibling();
+    }
 }
 
 void SMAMTreeWidget::writeConfigFile()
@@ -1009,7 +1096,26 @@ void SMAMTreeWidget::writeSharedBuffer()
     }
 }
 
-int SMAMTreeWidget::findFreeReceiverMemID()
+int SMAMTreeWidget::findFreeReceiverMemId()
 {
+    for (int i = 0; i < RECEIVER_SHAREDBUFFER_MAXITEMCOUNT; i++) {
+        if (!receiverMemIdArray[i]) {
+            receiverMemIdArray.setBit(i);
+            return i + RECEIVER_SHAREDBUFFER_MEMID_START_INDEX;
+        }
+    }
+    qDebug() << "SMAMMainUI:" << "Do not find no free receiver memid";
+    return -1;
+}
 
+int SMAMTreeWidget::findFreeIGMASStationMemId()
+{
+    for (int i = 0; i < IGMAS_SHAREDBUFFER_MAXITEMCOUNT; i++) {
+        if (!iGMASStationMemIdArray[i]) {
+            iGMASStationMemIdArray.setBit(i);
+            return i + IGMAS_SHAREDBUFFER_MEMID_START_INDEX;
+        }
+    }
+    qDebug() << "SMAMMainUI:" << "Do not find free igmas station memid";
+    return -1;
 }

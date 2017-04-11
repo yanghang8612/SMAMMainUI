@@ -23,7 +23,7 @@
       <x>480</x>
       <y>10</y>
       <width>240</width>
-      <height>160</height>
+      <height>190</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -39,6 +39,29 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>接收机端口(DEC)：</string>
+       </property>
+       <property name="buddy">
+        <cstring>receiverPortEdit</cstring>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="receiverPortEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="cursor">
+        <cursorShape>ArrowCursor</cursorShape>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
@@ -85,26 +108,20 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_3">
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>接收机端口(DEC)：</string>
-       </property>
-       <property name="buddy">
-        <cstring>receiverPortEdit</cstring>
+        <string>接收机挂载点：</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="receiverPortEdit">
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="receiverMountEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
        <property name="cursor">
         <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -116,7 +133,7 @@
       <x>760</x>
       <y>10</y>
       <width>200</width>
-      <height>160</height>
+      <height>148</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -216,9 +233,9 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>200</y>
+      <y>220</y>
       <width>480</width>
-      <height>220</height>
+      <height>200</height>
      </rect>
     </property>
     <property name="title">

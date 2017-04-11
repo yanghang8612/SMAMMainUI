@@ -1,9 +1,7 @@
 #include "other_center.h"
 
 OtherCenter::OtherCenter()
-{
-
-}
+{}
 
 QString OtherCenter::getUserName() const
 {

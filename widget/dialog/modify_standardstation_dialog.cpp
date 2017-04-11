@@ -1,5 +1,6 @@
 #include "modify_standardstation_dialog.h"
 #include "ui_modify_standardstation_dialog.h"
+
 #include "utilies/general_functions.h"
 
 ModifyStandardStationDialog::ModifyStandardStationDialog(StandardStation* station, QWidget *parent) :

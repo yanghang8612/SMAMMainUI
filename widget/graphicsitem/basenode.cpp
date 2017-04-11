@@ -1,4 +1,5 @@
 ﻿#include "basenode.h"
+
 #include "edge.h"
 
 BaseNode::BaseNode(quint8 length) :

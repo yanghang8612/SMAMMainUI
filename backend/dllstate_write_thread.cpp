@@ -1,6 +1,7 @@
 #include "dllstate_write_thread.h"
-#include "main_component_header.h"
+
 #include "common.h"
+#include "main_component_header.h"
 
 DllStateWriteThread::DllStateWriteThread() :
         QThread()
