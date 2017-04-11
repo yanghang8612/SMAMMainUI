@@ -2,6 +2,7 @@
 #define SYSTEMMANAGER_WIDGET_H
 
 #include <QWidget>
+#include <QProcess>
 #include <unistd.h>
 
 #include "utilies/shared_buffer.h"
@@ -35,6 +36,7 @@ private:
 
     SMAMTreeWidget* treeWidget;
     StatusPushButton* softwareStatus;
+    QProcess* proc;
     SharedBuffer* messageBuffers[COMPONENT_COUNT];
 };
 

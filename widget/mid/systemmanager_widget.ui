@@ -51,7 +51,7 @@ QDialog {
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,7">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,7">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="styleSheet">
@@ -60,7 +60,7 @@ QDialog {
   padding: 5px;
 }</string>
       </property>
-      <layout class="QHBoxLayout" name="headerLayout" stretch="2,2,6,3,3,3,4">
+      <layout class="QHBoxLayout" name="headerLayout" stretch="2,2,6,3,3,3,5">
        <property name="spacing">
         <number>0</number>
        </property>
@@ -204,15 +204,15 @@ QDialog {
        </item>
        <item>
         <layout class="QGridLayout" name="systemStatusLayout">
-         <item row="2" column="0">
-          <widget class="QLabel" name="networkLabel">
+         <item row="0" column="1">
+          <widget class="QProgressBar" name="cpuBar">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="text">
-            <string>网络占用：</string>
+           <property name="value">
+            <number>0</number>
            </property>
           </widget>
          </item>
@@ -228,20 +228,20 @@ QDialog {
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QProgressBar" name="networkBar">
+         <item row="0" column="0">
+          <widget class="QLabel" name="cpuLabel">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
-           <property name="value">
-            <number>0</number>
+           <property name="text">
+            <string>CPU占用：</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QProgressBar" name="cpuBar">
+         <item row="2" column="1">
+          <widget class="QProgressBar" name="diskBar">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
@@ -249,6 +249,21 @@ QDialog {
            </property>
            <property name="value">
             <number>0</number>
+           </property>
+           <property name="format">
+            <string>%vMB/%mMB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="networkLabel">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>磁盘占用：</string>
            </property>
           </widget>
          </item>
@@ -261,18 +276,6 @@ QDialog {
            </property>
            <property name="text">
             <string>内存占用：</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="cpuLabel">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>CPU占用：</string>
            </property>
           </widget>
          </item>
@@ -312,7 +315,9 @@ QDialog {
            <number>0</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget" native="true"/>
+           <widget class="QWidget" name="widget" native="true">
+            <zorder>groupBox</zorder>
+           </widget>
           </item>
          </layout>
         </item>

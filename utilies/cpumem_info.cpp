@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <unistd.h>   //头文件
 #include <assert.h>
+#include <sys/vfs.h>
 #include "utilies/cpumem_info.h"
 
 int get_phy_mem(const pid_t p)
@@ -147,4 +148,24 @@ const char* get_items(const char* buffer,int ie)
 	}
 
 	return p;
+}
+
+int getTotalDiskSize() {
+    struct statfs diskInfo;
+    statfs("/", &diskInfo);
+    unsigned long long totalBlocks = diskInfo.f_bsize;
+    unsigned long long totalSize = totalBlocks * diskInfo.f_blocks;
+    size_t mbTotalsize = totalSize>>20;
+    return mbTotalsize;
+}
+
+int getUsedDiskSize() {
+    struct statfs diskInfo;
+    statfs("/", &diskInfo);
+    unsigned long long totalBlocks = diskInfo.f_bsize;
+    unsigned long long totalSize = totalBlocks * diskInfo.f_blocks;
+    unsigned long long freeDisk = diskInfo.f_bfree*totalBlocks;
+    size_t mbTotalsize = totalSize>>20;
+    size_t mbFreedisk = freeDisk>>20;
+    return mbTotalsize - mbFreedisk;
 }

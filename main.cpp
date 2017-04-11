@@ -2,6 +2,8 @@
 #include <QDebug>
 #include <QtCore>
 
+#include <time.h>
+
 #include "smam_mainwindow.h"
 #include "main_component_header.h"
 #include "smam_component_header.h"

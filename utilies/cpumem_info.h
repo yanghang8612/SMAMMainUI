@@ -40,6 +40,8 @@ typedef struct
 	extern float get_pcpu(pid_t p);//获取进程CPU占用
 	extern float get_pmem(pid_t p);//获取进程内存占用
 	extern int get_rmem(pid_t p);//获取真实物理内存
+    extern int getTotalDiskSize();
+    extern int getUsedDiskSize();
 
 #ifdef __cplusplus
 }

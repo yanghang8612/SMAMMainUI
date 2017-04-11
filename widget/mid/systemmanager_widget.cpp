@@ -44,6 +44,9 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
     softwareStatus = new StatusPushButton(QIcon(":/status_green"), tr("软件运行状态"), this);
     ui->statusContainer->addWidget(softwareStatus);
+    ui->diskBar->setMaximum(getTotalDiskSize());
+    proc = new QProcess();
+    proc->start("top -p " + QString::number(getpid()));
 }
 
 SystemManagerWidget::~SystemManagerWidget()
@@ -53,10 +56,14 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+    float cpu = get_pcpu(getpid());
+    float mem = get_pmem(getpid());
+    qDebug() << cpu << mem;
+//    ui->cpuBar->setValue((int) (cpu * 100));
+//    ui->memoryBar->setValue((int) (mem * 100));
+    qDebug() << QString::number(getpid()) << proc->readAllStandardOutput();
+    ui->diskBar->setValue(getUsedDiskSize());
 	ui->onlineUserCount->display(ui->onlineUserCount->intValue() + (qrand() % 10 - 5));
-
 	QDateTime time = QDateTime::currentDateTime();
 	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
 	ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
