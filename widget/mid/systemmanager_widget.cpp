@@ -1,6 +1,8 @@
 ﻿#include <QCloseEvent>
 #include <QTime>
 #include <QTimer>
+#include <QStringList>
+#include <QDebug>
 
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"
@@ -49,6 +51,11 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
     ui->statusContainer->addWidget(softwareStatus);
     ui->diskBar->setMaximum(getTotalDiskSize());
     proc = new QProcess();
+    QStringList options;
+    options << "-c";
+    options << "top -bn1 | grep " + QString::number(getpid());
+    connect(proc, SIGNAL(readyReadStandardOutput()), this, SLOT(dataReady()));
+    //proc->start("/bin/bash -c \"top -bn1 | grep " + QString::number(getpid()) + "\"");
 }
 
 SystemManagerWidget::~SystemManagerWidget()
@@ -58,14 +65,15 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-//    ui->cpuBar->setValue((int) (cpu * 100));
-//    ui->memoryBar->setValue((int) (mem * 100));
-    //qDebug() << QString::number(getpid()) << proc->readAllStandardOutput();
+    proc->start("/bin/bash -c \"top -bn1 | grep " + QString::number(getpid()) + "\"");
+    //proc->kill();
+//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
+//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
     ui->diskBar->setValue(getUsedDiskSize());
 
 	QDateTime time = QDateTime::currentDateTime();
 	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
-	ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
+    ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
 
 //    if (deploymentType == DeploymentType::XJ_CENTER) {
         if (userRegisterInfoSharedBufferPointer != 0) {
@@ -74,7 +82,17 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
         if (userRealtimeInfoSharedBufferPointer != 0) {
             ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
         }
-//    }
+        //    }
+}
+
+void SystemManagerWidget::dataReady()
+{
+    QString result = QString(proc->readAllStandardOutput());
+    QStringList array = result.split(QRegExp("\\s+"));
+    ui->cpuBar->setValue(array.at(9).toDouble() * 10.0);
+    ui->cpuValue->setText(array.at(9) + "%");
+    ui->memBar->setValue(array.at(10).toDouble() * 10.0);
+    ui->memValue->setText(array.at(10) + "%");
 }
 
 void SystemManagerWidget::addMessageToInfoContainer()

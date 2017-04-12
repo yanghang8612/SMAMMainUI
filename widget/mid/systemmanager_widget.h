@@ -25,6 +25,7 @@ protected:
 	void timerEvent(QTimerEvent* event);
 
 private slots:
+    void dataReady();
 	void addMessageToInfoContainer();
     void closeEvent(QCloseEvent* closeEvent);
 

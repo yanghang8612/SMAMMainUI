@@ -13,6 +13,9 @@
   <property name="tabPosition">
    <enum>QTabWidget::South</enum>
   </property>
+  <property name="currentIndex">
+   <number>1</number>
+  </property>
   <widget class="QWidget" name="firstReceiverTab">
    <attribute name="title">
     <string>接收机基本信息</string>
@@ -257,12 +260,7 @@
   </widget>
   <widget class="QWidget" name="secondReceiverTab">
    <attribute name="title">
-    <string>接收机观测值信息</string>
-   </attribute>
-  </widget>
-  <widget class="QWidget" name="thirdReceiverTab">
-   <attribute name="title">
-    <string>接收机星历信息</string>
+    <string>接收机远程控制</string>
    </attribute>
   </widget>
  </widget>

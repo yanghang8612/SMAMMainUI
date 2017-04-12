@@ -204,27 +204,27 @@ QDialog {
        </item>
        <item>
         <layout class="QGridLayout" name="systemStatusLayout">
-         <item row="0" column="1">
-          <widget class="QProgressBar" name="cpuBar">
-           <property name="font">
-            <font>
-             <pointsize>10</pointsize>
-            </font>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
-          <widget class="QProgressBar" name="memoryBar">
+          <widget class="QProgressBar" name="memBar">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
            <property name="value">
             <number>0</number>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="textVisible">
+            <bool>false</bool>
+           </property>
+           <property name="format">
+            <string>%v‰</string>
            </property>
           </widget>
          </item>
@@ -240,18 +240,39 @@ QDialog {
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QProgressBar" name="diskBar">
+         <item row="1" column="0">
+          <widget class="QLabel" name="memoryLabel">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
+           <property name="text">
+            <string>内存占用：</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QProgressBar" name="cpuBar">
+           <property name="font">
+            <font>
+             <pointsize>10</pointsize>
+            </font>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
            <property name="value">
             <number>0</number>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="textVisible">
+            <bool>false</bool>
+           </property>
            <property name="format">
-            <string>%vMB/%mMB</string>
+            <string>%v‰</string>
            </property>
           </widget>
          </item>
@@ -267,15 +288,32 @@ QDialog {
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="memoryLabel">
+         <item row="0" column="2">
+          <widget class="QLabel" name="cpuValue">
+           <property name="text">
+            <string>0.0%</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="2">
+          <widget class="QProgressBar" name="diskBar">
            <property name="font">
             <font>
              <pointsize>10</pointsize>
             </font>
            </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="format">
+            <string>%vMB/%mMB</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="memValue">
            <property name="text">
-            <string>内存占用：</string>
+            <string>0.0%</string>
            </property>
           </widget>
          </item>
@@ -315,9 +353,7 @@ QDialog {
            <number>0</number>
           </property>
           <item>
-           <widget class="QWidget" name="widget" native="true">
-            <zorder>groupBox</zorder>
-           </widget>
+           <widget class="QWidget" name="widget" native="true"/>
           </item>
          </layout>
         </item>
