@@ -3,6 +3,7 @@
 
 #include "basenode.h"
 #include "bean/station/igmas_station.h"
+#include "utilies/shared_buffer.h"
 
 class IGMASNode : public QObject, public BaseNode
 {
@@ -15,8 +16,13 @@ public:
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
 
+private slots:
+    void checkDataReceivingState();
+
 private:
     IGMASStation* station;
+    QTimer* timer;
+    SharedBuffer* dataReceivingSharedBuffer;
 };
 
 #endif // IGMASNODE_H

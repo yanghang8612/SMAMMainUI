@@ -38,7 +38,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
         messageBuffers[i] = 0;
     }
 
-    startTimer(1000);
+    startTimer(500);
 	qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
     QTimer* messageReceiverTimer = new QTimer(this);
@@ -51,11 +51,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
     ui->statusContainer->addWidget(softwareStatus);
     ui->diskBar->setMaximum(getTotalDiskSize());
     proc = new QProcess();
-    QStringList options;
-    options << "-c";
-    options << "top -bn1 | grep " + QString::number(getpid());
-    connect(proc, SIGNAL(readyReadStandardOutput()), this, SLOT(dataReady()));
-    //proc->start("/bin/bash -c \"top -bn1 | grep " + QString::number(getpid()) + "\"");
+    proc->start("top -bd1 -p " + QString::number(getpid()));
 }
 
 SystemManagerWidget::~SystemManagerWidget()
@@ -65,34 +61,28 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::timerEvent(QTimerEvent*)
 {
-    proc->start("/bin/bash -c \"top -bn1 | grep " + QString::number(getpid()) + "\"");
-    //proc->kill();
-//    ui->cpuBar->setValue((int) (get_pcpu(getpid()) * 100));
-//    ui->memoryBar->setValue((int) (get_pmem(getpid()) * 100));
+    QString result = QString(proc->readAllStandardOutput());
+    QStringList lines = result.split(QRegExp("\\n"));
+    if (lines.size() >= 10) {
+        QStringList array = lines[9].split(QRegExp("\\s+"));
+        int startIndex = (array[0] == "") ? 9 : 8;
+        ui->cpuBar->setValue(array[startIndex].toDouble() * 10);
+        ui->cpuValue->setText(array[startIndex] + "%");
+        ui->memBar->setValue(array[startIndex + 1].toDouble() * 10);
+        ui->memValue->setText(array[startIndex + 1] + "%");
+    }
     ui->diskBar->setValue(getUsedDiskSize());
-
+    ui->diskValue->setText(QString::number(getTotalDiskSize() - getUsedDiskSize()) + "MB");
 	QDateTime time = QDateTime::currentDateTime();
 	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
     ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
 
-//    if (deploymentType == DeploymentType::XJ_CENTER) {
-        if (userRegisterInfoSharedBufferPointer != 0) {
-            ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));
-        }
-        if (userRealtimeInfoSharedBufferPointer != 0) {
-            ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
-        }
-        //    }
-}
-
-void SystemManagerWidget::dataReady()
-{
-    QString result = QString(proc->readAllStandardOutput());
-    QStringList array = result.split(QRegExp("\\s+"));
-    ui->cpuBar->setValue(array.at(9).toDouble() * 10.0);
-    ui->cpuValue->setText(array.at(9) + "%");
-    ui->memBar->setValue(array.at(10).toDouble() * 10.0);
-    ui->memValue->setText(array.at(10) + "%");
+    if (userRegisterInfoSharedBufferPointer != 0) {
+        ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));
+    }
+    if (userRealtimeInfoSharedBufferPointer != 0) {
+        ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
+    }
 }
 
 void SystemManagerWidget::addMessageToInfoContainer()
@@ -104,14 +94,20 @@ void SystemManagerWidget::addMessageToInfoContainer()
                                                                                                    componentStateSharedBufferPointer[i]);
         }
     }
-	int currentRowCount = ui->infoOutputTable->rowCount();
+    int currentRowCount = ui->infoOutputTable->rowCount();
     for (int i = 0; i < 6; ++i) {
         while (true) {
             SoftWorkStatus status;
             if (messageBuffers[i] == 0 || messageBuffers[i]->readData(&status, sizeof(status)) == 0) {
                 break;
             }
-            ui->infoOutputTable->setRowCount(currentRowCount + 1);
+            if (currentRowCount == MESSAGE_MAX_COUNT) {
+                ui->infoOutputTable->removeColumn(0);
+                currentRowCount -= 1;
+            }
+            else {
+                ui->infoOutputTable->setRowCount(currentRowCount + 1);
+            }
             ui->infoOutputTable->setItem(currentRowCount, 0, new QTableWidgetItem(QDateTime::fromTime_t(status.messageTime).toString(DATETIME_FORMAT_STRING)));
             QString iconName;
             switch (status.messageType) {
@@ -125,12 +121,12 @@ void SystemManagerWidget::addMessageToInfoContainer()
                     iconName = ":/info_error";
                     break;
                 default:
+                    iconName = ":/info_normal";
                     break;
             }
             ui->infoOutputTable->setItem(currentRowCount, 1, new QTableWidgetItem(QIcon(iconName), QString(status.messageContent)));
             ui->infoOutputTable->setRowHeight(currentRowCount, 22);
             ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
-            currentRowCount++;
         }
     }
 }

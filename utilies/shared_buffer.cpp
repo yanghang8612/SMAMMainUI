@@ -1,6 +1,7 @@
 #include <QDebug>
 
 #include "shared_buffer.h"
+#include "common.h"
 
 SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer)
 {
@@ -9,6 +10,9 @@ SharedBuffer::SharedBuffer(BufferType type, BufferMode mode, void* headerPointer
     if (type == LOOP_BUFFER) {
         commonInit(headerPointer);
         bufferCapacity = header->bufferSize - sizeof(SharedBufferHeader);
+        preWritePointer = 0;
+        dataWriteState = false;
+        startTimer(SHAREDBUFFER_WRITE_STATE_CHECK_TIMEINTERVAL);
     }
     else {
         qDebug() << "SMAMMainUI:" << "Wrong buffertype when construct sharedbuffer instance";
@@ -202,6 +206,21 @@ quint32 SharedBuffer::getItemSize() const
     return itemSize;
 }
 
+bool SharedBuffer::getDataWriteState() const
+{
+    return dataWriteState;
+}
+
+void SharedBuffer::timerEvent(QTimerEvent*)
+{
+    if (header->writePointer != preWritePointer) {
+        dataWriteState = true;
+        preWritePointer = header->writePointer;
+    }
+    else {
+        dataWriteState = false;
+    }
+}
 
 void SharedBuffer::commonInit(void* headerPointer)
 {

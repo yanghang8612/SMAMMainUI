@@ -1,10 +1,13 @@
 #ifndef SHAREDBUFFER_H
 #define SHAREDBUFFER_H
 
+#include <QObject>
 #include <QtGlobal>
 
-class SharedBuffer
+class SharedBuffer : public QObject
 {
+    Q_OBJECT
+
 public:
     enum BufferType {
         LOOP_BUFFER = 0,
@@ -53,6 +56,11 @@ public:
     quint32 getItemCount() const;
     quint32 getItemSize() const;
 
+    bool getDataWriteState() const;
+
+private:
+    void timerEvent(QTimerEvent* event);
+
 private:
     BufferType type;
     BufferMode mode;
@@ -61,6 +69,9 @@ private:
 
     quint32 readPointer;
     quint32 bufferCapacity;
+
+    quint32 preWritePointer;
+    bool dataWriteState;
 
     quint32* itemCount;
     quint32 itemSize;

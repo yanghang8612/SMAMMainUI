@@ -35,7 +35,7 @@ void Edge::addData()
 
         timer = new QTimer(this);
         connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()));
-        timer->start(10);
+        timer->start(50);
     }
     dataList << sourcePoint;
 
@@ -67,7 +67,7 @@ void Edge::adjust()
     QLineF line(mapFromItem(sourceNode, 0, 0), mapFromItem(destNode, 0, 0));
 	qreal length = line.length();
 
-    dataFlowOffset = QPointF((line.dx() * 3) / length, (line.dy() * 3) / length);
+    dataFlowOffset = QPointF((line.dx() * 5) / length, (line.dy() * 5) / length);
 
     prepareGeometryChange();
 
@@ -116,7 +116,7 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
         default:
             break;
     }
-    painter->setPen(QPen(lineColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    painter->setPen(QPen(lineColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter->drawLine(QLineF(sourcePoint, destPoint));
 
     painter->setPen(QPen(Qt::black, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));

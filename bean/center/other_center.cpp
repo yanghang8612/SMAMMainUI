@@ -33,6 +33,7 @@ OtherCenterInBuffer OtherCenter::toOtherCenterInBuffer()
     qMemCopy(otherCenterInBuffer.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
     otherCenterInBuffer.port = port;
     qMemCopy(otherCenterInBuffer.detail, detail.toStdString().c_str(), detail.length());
+    qMemCopy(otherCenterInBuffer.mount, "/RTA02", qstrlen("/RTA02"));
     return otherCenterInBuffer;
 }
 

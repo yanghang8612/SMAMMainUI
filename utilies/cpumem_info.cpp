@@ -152,7 +152,7 @@ const char* get_items(const char* buffer,int ie)
 
 int getTotalDiskSize() {
     struct statfs diskInfo;
-    statfs("/", &diskInfo);
+    statfs("/home", &diskInfo);
     unsigned long long totalBlocks = diskInfo.f_bsize;
     unsigned long long totalSize = totalBlocks * diskInfo.f_blocks;
     size_t mbTotalsize = totalSize>>20;
@@ -161,7 +161,7 @@ int getTotalDiskSize() {
 
 int getUsedDiskSize() {
     struct statfs diskInfo;
-    statfs("/", &diskInfo);
+    statfs("/home", &diskInfo);
     unsigned long long totalBlocks = diskInfo.f_bsize;
     unsigned long long totalSize = totalBlocks * diskInfo.f_blocks;
     unsigned long long freeDisk = diskInfo.f_bfree*totalBlocks;
