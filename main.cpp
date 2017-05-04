@@ -1,6 +1,7 @@
 ﻿#include <QApplication>
 #include <QDebug>
 #include <QtCore>
+#include <QTableWidgetItem>
 
 #include <time.h>
 

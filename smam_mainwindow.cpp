@@ -15,10 +15,10 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
 
     menu = new XJMenu(this);
 
-    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::XJ_CENTER, this);
+    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::BJ_CENTER, this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));
 
-	systemManagerSub = ui->mdiArea->addSubWindow(managerWidget);
+    systemManagerSub = ui->mdiArea->addSubWindow(managerWidget);
 	systemManagerSub->setWindowTitle(tr("系统管理"));
     //systemManagerSub->resize(1280, 760);
     systemManagerSub->setGeometry(0, 0, 1280, 760);

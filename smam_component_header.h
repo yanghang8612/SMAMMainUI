@@ -33,13 +33,14 @@ struct OtherCenterInBuffer {
     char ipAddress[16];
     int port;
     char detail[256];
+    char mount[8];
 };
 
 struct IGMASStationInBuffer {
     bool isAvailable;
     char ipAddress[16];
     int port;
-    char mount[4];
+    char mount[8];
     int memID;
     double longitude;
     double latitude;

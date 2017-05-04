@@ -203,7 +203,7 @@ QDialog {
         <layout class="QVBoxLayout" name="statusContainer"/>
        </item>
        <item>
-        <layout class="QGridLayout" name="systemStatusLayout">
+        <layout class="QGridLayout" name="systemStatusLayout" columnstretch="1,4,1">
          <item row="1" column="1">
           <widget class="QProgressBar" name="memBar">
            <property name="font">
@@ -276,6 +276,26 @@ QDialog {
            </property>
           </widget>
          </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="cpuValue">
+           <property name="text">
+            <string>0.0%</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLabel" name="memValue">
+           <property name="text">
+            <string>0.0%</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="networkLabel">
            <property name="font">
@@ -288,14 +308,7 @@ QDialog {
            </property>
           </widget>
          </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="cpuValue">
-           <property name="text">
-            <string>0.0%</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1" colspan="2">
+         <item row="2" column="1">
           <widget class="QProgressBar" name="diskBar">
            <property name="font">
             <font>
@@ -305,15 +318,15 @@ QDialog {
            <property name="value">
             <number>0</number>
            </property>
-           <property name="format">
-            <string>%vMB/%mMB</string>
+           <property name="textVisible">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QLabel" name="memValue">
+         <item row="2" column="2">
+          <widget class="QLabel" name="diskValue">
            <property name="text">
-            <string>0.0%</string>
+            <string>2333MB</string>
            </property>
           </widget>
          </item>

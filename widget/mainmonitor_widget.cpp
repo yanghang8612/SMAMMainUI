@@ -76,12 +76,13 @@ void MainMonitorWidget::updateDeviceConnectState()
                                                                                                            sizeof(ReceiverState));
             }
             else {
-                *((int*) receiverStateSharedBufferPointer) = RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT;
-                receiverStateSharedBuffer->readData((void*) receiverState);
+                qMemCopy(receiverState,
+                         (char*) receiverStateSharedBufferPointer + 4,
+                         RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
                 for (int i = 0; i < receiverNodeList.size(); i++) {
                     bool isConnected = false;
-                    for (quint32 j = 0; j < receiverStateSharedBuffer->getItemCount(); j++) {
-                        if (qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0)
+                    for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
+                        if (receiverState[j].isConnected && qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0)
                             isConnected = true;
                     }
                     receiverNodeList[i]->setStatus(isConnected ? 1 : 2);
@@ -229,15 +230,18 @@ void MainMonitorWidget::updateBJView()
     if (0 == stationCount) {
         return;
     }
-    qreal stationLength = qMin((double) 400 / stationCount, 100.0);
+    qreal stationLength = qMin((double) 420 / ((stationCount > 10) ? 10 : stationCount), 100.0);
 
-    QPointF topStationPoint(-300, - stationLength / 2 * (stationCount - 1));
+    QPointF lineOneTopStationPoint(-300, - stationLength / 2 * (((stationCount > 10) ? 10 : stationCount) - 1));
+    QPointF lineTwoTopStationPoint(-350, - stationLength / 2 * (((stationCount > 10) ? 10 : stationCount) - 1));
     for (int i = 0; i < stationCount; i++) {
         IGMASStation* station = iGMASStationList[i];
         IGMASNode* stationNode = new IGMASNode(station, stationLength * 0.5);
-        stationNode->setPos(topStationPoint + QPointF(0, stationLength * i));
+        stationNode->setPos(((i > 9) ? lineTwoTopStationPoint : lineOneTopStationPoint) + QPointF(0, stationLength * (i % 10)));
         scene->addItem(stationNode);
-        scene->addItem(new Edge(stationNode, mainCenterNode));
+        if (i < 10) {
+            scene->addItem(new Edge(stationNode, mainCenterNode));
+        }
         iGMASNodeList << stationNode;
     }
 

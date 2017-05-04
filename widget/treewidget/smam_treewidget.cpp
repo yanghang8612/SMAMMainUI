@@ -133,10 +133,10 @@ void SMAMTreeWidget::showRightMenu(QPoint pos)
         }
         case RECEIVER_TREEITEM_TYPE:
         {
-            QAction* startReceiver = new QAction(tr("启动接收机"), this);
-            popMenu->addAction(startReceiver);
-            QAction* stopReceiver = new QAction(tr("停止接收机"), this);
-            popMenu->addAction(stopReceiver);
+//            QAction* startReceiver = new QAction(tr("启动接收机"), this);
+//            popMenu->addAction(startReceiver);
+//            QAction* stopReceiver = new QAction(tr("停止接收机"), this);
+//            popMenu->addAction(stopReceiver);
             QAction* modifyReceiver = new QAction(tr("编辑接收机"), this);
             connect(modifyReceiver, SIGNAL(triggered(bool)), this, SLOT(showModifyReceiverDialog()));
             popMenu->addAction(modifyReceiver);
