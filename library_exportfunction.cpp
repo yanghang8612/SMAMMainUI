@@ -64,25 +64,25 @@ extern "C" bool DllInit(int, char*)
         case DeploymentType::XJ_CENTER:
             receiverStateSharedBufferPointer = FindMemoryInfoFunc(
                                                    RECEIVER_STATE_SHAREDBUFFER_ID,
-                                                   RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
+                                                   RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState) + 4);
 
             userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
                                                       USER_REGISTER_INFO_SHAREDBUFFER_ID,
-                                                      USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo));
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo) + 4);
 
             userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
                                                       USER_REALTIME_INFO_SHAREDBUFFER_ID,
-                                                      USER_REALTIME_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserLoginInfo));
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserLoginInfo) + 4);
             break;
         case DeploymentType::BJ_CENTER:
             iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
                                                 IGMAS_STATE_SHAREDBUFFER_ID,
-                                                IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState));
+                                                IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState) + 4);
             break;
     }
     otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
                                               OTHERCENTER_STATE_SHAREDBUFFER_ID,
-                                              OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState));
+                                              OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState) + 4);
 
     return true;
 }
