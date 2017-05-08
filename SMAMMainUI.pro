@@ -74,6 +74,7 @@ SOURCES += \
     widget/igmasstationinfo_widget.cpp \
     widget/graphicsitem/standardnode.cpp \
     widget/graphicsitem/igmasnode.cpp \
+    widget/graphicsitem/dmznode.cpp
 
 HEADERS  += \
     common.h \
@@ -139,7 +140,8 @@ HEADERS  += \
     widget/igmasstationinfo_widget.h \
     widget/graphicsitem/standardnode.h \
     widget/graphicsitem/igmasnode.h \
-    other_component_header.h
+    other_component_header.h \
+    widget/graphicsitem/dmznode.h
 
 FORMS    += \
     smam_mainwindow.ui \

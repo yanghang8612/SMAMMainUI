@@ -6,7 +6,7 @@
 
 IGMASNode::IGMASNode(IGMASStation* station, quint8 length) :
     BaseNode(length),
-    station(station)
+    station(station), dataReceivingSharedBuffer(0)
 {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(checkDataReceivingState()), Qt::QueuedConnection);
@@ -46,23 +46,25 @@ void IGMASNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
 
 void IGMASNode::checkDataReceivingState()
 {
-    foreach (Edge* edge, edgeFromNodeList) {
-        //edge->adjust();
-        edge->addData();
+    if (getStatus() == 1) {
+        if (dataReceivingSharedBuffer == 0) {
+            void* pointer = FindMemoryInfoFunc(station->getMemID(), 4096 + 80);
+            dataReceivingSharedBuffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, pointer);
+        }
+        else {
+            if (dataReceivingSharedBuffer->getDataWriteState()) {
+                foreach (Edge* edge, edgeFromNodeList) {
+                    //edge->adjust();
+                    edge->setStatus(1);
+                }
+            }
+            else {
+                foreach (Edge* edge, edgeFromNodeList) {
+                    //edge->adjust();
+                    edge->setStatus(2);
+                }
+            }
+        }
     }
-//    if (getStatus() == 1) {
-//        if (dataReceivingSharedBuffer == 0) {
-//            void* pointer = FindMemoryInfoFunc(station->getMemID(), 4096 + 80);
-//            dataReceivingSharedBuffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, pointer);
-//        }
-//        else {
-//            if (dataReceivingSharedBuffer->getDataWriteState()) {
-//                foreach (Edge* edge, edgeFromNodeList) {
-//                    //edge->adjust();
-//                    edge->addData();
-//                }
-//            }
-//        }
-//    }
 }
 

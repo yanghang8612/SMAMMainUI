@@ -1,47 +1,48 @@
 #include <QPainter>
 
-#include "usersnode.h"
+#include "dmznode.h"
+#include "common.h"
 
-extern void* userRealtimeInfoSharedBufferPointer;
+extern DeploymentType::Value deploymentType;
+extern void* DMZSharedBufferPointer;
 
-UsersNode::UsersNode(quint8 length) :
+DMZNode::DMZNode(quint8 length) :
     BaseNode(length)
 {
-    startTimer(500);
+    if (deploymentType == DeploymentType::XJ_CENTER) {
+        startTimer(500);
+    }
 }
 
-QRectF UsersNode::boundingRect() const
+QRectF DMZNode::boundingRect() const
 {
     return QRectF(-length / 2, -length / 2, length + 30, length + 30);
 }
 
-void UsersNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
+void DMZNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QString imageName;
     switch (status) {
         case 0:
-            imageName = ":/users_normal";
+            imageName = ":/dmz_normal";
             break;
         case 1:
-            imageName = ":/users_green";
+            imageName = ":/dmz_green";
             break;
         case 2:
-            imageName = ":/users_red";
+            imageName = ":/dmz_red";
             break;
         default:
             break;
     }
-    //painter->setRenderHint(QPainter::Antialiasing);
     painter->drawImage(QRectF(-length / 2, -length / 2, length, length), QImage(imageName));
     painter->setFont(QFont("Helvetica", 10, QFont::Bold));
-    painter->drawText(-length / 2 - 10, length / 2 - 5, length + 20, 13, Qt::AlignCenter, "用户终端");
-
+    painter->drawText(-length / 2 - 10, length / 2 - 5, length + 20, 13, Qt::AlignCenter, "DMZ区");
 }
 
-void UsersNode::timerEvent(QTimerEvent* event)
+void DMZNode::timerEvent(QTimerEvent*)
 {
-    Q_UNUSED(event);
-    if (userRealtimeInfoSharedBufferPointer != 0 && (*((int*) userRealtimeInfoSharedBufferPointer)) > 0) {
+    if (DMZSharedBufferPointer != 0 && *((bool*) DMZSharedBufferPointer)) {
         setStatus(1);
         foreach (Edge* edge, edgeToNodeList) {
             edge->setStatus(1);

@@ -39,33 +39,17 @@
       <x>20</x>
       <y>0</y>
       <width>291</width>
-      <height>71</height>
+      <height>74</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="1">
       <widget class="QLineEdit" name="memoryIDEdit"/>
      </item>
-     <item row="1" column="2" colspan="2">
-      <widget class="QLineEdit" name="itemSizeEdit"/>
-     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>内存ID</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="autoUpdateButton">
-       <property name="text">
-        <string>开始刷新</string>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -90,6 +74,19 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="2">
+      <widget class="QPushButton" name="autoUpdateButton">
+       <property name="text">
+        <string>开始刷新</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget1">
@@ -98,7 +95,7 @@
       <x>330</x>
       <y>0</y>
       <width>641</width>
-      <height>71</height>
+      <height>74</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">

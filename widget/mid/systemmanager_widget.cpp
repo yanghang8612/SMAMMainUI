@@ -31,7 +31,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	ui->infoOutputTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
 	ui->infoOutputTable->verticalHeader()->setVisible(false);
 	ui->infoOutputTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	ui->infoOutputTable->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->infoOutputTable->setSelectionMode(QAbstractItemView::NoSelection);
 
     deploymentType = type;
     for (int i = 0; i < COMPONENT_COUNT; i++) {

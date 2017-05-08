@@ -37,6 +37,8 @@
 
 #define MEMINFO_TREEITEM_TYPE 40
 
+#define DMZINFO_TREEITEM_TYPE 50
+
 extern DeploymentType::Value deploymentType;
 
 extern void* receiverSharedBufferPointer;
@@ -52,6 +54,9 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             initAtXJ();
+            break;
+        case DeploymentType::XJ_DMZ:
+            initAtDMZ();
             break;
         case DeploymentType::BJ_CENTER:
             initAtBJ();
@@ -218,6 +223,7 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
         case IGMASROOT_TREEITEM_TYPE:
         case IGSROOT_TREEITEM_TYPE:
         case CENTERROOT_TREEITEM_TYPE:
+        case DMZINFO_TREEITEM_TYPE:
             currentContentWidget = systemMonitorWidget;
             break;
         case STANDARDNODE_TREEITEM_TYPE:
@@ -965,6 +971,25 @@ void SMAMTreeWidget::initAtXJ()
                                                                                      otherCenterSharedBufferPointer,
                                                                                      sizeof(OtherCenterInBuffer));
     writeSharedBuffer();
+}
+
+void SMAMTreeWidget::initAtDMZ()
+{
+    //Get config xml file root
+    root = getRootFromXMLFile(XJ_CONFIGFILE_PATH);
+
+    //Create standard stations root of QTreewidget
+    dmzTreeRoot = new QTreeWidgetItem(DMZINFO_TREEITEM_TYPE);
+    dmzTreeRoot->setText(0, tr("DMZ连接状态"));
+    dmzTreeRoot->setIcon(0, QIcon(":/dmz_normal"));
+
+    memoryTreeRoot = new QTreeWidgetItem(MEMINFO_TREEITEM_TYPE);
+    memoryTreeRoot->setText(0, tr("内存管理"));
+    memoryTreeRoot->setIcon(0, QIcon(":/2"));
+
+    tree->setColumnCount(1);
+    tree->addTopLevelItem(dmzTreeRoot);
+    tree->addTopLevelItem(memoryTreeRoot);
 }
 
 QDomDocument SMAMTreeWidget::getRootFromXMLFile(const QString& filePath)

@@ -43,23 +43,13 @@ void SharedMemoryInfoWidget::on_viewButton_clicked()
         return;
     }
     else {
-        if (FindMemoryInfoFunc == 0)
+        if (FindMemoryInfoFunc == 0) {
             return;
-        void* sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 100);
+        }
+        sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 100);
         if (ui->bufferTypeBox->currentIndex() == 0) {
             buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
             if (buffer->getBufferSize() == 0) {
-                QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
-                return;
-            }
-        }
-        else {
-            if (ui->itemSizeEdit->text().isEmpty()) {
-                QMessageBox::warning(this, tr("提示"), tr("请输入覆盖缓冲区中单个结构体的sizeof结果"), QMessageBox::Ok);
-                return;
-            }
-            buffer = new SharedBuffer(SharedBuffer::COVER_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer, ui->itemSizeEdit->text().toUInt());
-            if (buffer->getItemCount() == 0) {
                 QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
                 return;
             }
@@ -73,7 +63,7 @@ void SharedMemoryInfoWidget::on_autoUpdateButton_clicked(bool checked)
     static int timerID;
     if (checked) {
         ui->autoUpdateButton->setText(tr("停止刷新"));
-        timerID = startTimer(100);
+        timerID = startTimer(300);
     }
     else {
         ui->autoUpdateButton->setText(tr("开始刷新"));
@@ -109,10 +99,10 @@ void SharedMemoryInfoWidget::on_memoryCharInfoTable_itemSelectionChanged()
 
 void SharedMemoryInfoWidget::updateView()
 {
-    if (buffer == 0) {
-        return;
-    }
     if (ui->bufferTypeBox->currentIndex() == 0) {
+        if (buffer == 0) {
+            return;
+        }
         ui->bufferSizeEdit->setText(QString::number(buffer->getBufferSize()));
         ui->blockSizeEdit->setText(QString::number(buffer->getBlockSize()));
         ui->writePointerEdit->setText(QString::number(buffer->getWritePointer()));
@@ -133,11 +123,10 @@ void SharedMemoryInfoWidget::updateView()
         }
     }
     else {
-        ui->bufferSizeEdit->setText(QString::number(buffer->getItemCount()));
-        quint32 bufferSize = buffer->getItemCount() * buffer->getItemSize();
+        quint32 bufferSize = 666666;
         ui->memoryHexInfoTable->setRowCount((int)(bufferSize / 16) + 1);
         ui->memoryCharInfoTable->setRowCount((int)(bufferSize / 16) + 1);
-        quint8* dataStartPointer = (quint8*) buffer->getDataStartPointer();
+        quint8* dataStartPointer = (quint8*) sharedMemoryPointer;
         for (quint32 i = 0; i < bufferSize; i++) {
             quint8 singleByte = *(dataStartPointer + i);
             QTableWidgetItem* hexItem = new QTableWidgetItem(((singleByte > 15) ? "" : "0") + QString::number(singleByte, 16).toUpper());

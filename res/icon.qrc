@@ -40,5 +40,15 @@
         <file alias="other_center">icon/other_center.png</file>
         <file alias="igmas_station">icon/igmas_station.png</file>
         <file alias="igmas_root">icon/igmas_root.png</file>
+        <file alias="dmz_green">icon/dmz_green.png</file>
+        <file alias="dmz_normal">icon/dmz_normal.png</file>
+        <file alias="dmz_red">icon/dmz_red.png</file>
+        <file alias="saved_file_green">icon/saved_file_green.png</file>
+        <file alias="saved_file_normal">icon/saved_file_normal.png</file>
+        <file alias="saved_file_red">icon/saved_file_red.png</file>
+        <file alias="status_grey">icon/status_grey.png</file>
+        <file alias="users_green">icon/users_green.png</file>
+        <file alias="users_normal">icon/users_normal.png</file>
+        <file alias="users_red">icon/users_red.png</file>
     </qresource>
 </RCC>

@@ -16,7 +16,7 @@ StatusPushButton::StatusPushButton(QList<int>& componentStateCheckIntervals, con
 
 void StatusPushButton::enterEvent(QEvent*)
 {
-    statusFrame->setGeometry(this->pos().x() + 150, this->pos().y() + 30, 170, 200);
+    statusFrame->setGeometry(this->pos().x() + 150, this->pos().y() + 30, 170, 220);
     statusFrame->show();
 }
 

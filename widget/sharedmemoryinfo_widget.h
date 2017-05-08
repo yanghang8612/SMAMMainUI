@@ -28,6 +28,7 @@ private slots:
 
 private:
     Ui::SharedMemoryInfoWidget *ui;
+    void* sharedMemoryPointer;
     SharedBuffer* buffer;
     bool hexTableChanging;
     bool charTableChanging;

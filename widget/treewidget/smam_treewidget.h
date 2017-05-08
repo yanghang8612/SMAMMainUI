@@ -91,6 +91,7 @@ private:
     QTreeWidgetItem* iGSStatioinTreeRoot;
     QTreeWidgetItem* otherCenterTreeRoot;
     QTreeWidgetItem* memoryTreeRoot;
+    QTreeWidgetItem* dmzTreeRoot;
 
     QVBoxLayout* container;
 	QWidget* currentContentWidget;
@@ -110,6 +111,7 @@ private:
 
 	void initAtBJ();
 	void initAtXJ();
+    void initAtDMZ();
 	QDomDocument getRootFromXMLFile(const QString& filePath);
     void getComponentStateCheckIntervalFromXML();
 	void writeConfigFile();

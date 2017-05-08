@@ -57,6 +57,9 @@ void MainMonitorWidget::updateView() {
         case DeploymentType::XJ_CENTER:
             updateXJView();
             break;
+        case DeploymentType::XJ_DMZ:
+            updateDMZView();
+            break;
         case DeploymentType::BJ_CENTER:
             updateBJView();
             break;
@@ -137,24 +140,29 @@ void MainMonitorWidget::updateXJView()
 
     MainCenter* mainCenter = new MainCenter();
     mainCenter->setCenterName(tr("新疆中心"));
-    CenterNode* mainCenterNode = new CenterNode(mainCenter, 60);
+    CenterNode* mainCenterNode = new CenterNode(mainCenter, 50);
     mainCenterNode->setPos(0, 0);
     scene->addItem(mainCenterNode);
 
-    UsersNode* usersNode = new UsersNode(50);
-    usersNode->setPos(0, -150);
+    DMZNode* dmzNode = new DMZNode(45);
+    dmzNode->setPos(0, -150);
+    scene->addItem(dmzNode);
+    scene->addItem(new Edge(mainCenterNode, dmzNode));
+
+    UsersNode* usersNode = new UsersNode(45);
+    usersNode->setPos(150, -150);
     scene->addItem(usersNode);
-    scene->addItem(new Edge(mainCenterNode, usersNode));
+    scene->addItem(new Edge(dmzNode, usersNode));
 
     FileNode* fileNode = new FileNode(40);
     fileNode->setPos(0, 150);
     scene->addItem(fileNode);
-    scene->addItem(new Edge(mainCenterNode, fileNode));
+    scene->addItem((new Edge(mainCenterNode, fileNode))->setStatus(1));
 
-    HardDriveNode* hardDriveNode = new HardDriveNode(40);
-    hardDriveNode->setPos(150, 150);
-    scene->addItem(hardDriveNode);
-    scene->addItem(new Edge(fileNode, hardDriveNode));
+//    HardDriveNode* hardDriveNode = new HardDriveNode(30);
+//    hardDriveNode->setPos(150, 150);
+//    scene->addItem(hardDriveNode);
+//    scene->addItem(new Edge(fileNode, hardDriveNode));
 
     int stationCount = standardStationList.size();
     if (0 == stationCount) {
@@ -191,12 +199,33 @@ void MainMonitorWidget::updateXJView()
     QPointF topCenterPoint(300, - centerLength / 2 * (centerCount - 1));
     for (int i = 0; i < centerCount; i++) {
         OtherCenter* center = otherCenterList[i];
-        CenterNode* otherCenterNode = new CenterNode(center, 60);
+        CenterNode* otherCenterNode = new CenterNode(center, 50);
         otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
         scene->addItem(otherCenterNode);
         scene->addItem(new Edge(mainCenterNode, otherCenterNode));
         otherCenterNodeList << otherCenterNode;
     }
+}
+
+void MainMonitorWidget::updateDMZView()
+{
+    scene->clear();
+
+    DMZNode* dmzNode = new DMZNode(50);
+    dmzNode->setPos(0, 0);
+    scene->addItem(dmzNode);
+
+    MainCenter* mainCenter = new MainCenter();
+    mainCenter->setCenterName(tr("新疆中心"));
+    CenterNode* mainCenterNode = new CenterNode(mainCenter, 50);
+    mainCenterNode->setPos(-200, 0);
+    scene->addItem(mainCenterNode);
+    scene->addItem(new Edge(dmzNode, mainCenterNode));
+
+    UsersNode* usersNode = new UsersNode(50);
+    usersNode->setPos(200, 0);
+    scene->addItem(usersNode);
+    scene->addItem(new Edge(dmzNode, usersNode));
 }
 
 void MainMonitorWidget::updateBJView()
@@ -207,11 +236,11 @@ void MainMonitorWidget::updateBJView()
 
     MainCenter* mainCenter = new MainCenter();
     mainCenter->setCenterName(tr("北京中心"));
-    CenterNode* mainCenterNode = new CenterNode(mainCenter, 60);
+    CenterNode* mainCenterNode = new CenterNode(mainCenter, 50);
     mainCenterNode->setPos(0, 0);
     scene->addItem(mainCenterNode);
 
-    UsersNode* usersNode = new UsersNode(50);
+    UsersNode* usersNode = new UsersNode(45);
     usersNode->setPos(0, -150);
     scene->addItem(usersNode);
     scene->addItem(new Edge(mainCenterNode, usersNode));
@@ -219,12 +248,12 @@ void MainMonitorWidget::updateBJView()
     FileNode* fileNode = new FileNode(40);
     fileNode->setPos(0, 150);
     scene->addItem(fileNode);
-    scene->addItem(new Edge(mainCenterNode, fileNode));
+    scene->addItem((new Edge(mainCenterNode, fileNode))->setStatus(1));
 
-    HardDriveNode* hardDriveNode = new HardDriveNode(40);
-    hardDriveNode->setPos(150, 150);
-    scene->addItem(hardDriveNode);
-    scene->addItem(new Edge(fileNode, hardDriveNode));
+//    HardDriveNode* hardDriveNode = new HardDriveNode(30);
+//    hardDriveNode->setPos(150, 150);
+//    scene->addItem(hardDriveNode);
+//    scene->addItem(new Edge(fileNode, hardDriveNode));
 
     int stationCount = iGMASStationList.size();
     if (0 == stationCount) {
@@ -254,7 +283,7 @@ void MainMonitorWidget::updateBJView()
     QPointF topCenterPoint(300, - centerLength / 2 * (centerCount - 1));
     for (int i = 0; i < centerCount; i++) {
         OtherCenter* center = otherCenterList[i];
-        CenterNode* otherCenterNode = new CenterNode(center, 60);
+        CenterNode* otherCenterNode = new CenterNode(center, 50);
         otherCenterNode->setPos(topCenterPoint + QPointF(0, centerLength * i));
         scene->addItem(otherCenterNode);
         scene->addItem(new Edge(mainCenterNode, otherCenterNode));

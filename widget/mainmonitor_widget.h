@@ -17,6 +17,7 @@
 #include "graphicsitem/filenode.h"
 #include "graphicsitem/harddrivenode.h"
 #include "graphicsitem/usersnode.h"
+#include "graphicsitem/dmznode.h"
 
 namespace Ui {
 class MainMonitorWidget;
@@ -57,6 +58,7 @@ private:
     QTimer* deviceTransferStateCheckTimer;
 
     void updateXJView();
+    void updateDMZView();
     void updateBJView();
 };
 

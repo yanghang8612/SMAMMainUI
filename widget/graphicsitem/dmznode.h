@@ -1,14 +1,14 @@
-#ifndef USERSNODE_H
-#define USERSNODE_H
+#ifndef DMZNODE_H
+#define DMZNODE_H
 
 #include "basenode.h"
 
-class UsersNode :public QObject, public BaseNode
+class DMZNode : public QObject, public BaseNode
 {
     Q_OBJECT
 
 public:
-    UsersNode(quint8 length);
+    DMZNode(quint8 length);
 
     virtual QRectF boundingRect() const;
     virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
@@ -17,4 +17,4 @@ protected:
     void timerEvent(QTimerEvent* event);
 };
 
-#endif // USERSNODE_H
+#endif // DMZNODE_H

@@ -34,6 +34,9 @@ void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
         DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
         for (int i = 0; i < COMPONENT_COUNT; i++) {
             if ((++componentStateCheckCountdown[i]) == componentStateCheckIntervals[i]) {
+                if (dllStatus[COMPONENT_STATEARRAY_INDEX[i]] == 0) {
+                    continue;
+                }
                 componentStateCheckCountdown[i] = 0;
                 componentStatus[i] = true;
                 for (int j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
