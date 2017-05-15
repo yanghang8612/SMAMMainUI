@@ -30,12 +30,12 @@ extern "C" bool DllMain(int args, char* argv[])
     DllStateWriteThread* dllStateWriteThread = new DllStateWriteThread();
     dllStateWriteThread->start();
 
-    otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
-                                                        OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
-
     if (args > 0 && qstrcmp(argv[0], "XJ") == 0) {
         receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
                                                          RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
+
+        otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
+                                                            OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
 
         DMZSharedBufferPointer = FindMemoryInfoFunc(DMZ_SHAREDBUFFER_ID, 1);
 
@@ -45,7 +45,18 @@ extern "C" bool DllMain(int args, char* argv[])
         iGMASSharedBufferPointer = FindMemoryInfoFunc(IGMAS_SHAREDBUFFER_ID,
                                                       IGMAS_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASStationInBuffer));
 
+        otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
+                                                            OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
+
         widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
+    }
+    else if (args > 0 && qstrcmp(argv[0], "DMZ") == 0) {
+        receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
+                                                         RECEIVER_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
+
+        DMZSharedBufferPointer = FindMemoryInfoFunc(DMZ_SHAREDBUFFER_ID, 1);
+
+        widget = new SystemManagerWidget(DeploymentType::XJ_DMZ);
     }
     else {
         qDebug() << "SMAMMainUI:" << "No appropriate deployment type according to parameter 'argv'";
@@ -69,6 +80,10 @@ extern "C" bool DllInit(int, char*)
                                                    RECEIVER_STATE_SHAREDBUFFER_ID,
                                                    RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState) + sizeof(int));
 
+            otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                      OTHERCENTER_STATE_SHAREDBUFFER_ID,
+                                                      OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
+
             userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
                                                       USER_REGISTER_INFO_SHAREDBUFFER_ID,
                                                       USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo) + sizeof(int));
@@ -81,12 +96,20 @@ extern "C" bool DllInit(int, char*)
             iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
                                                 IGMAS_STATE_SHAREDBUFFER_ID,
                                                 IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState) + sizeof(int));
-            break;
-    }
-    otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
-                                              OTHERCENTER_STATE_SHAREDBUFFER_ID,
-                                              OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
 
+            otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
+                                                      OTHERCENTER_STATE_SHAREDBUFFER_ID,
+                                                      OTHERCENTER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
+            break;
+        case DeploymentType::XJ_DMZ:
+            userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_ID,
+                                                      USER_REGISTER_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserBasicInfo) + sizeof(int));
+
+            userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_ID,
+                                                      USER_REALTIME_INFO_SHAREDBUFFER_MAXITEMCOUNT * sizeof(UserLoginInfo) + sizeof(int));
+    }
     return true;
 }
 

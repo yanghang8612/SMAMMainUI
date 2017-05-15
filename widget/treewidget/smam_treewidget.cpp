@@ -307,12 +307,13 @@ void SMAMTreeWidget::showModifyStandardStationDialog()
 
 void SMAMTreeWidget::modifyStandardStation(StandardStation* station)
 {
-	addWidgetToContainer(tree->currentItem());
+    //addWidgetToContainer(tree->currentItem());
+    tree->currentItem()->setText(0, station->getStationName());
 
 	int index = tree->currentIndex().row();
     QDomNode standardStationNode = standardStationRoot.childNodes().at(index);
 
-	QDomElement stationName = root.createElement("STATIONNAME");
+    QDomElement stationName = root.createElement("STATIONNAME");
 	stationName.appendChild(root.createTextNode(station->getStationName()));
     standardStationNode.replaceChild(stationName, standardStationNode.namedItem("STATIONNAME"));
 
@@ -331,11 +332,11 @@ void SMAMTreeWidget::deleteStandardStation()
 {
 	StandardStation* station = (StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
     QString content = tr("确认删除基准站 ") + station->getStationName() + tr(" 吗？");
-	int ret = QMessageBox::warning(tree,
-								   tr("提示"),
-                                   content,
-								   QMessageBox::Cancel | QMessageBox::Ok);
-	if (ret == QMessageBox::Ok) {
+    QMessageBox box(QMessageBox::Warning, "提示", content);
+    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    box.setButtonText(QMessageBox::Cancel , "取消");
+    box.setButtonText(QMessageBox::Ok , "确认");
+    if (box.exec() == QMessageBox::Ok) {
         standardStationList.removeAt(tree->currentIndex().row());
         standardStationRoot.removeChild(standardStationRoot.childNodes().at(tree->currentIndex().row()));
 		delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
@@ -345,11 +346,11 @@ void SMAMTreeWidget::deleteStandardStation()
 
 void SMAMTreeWidget::showAddNewReceiverDialog()
 {
-    if (((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() > MAX_RECEIVER_COUNT_PERSTATION) {
-        QMessageBox::warning(tree,
-                             tr("提示"),
-                             tr("超过最大单个基准站所能容纳接收机数目。"),
-                             QMessageBox::Ok);
+    if (((StandardStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>())->getReceivers().size() >= MAX_RECEIVER_COUNT_PERSTATION) {
+        QMessageBox box(QMessageBox::Warning, "提示", "超过最大单个基准站所能容纳接收机数目。");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok , "确认");
+        box.exec();
     }
     else {
         AddReceiverDialog* dialog = new AddReceiverDialog(tree);
@@ -420,7 +421,8 @@ void SMAMTreeWidget::showModifyReceiverDialog()
 
 void SMAMTreeWidget::modifyReceiver(Receiver* receiver)
 {
-	addWidgetToContainer(tree->currentItem());
+    //addWidgetToContainer(tree->currentItem());
+    tree->currentItem()->setText(0, receiver->getReceiverName());
 
     int parentNodeIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
 	int nodeIndex = tree->currentIndex().row();
@@ -473,11 +475,11 @@ void SMAMTreeWidget::deleteReceiver()
 {
 	Receiver* receiver = (Receiver*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
     QString content = tr("确认删除接受机 ") + receiver->getReceiverName() + tr(" 吗？");
-	int ret = QMessageBox::warning(tree,
-								   tr("提示"),
-                                   content,
-								   QMessageBox::Cancel | QMessageBox::Ok);
-	if (ret == QMessageBox::Ok) {
+    QMessageBox box(QMessageBox::Warning, "提示", content);
+    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    box.setButtonText(QMessageBox::Cancel , "取消");
+    box.setButtonText(QMessageBox::Ok , "确认");
+    if (box.exec() == QMessageBox::Ok) {
         if (FindMemoryInfoFunc != 0) {
             SharedBuffer(
                         SharedBuffer::LOOP_BUFFER,
@@ -497,10 +499,10 @@ void SMAMTreeWidget::deleteReceiver()
 void SMAMTreeWidget::showAddNewIGMASStationDialog()
 {
     if (iGMASStationList.size() > IGMAS_SHAREDBUFFER_MAXITEMCOUNT) {
-        QMessageBox::warning(tree,
-                             tr("提示"),
-                             tr("超过最大单个中心所能容纳的IGMAS站数目。"),
-                             QMessageBox::Ok);
+        QMessageBox box(QMessageBox::Warning, "提示", "超过最大单个中心所能容纳的IGMAS站数目。");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok , "确认");
+        box.exec();
     }
     else {
         AddIGMASStationDialog* dialog = new AddIGMASStationDialog(tree);
@@ -571,7 +573,8 @@ void SMAMTreeWidget::showModifyIGMASStationDialog()
 
 void SMAMTreeWidget::modifyIGMASStation(IGMASStation* station)
 {
-    addWidgetToContainer(tree->currentItem());
+    //addWidgetToContainer(tree->currentItem());
+    tree->currentItem()->setText(0, station->getMount());
 
     int index = tree->currentIndex().row();
     QDomNode iGMASStationNode = iGMASStationRoot.childNodes().at(index);
@@ -623,11 +626,11 @@ void SMAMTreeWidget::deleteIGMASStation()
 {
     IGMASStation* station = (IGMASStation*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
     QString content = tr("确认删除iGMAS测站 ") + station->getMount() + tr(" 吗？");
-    int ret = QMessageBox::warning(tree,
-                                   tr("提示"),
-                                   content,
-                                   QMessageBox::Cancel | QMessageBox::Ok);
-    if (ret == QMessageBox::Ok) {
+    QMessageBox box(QMessageBox::Warning, "提示", content);
+    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    box.setButtonText(QMessageBox::Cancel , "取消");
+    box.setButtonText(QMessageBox::Ok , "确认");
+    if (box.exec() == QMessageBox::Ok) {
         if (FindMemoryInfoFunc != 0) {
             SharedBuffer(
                         SharedBuffer::LOOP_BUFFER,
@@ -669,9 +672,17 @@ void SMAMTreeWidget::deleteIGSStation()
 
 void SMAMTreeWidget::showAddNewCenterDialog()
 {
-    AddCenterDialog* dialog = new AddCenterDialog(tree);
-    connect(dialog, SIGNAL(confirmButtonClicked(OtherCenter*)), this, SLOT(addNewCenter(OtherCenter*)));
-    dialog->show();
+    if (otherCenterList.size() > OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT) {
+        QMessageBox box(QMessageBox::Warning, "提示", "超过最大其他中心数目。");
+        box.setStandardButtons(QMessageBox::Ok);
+        box.setButtonText(QMessageBox::Ok , "确认");
+        box.exec();
+    }
+    else {
+        AddCenterDialog* dialog = new AddCenterDialog(tree);
+        connect(dialog, SIGNAL(confirmButtonClicked(OtherCenter*)), this, SLOT(addNewCenter(OtherCenter*)));
+        dialog->show();
+    }
 }
 
 void SMAMTreeWidget::addNewCenter(OtherCenter* center)
@@ -755,11 +766,11 @@ void SMAMTreeWidget::deleteCenter()
 {
     OtherCenter* center = (OtherCenter*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
     QString content = tr("确认删除其他中心 ") + center->getCenterName() + tr(" 吗？");
-    int ret = QMessageBox::warning(tree,
-                                   tr("提示"),
-                                   content,
-                                   QMessageBox::Cancel | QMessageBox::Ok);
-    if (ret == QMessageBox::Ok) {
+    QMessageBox box(QMessageBox::Warning, "提示", content);
+    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    box.setButtonText(QMessageBox::Cancel , "取消");
+    box.setButtonText(QMessageBox::Ok , "确认");
+    if (box.exec() == QMessageBox::Ok) {
         otherCenterList.removeAt(tree->currentIndex().row());
         otherCenterRoot.removeChild(otherCenterRoot.childNodes().at(tree->currentIndex().row()));
         delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());

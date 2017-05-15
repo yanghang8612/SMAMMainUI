@@ -141,7 +141,7 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     receiverInBuffer.latitude = latitude;
     receiverInBuffer.height = height;
     qMemCopy(receiverInBuffer.detail, detail.toStdString().c_str(), detail.length());
-    qMemCopy(receiverInBuffer.mount, mount.toStdString().c_str(), mount.length());
+    qMemCopy(receiverInBuffer.mount, ("/" + mount).toStdString().c_str(), mount.length() + 1);
     return receiverInBuffer;
 }
 

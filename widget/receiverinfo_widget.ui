@@ -45,7 +45,10 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>接收机端口(DEC)：</string>
+        <string>端口(DEC)：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>receiverPortEdit</cstring>
@@ -68,7 +71,10 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>接收机名称：</string>
+        <string>名称：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>receiverNameEdit</cstring>
@@ -91,7 +97,10 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>接收机IP(DEC)：    </string>
+        <string>IP(DEC)：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
        <property name="buddy">
         <cstring>receiverIPEdit</cstring>
@@ -114,7 +123,10 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
-        <string>接收机挂载点：</string>
+        <string>挂载点：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
@@ -157,6 +169,9 @@
        <property name="text">
         <string>经度(度)：</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -177,6 +192,9 @@
        <property name="text">
         <string>纬度(度)：</string>
        </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
      </item>
      <item row="1" column="1">
@@ -196,6 +214,9 @@
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>高度(米)：</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

@@ -1,4 +1,7 @@
 #include <QMessageBox>
+#include <QScrollBar>
+#include <QWheelEvent>
+#include <QDebug>
 
 #include "sharedmemoryinfo_widget.h"
 #include "ui_sharedmemoryinfo_widget.h"
@@ -15,10 +18,12 @@ SharedMemoryInfoWidget::SharedMemoryInfoWidget(QWidget *parent) :
     ui->memoryHexInfoTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->memoryHexInfoTable->setShowGrid(false);
     ui->memoryHexInfoTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->memoryHexInfoTable->verticalScrollBar()->installEventFilter(this);
     ui->memoryCharInfoTable->setColumnCount(16);
     ui->memoryCharInfoTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->memoryCharInfoTable->setShowGrid(false);
     ui->memoryCharInfoTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->memoryCharInfoTable->verticalScrollBar()->installEventFilter(this);
 }
 
 SharedMemoryInfoWidget::~SharedMemoryInfoWidget()
@@ -30,6 +35,24 @@ void SharedMemoryInfoWidget::timerEvent(QTimerEvent* event)
 {
     Q_UNUSED(event);
     updateView();
+}
+
+bool SharedMemoryInfoWidget::eventFilter(QObject* target, QEvent* event)
+{
+    if(event->type() == QEvent::Wheel)
+    {
+        QScrollBar* scrollBar;
+        if (target == ui->memoryHexInfoTable->verticalScrollBar()){
+            scrollBar = ui->memoryCharInfoTable->verticalScrollBar();
+        }
+        if (target == ui->memoryCharInfoTable->verticalScrollBar()){
+            scrollBar = ui->memoryCharInfoTable->verticalScrollBar();
+        }
+        QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
+        scrollBar->setValue(scrollBar->value() - wheelEvent->delta() / 40);
+        return true;
+    }
+    return QTabWidget::eventFilter(target, event);
 }
 
 void SharedMemoryInfoWidget::on_viewButton_clicked()
@@ -123,7 +146,7 @@ void SharedMemoryInfoWidget::updateView()
         }
     }
     else {
-        quint32 bufferSize = 666666;
+        quint32 bufferSize = 6666;
         ui->memoryHexInfoTable->setRowCount((int)(bufferSize / 16) + 1);
         ui->memoryCharInfoTable->setRowCount((int)(bufferSize / 16) + 1);
         quint8* dataStartPointer = (quint8*) sharedMemoryPointer;

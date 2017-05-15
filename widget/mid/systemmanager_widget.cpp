@@ -73,9 +73,7 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
     }
     ui->diskBar->setValue(getUsedDiskSize());
     ui->diskValue->setText(QString::number(getTotalDiskSize() - getUsedDiskSize()) + "MB");
-	QDateTime time = QDateTime::currentDateTime();
-	ui->dateLabel->setText(time.toString(DATE_FORMAT_STRING));
-    ui->timeLabel->setText(time.toString(TIME_FORMAT_STRING));
+    ui->dateTimeLabel->setText(QDateTime::currentDateTime().toString(DATETIME_FORMAT_STRING));
 
     if (userRegisterInfoSharedBufferPointer != 0) {
         ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));

@@ -19,6 +19,7 @@ public:
 
 protected:
     void timerEvent(QTimerEvent* event);
+    bool eventFilter(QObject* target, QEvent* event);
 
 private slots:
     void on_viewButton_clicked();

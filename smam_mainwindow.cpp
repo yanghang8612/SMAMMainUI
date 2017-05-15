@@ -1,4 +1,6 @@
-﻿#include "smam_mainwindow.h"
+﻿#include <QDebug>
+
+#include "smam_mainwindow.h"
 #include "ui_smam_mainwindow.h"
 
 #include "menu/bj_menu.h"
@@ -15,14 +17,16 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
 
     menu = new XJMenu(this);
 
-    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::XJ_DMZ, this);
+    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::XJ_CENTER, this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));
 
     systemManagerSub = ui->mdiArea->addSubWindow(managerWidget);
+    systemManagerSub->setSystemMenu(0);
+    systemManagerSub->setWindowFlags(systemManagerSub->windowFlags()&~Qt::WindowMaximizeButtonHint&~Qt::WindowMinimizeButtonHint);
 	systemManagerSub->setWindowTitle(tr("系统管理"));
     //systemManagerSub->resize(1280, 760);
     systemManagerSub->setGeometry(0, 0, 1280, 760);
-    //systemManagerSub->setFixedSize(1280, 760);
+    systemManagerSub->setFixedSize(1280, 760);
     //systemManagerSub->setWindowModified(false);
     systemManagerSub->setWindowIcon(QIcon(":/manager"));
     systemManagerSub->show();

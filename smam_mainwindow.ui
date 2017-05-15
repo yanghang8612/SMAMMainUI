@@ -13,11 +13,6 @@
   <property name="windowTitle">
    <string>北斗增强与辅助定位软件</string>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QMainWindow{
-  background-color: rgb(240, 240, 240);
-}</string>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QMdiArea" name="mdiArea">
     <property name="geometry">
@@ -36,7 +31,7 @@
      <x>0</x>
      <y>0</y>
      <width>1440</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="font">

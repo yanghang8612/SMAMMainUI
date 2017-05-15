@@ -19,7 +19,7 @@ QRectF DMZNode::boundingRect() const
     return QRectF(-length / 2, -length / 2, length + 30, length + 30);
 }
 
-void DMZNode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void DMZNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
     QString imageName;
     switch (status) {

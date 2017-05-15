@@ -9,7 +9,7 @@ class BaseNode;
 
 class Edge : public QObject, public QGraphicsItem
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
 	Edge(BaseNode* sourceNode, BaseNode* destNode);

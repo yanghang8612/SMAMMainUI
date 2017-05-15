@@ -85,8 +85,10 @@ void MainMonitorWidget::updateDeviceConnectState()
                 for (int i = 0; i < receiverNodeList.size(); i++) {
                     bool isConnected = false;
                     for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
-                        if (receiverState[j].isConnected && qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0)
+                        if (receiverState[j].isConnected && qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0) {
                             isConnected = true;
+                            break;
+                        }
                     }
                     receiverNodeList[i]->setStatus(isConnected ? 1 : 2);
                 }
@@ -108,6 +110,8 @@ void MainMonitorWidget::updateDeviceConnectState()
                     }
                 }
             }
+            break;
+        case DeploymentType::XJ_DMZ:
             break;
     }
     if (otherCenterStateSharedBuffer == 0) {
