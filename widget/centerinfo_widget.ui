@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
-    <string>其他中心基本信息</string>
+    <string>数据中心基本信息</string>
    </attribute>
    <widget class="QGroupBox" name="verticalGroupBox">
     <property name="geometry">
@@ -49,7 +49,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>其他中心信息</string>
+     <string>数据中心信息</string>
     </property>
     <layout class="QGridLayout" name="gridLayout">
      <property name="topMargin">

@@ -45,7 +45,7 @@ void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
             imageName = ":/receiver_green";
             break;
         case 2:
-            imageName = ":/receiver_red";
+            imageName = ":/receiver_normal";
             break;
         default:
             break;

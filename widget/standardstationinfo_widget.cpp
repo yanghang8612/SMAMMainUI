@@ -16,13 +16,7 @@ StandardStationInfoWidget::StandardStationInfoWidget(QWidget *parent) :
 	ui->receiverTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 	ui->receiverTable->verticalHeader()->setVisible(false);
 
-    if (receiverStateSharedBufferPointer != 0) {
-        qMemCopy(receiverState,
-                 (char*) receiverStateSharedBufferPointer + 4,
-                 RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
-
-        startTimer(DEVICE_CONNECT_STATE_CHECK_TIMEINTERVAL);
-    }
+    startTimer(DEVICE_CONNECT_STATE_CHECK_TIMEINTERVAL);
 }
 
 StandardStationInfoWidget::~StandardStationInfoWidget()
@@ -51,16 +45,22 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
     }
 }
 
-void StandardStationInfoWidget::timerEvent(QTimerEvent *event)
+void StandardStationInfoWidget::timerEvent(QTimerEvent*)
 {
-    for (int i = 0; i < station->getReceivers().size(); i++) {
-        bool isConnected = false;
-        for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
-            if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMount().toStdString().c_str(), receiverState[j].mount) == 0) {
-                isConnected = true;
-                break;
+    if (receiverStateSharedBufferPointer != 0) {
+        qMemCopy(receiverState,
+                 (char*) receiverStateSharedBufferPointer + 4,
+                 RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
+
+        for (int i = 0; i < station->getReceivers().size(); i++) {
+            bool isConnected = false;
+            for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
+                if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMount().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
+                    isConnected = true;
+                    break;
+                }
             }
+            ui->receiverTable->item(i, 3)->setText(isConnected ? "在线" : "离线");
         }
-        ui->receiverTable->item(i, 3)->setText(isConnected ? "在线" : "离线");
     }
 }

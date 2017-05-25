@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QProcess>
 #include <unistd.h>
+#include <QTextStream>
 
 #include "utilies/shared_buffer.h"
 #include "widget/treewidget/smam_treewidget.h"
@@ -38,6 +39,7 @@ private:
     StatusPushButton* softwareStatus;
     QProcess* proc;
     SharedBuffer* messageBuffers[COMPONENT_COUNT];
+    QTextStream* out;
 };
 
 #endif // SYSTEMMANAGER_WIDGET_H

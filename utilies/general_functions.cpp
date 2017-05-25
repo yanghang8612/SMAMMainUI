@@ -9,7 +9,7 @@ const QRegExp GeneralFunctions::ipAddressRX("^(?:(?:25[0-5]|2[0-4]\\d|1\\d{2}|[1
 const QRegExp GeneralFunctions::longitudeRX("^[+-]?(?:1[0-7]\\d|[1-9]?\\d)(?:\\.\\d{2,})$");
 const QRegExp GeneralFunctions::latitudeRX("^[+-]?(?:[1-8]?\\d)(?:\\.\\d{2,})$");
 const QRegExp GeneralFunctions::heightRX("^[+-]?(?:(?:[1-9]\\d*|0)\\.\\d{2,})$");
-const QRegExp GeneralFunctions::mountRX("^(?:[0-9A-Z]{4})$");
+const QRegExp GeneralFunctions::mountRX("^(?:[a-zA-Z0-9]{4,10})$");
 const QRegExp GeneralFunctions::memIDRX("^(?:\\d+)$");
 const QRegExp GeneralFunctions::userNameRX("^[a-zA-Z0-9].+$");
 const QRegExp GeneralFunctions::passwordRX("^.{4,}$");

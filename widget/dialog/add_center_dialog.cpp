@@ -8,7 +8,7 @@ AddCenterDialog::AddCenterDialog(QWidget *parent) :
     ui(new Ui::AddCenterDialog)
 {
     ui->setupUi(this);
-    setWindowTitle(tr("添加其他中心"));
+    setWindowTitle(tr("添加数据中心"));
 }
 
 AddCenterDialog::~AddCenterDialog()

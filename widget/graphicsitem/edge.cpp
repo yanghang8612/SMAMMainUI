@@ -111,7 +111,7 @@ void Edge::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
             lineColor = Qt::darkGreen;
             break;
         case 2:
-            lineColor = Qt::darkRed;
+            lineColor = Qt::black;
             break;
         default:
             break;

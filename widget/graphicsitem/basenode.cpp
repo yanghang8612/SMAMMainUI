@@ -25,9 +25,11 @@ void BaseNode::transformData()
 
 void BaseNode::setStatus(quint8 status)
 {
-	this->status = status;
-    prepareGeometryChange();
-    update();
+    if (this->status != status) {
+        this->status = status;
+        prepareGeometryChange();
+        update();
+    }
 }
 
 quint8 BaseNode::getStatus() const

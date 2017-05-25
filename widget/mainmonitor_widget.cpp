@@ -85,7 +85,7 @@ void MainMonitorWidget::updateDeviceConnectState()
                 for (int i = 0; i < receiverNodeList.size(); i++) {
                     bool isConnected = false;
                     for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
-                        if (receiverState[j].isConnected && qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount) == 0) {
+                        if (receiverState[j].isConnected && qstrcmp(receiverNodeList[i]->getReceiverMount().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
                             isConnected = true;
                             break;
                         }
@@ -102,12 +102,19 @@ void MainMonitorWidget::updateDeviceConnectState()
                                                                                                      sizeof(IGMASState));
             }
             else {
-                iGMASStateSharedBuffer->readData((void*) iGMASState);
-                for (int i = 0; i < iGMASStationList.size(); i++) {
-                    for (quint32 j = 0; j < iGMASStateSharedBuffer->getItemCount(); j++) {
-                        if (qstrcmp(iGMASNodeList[i]->getStationIPAddress().toStdString().c_str(), iGMASState[j].ipAddress) == 0)
-                            iGMASNodeList[i]->setStatus(iGMASState[j].isConnected ? 1 : 2);
+                qMemCopy(iGMASState,
+                         (char*) iGMASStateSharedBufferPointer + 4,
+                         IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(IGMASState));
+                for (int i = 0; i < iGMASNodeList.size(); i++) {
+                    bool isConnected = false;
+                    for (quint32 j = 0; j < IGMAS_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
+                        if (iGMASState[j].isConnected && qstrcmp(iGMASNodeList[i]->getStationIPAddress().toStdString().c_str(), iGMASState[j].ipAddress) == 0) {
+                            isConnected = true;
+                            break;
+                        }
+
                     }
+                    iGMASNodeList[i]->setStatus(isConnected ? 1 : 2);
                 }
             }
             break;
@@ -272,9 +279,7 @@ void MainMonitorWidget::updateBJView()
         IGMASNode* stationNode = new IGMASNode(station, stationLength * 0.5);
         stationNode->setPos(((i > 9) ? lineTwoTopStationPoint : lineOneTopStationPoint) + QPointF(0, stationLength * (i % 10)));
         scene->addItem(stationNode);
-        if (i < 10) {
-            scene->addItem(new Edge(stationNode, mainCenterNode));
-        }
+        scene->addItem(new Edge(stationNode, mainCenterNode));
         iGMASNodeList << stationNode;
     }
 

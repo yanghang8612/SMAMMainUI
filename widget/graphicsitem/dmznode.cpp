@@ -30,7 +30,7 @@ void DMZNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*
             imageName = ":/dmz_green";
             break;
         case 2:
-            imageName = ":/dmz_red";
+            imageName = ":/dmz_normal";
             break;
         default:
             break;

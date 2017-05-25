@@ -24,7 +24,7 @@ void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget
             imageName = ":/saved_file_green";
             break;
         case 2:
-            imageName = ":/saved_file_red";
+            imageName = ":/saved_file_normal";
             break;
         default:
             break;

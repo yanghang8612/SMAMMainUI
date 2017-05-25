@@ -35,7 +35,7 @@ void CenterNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidg
             imageName = ":/center_green";
             break;
         case 2:
-            imageName = ":/center_red";
+            imageName = ":/center_normal";
             break;
         default:
             break;

@@ -14,7 +14,7 @@ ModifyCenterDialog::ModifyCenterDialog(OtherCenter* center, QWidget *parent) :
     ui->centerIPEdit->setText(center->getIpAddress());
     ui->centerPortEdit->setText(QString::number(center->getPort()));
     ui->centerDetailEdit->setText(center->getDetail());
-    setWindowTitle(tr("编辑其他中心信息"));
+    setWindowTitle(tr("编辑数据中心信息"));
 }
 
 ModifyCenterDialog::~ModifyCenterDialog()

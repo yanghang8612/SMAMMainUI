@@ -186,17 +186,17 @@ void SMAMTreeWidget::showRightMenu(QPoint pos)
         }
         case CENTERROOT_TREEITEM_TYPE:
         {
-            QAction* addNewCenter = new QAction(tr("添加其他中心"), this);
+            QAction* addNewCenter = new QAction(tr("添加数据中心"), this);
             connect(addNewCenter, SIGNAL(triggered(bool)), this, SLOT(showAddNewCenterDialog()));
             popMenu->addAction(addNewCenter);
             break;
         }
         case CENTERNODE_TREEITEM_TYPE:
         {
-            QAction* modifyCenter = new QAction(tr("编辑其他中心"), this);
+            QAction* modifyCenter = new QAction(tr("编辑数据中心"), this);
             connect(modifyCenter, SIGNAL(triggered(bool)), this, SLOT(showModifyCenterDialog()));
             popMenu->addAction(modifyCenter);
-            QAction* deleteCenter = new QAction(tr("删除其他中心"), this);
+            QAction* deleteCenter = new QAction(tr("删除数据中心"), this);
             connect(deleteCenter, SIGNAL(triggered(bool)), this, SLOT(deleteCenter()));
             popMenu->addAction(deleteCenter);
             break;
@@ -673,7 +673,7 @@ void SMAMTreeWidget::deleteIGSStation()
 void SMAMTreeWidget::showAddNewCenterDialog()
 {
     if (otherCenterList.size() > OTHERCENTER_SHAREDBUFFER_MAXITEMCOUNT) {
-        QMessageBox box(QMessageBox::Warning, "提示", "超过最大其他中心数目。");
+        QMessageBox box(QMessageBox::Warning, "提示", "超过最大数据中心数目。");
         box.setStandardButtons(QMessageBox::Ok);
         box.setButtonText(QMessageBox::Ok , "确认");
         box.exec();
@@ -730,7 +730,8 @@ void SMAMTreeWidget::showModifyCenterDialog()
 
 void SMAMTreeWidget::modifyCenter(OtherCenter* center)
 {
-    addWidgetToContainer(tree->currentItem());
+    //addWidgetToContainer(tree->currentItem());
+    tree->currentItem()->setText(0, center->getCenterName());
 
     int index = tree->currentIndex().row();
     QDomNode centerNode = otherCenterRoot.childNodes().at(index);
@@ -765,7 +766,7 @@ void SMAMTreeWidget::modifyCenter(OtherCenter* center)
 void SMAMTreeWidget::deleteCenter()
 {
     OtherCenter* center = (OtherCenter*) tree->currentItem()->data(0, Qt::UserRole).value<void*>();\
-    QString content = tr("确认删除其他中心 ") + center->getCenterName() + tr(" 吗？");
+    QString content = tr("确认删除数据中心 ") + center->getCenterName() + tr(" 吗？");
     QMessageBox box(QMessageBox::Warning, "提示", content);
     box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
     box.setButtonText(QMessageBox::Cancel , "取消");
@@ -820,7 +821,7 @@ void SMAMTreeWidget::initAtBJ()
 
     //Create other centers root of QTreewidget
     otherCenterTreeRoot = new QTreeWidgetItem(CENTERROOT_TREEITEM_TYPE);
-    otherCenterTreeRoot->setText(0, tr("其他中心管理"));
+    otherCenterTreeRoot->setText(0, tr("数据中心"));
     otherCenterTreeRoot->setIcon(0, QIcon(":/center_root"));
 
     //Read other centers information from config xml file
@@ -931,7 +932,7 @@ void SMAMTreeWidget::initAtXJ()
 
     //Create other centers root of QTreewidget
     otherCenterTreeRoot = new QTreeWidgetItem(CENTERROOT_TREEITEM_TYPE);
-    otherCenterTreeRoot->setText(0, tr("其他中心管理"));
+    otherCenterTreeRoot->setText(0, tr("数据中心"));
     otherCenterTreeRoot->setIcon(0, QIcon(":/center_root"));
 
     //Read other centers information from config xml file

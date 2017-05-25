@@ -3,6 +3,8 @@
 #include <QTimer>
 #include <QStringList>
 #include <QDebug>
+#include <QDateTime>
+#include <QFile>
 
 #include "systemmanager_widget.h"
 #include "ui_systemmanager_widget.h"
@@ -26,6 +28,9 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 	QWidget(parent),
 	ui(new Ui::SystemManagerWidget)
 {   
+    QFile* file = new QFile("mem");
+    file->open(QIODevice::WriteOnly | QIODevice::Text);
+    out = new QTextStream(file);
 	ui->setupUi(this);
 	ui->infoOutputTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
 	ui->infoOutputTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
@@ -43,7 +48,7 @@ SystemManagerWidget::SystemManagerWidget(DeploymentType::Value type, QWidget *pa
 
     QTimer* messageReceiverTimer = new QTimer(this);
     connect(messageReceiverTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
-    messageReceiverTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
+    //messageReceiverTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
     softwareStatus = new StatusPushButton(treeWidget->getComponentStateCheckIntervals(), QIcon(":/status_green"), tr("软件运行状态"), this);
@@ -70,6 +75,8 @@ void SystemManagerWidget::timerEvent(QTimerEvent*)
         ui->cpuValue->setText(array[startIndex] + "%");
         ui->memBar->setValue(array[startIndex + 1].toDouble() * 10);
         ui->memValue->setText(array[startIndex + 1] + "%");
+        (*out) << QDateTime::currentDateTime().toString(DATETIME_FORMAT_STRING) << " " << array[startIndex - 3] << "\n";
+        out->flush();
     }
     ui->diskBar->setValue(getUsedDiskSize());
     ui->diskValue->setText(QString::number(getTotalDiskSize() - getUsedDiskSize()) + "MB");
@@ -92,20 +99,18 @@ void SystemManagerWidget::addMessageToInfoContainer()
                                                                                                    componentStateSharedBufferPointer[i]);
         }
     }
-    int currentRowCount = ui->infoOutputTable->rowCount();
     for (int i = 0; i < 6; ++i) {
         while (true) {
             SoftWorkStatus status;
             if (messageBuffers[i] == 0 || messageBuffers[i]->readData(&status, sizeof(status)) == 0) {
                 break;
             }
+            int currentRowCount = ui->infoOutputTable->rowCount();
             if (currentRowCount == MESSAGE_MAX_COUNT) {
-                ui->infoOutputTable->removeColumn(0);
+                ui->infoOutputTable->removeRow(0);
                 currentRowCount -= 1;
             }
-            else {
-                ui->infoOutputTable->setRowCount(currentRowCount + 1);
-            }
+            ui->infoOutputTable->setRowCount(currentRowCount + 1);
             ui->infoOutputTable->setItem(currentRowCount, 0, new QTableWidgetItem(QDateTime::fromTime_t(status.messageTime).toString(DATETIME_FORMAT_STRING)));
             QString iconName;
             switch (status.messageType) {

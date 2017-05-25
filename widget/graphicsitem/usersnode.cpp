@@ -26,7 +26,7 @@ void UsersNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
             imageName = ":/users_green";
             break;
         case 2:
-            imageName = ":/users_red";
+            imageName = ":/users_normal";
             break;
         default:
             break;

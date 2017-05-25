@@ -83,11 +83,11 @@ QWidget {
         <number>0</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="onlineUserCountLayout">
+        <layout class="QVBoxLayout" name="registerUserCountLayout">
          <item>
-          <widget class="QLabel" name="onlineUserCountLabel">
+          <widget class="QLabel" name="registeredUserCountLabel">
            <property name="text">
-            <string>当前在线用户数</string>
+            <string>注册用户数量</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -95,7 +95,7 @@ QWidget {
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="onlineUserCount">
+          <widget class="QLCDNumber" name="registeredUserCount">
            <property name="mode">
             <enum>QLCDNumber::Dec</enum>
            </property>
@@ -107,11 +107,11 @@ QWidget {
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="registerUserCountLayout">
+        <layout class="QVBoxLayout" name="onlineUserCountLayout">
          <item>
-          <widget class="QLabel" name="registeredUserCountLabel">
+          <widget class="QLabel" name="onlineUserCountLabel">
            <property name="text">
-            <string>注册用户数</string>
+            <string>在线用户数量</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -119,7 +119,7 @@ QWidget {
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="registeredUserCount">
+          <widget class="QLCDNumber" name="onlineUserCount">
            <property name="mode">
             <enum>QLCDNumber::Dec</enum>
            </property>

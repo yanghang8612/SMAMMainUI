@@ -34,7 +34,7 @@ void IGMASNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidge
             imageName = ":/station_green";
             break;
         case 2:
-            imageName = ":/station_red";
+            imageName = ":/station_normal";
             break;
         default:
             break;

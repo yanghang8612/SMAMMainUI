@@ -23,7 +23,7 @@ void StandardNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
             imageName = ":/station_green";
             break;
         case 2:
-            imageName = ":/station_red";
+            imageName = ":/station_normal";
             break;
         default:
             break;
