@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IGMASStationInfoWidget</class>
- <widget class="QTabWidget" name="IGMASStationInfoWidget">
+ <class>iGMASStationInfoWidget</class>
+ <widget class="QTabWidget" name="iGMASStationInfoWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -21,7 +21,7 @@
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
-    <string>iGMAS测站信息</string>
+    <string>iGMAS测站配置信息</string>
    </attribute>
    <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
@@ -29,7 +29,7 @@
       <x>10</x>
       <y>10</y>
       <width>250</width>
-      <height>200</height>
+      <height>150</height>
      </rect>
     </property>
     <property name="title">
@@ -42,18 +42,18 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>MOUNTPOINT：</string>
+        <string>挂载点：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="stationMountEdit">
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="mountPointEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -65,41 +65,18 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>IP(DEC)：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="stationIPEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
+     <item row="0" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>端口(DEC)：</string>
+        <string>名称：</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="stationPortEdit">
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="stationNameEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -140,7 +117,7 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="stationLongitudeEdit">
+      <widget class="QLineEdit" name="longitudeEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -163,7 +140,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="stationLatitudeEdit">
+      <widget class="QLineEdit" name="latitudeEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -186,7 +163,7 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="stationHeightEdit">
+      <widget class="QLineEdit" name="heightEdit">
        <property name="enabled">
         <bool>false</bool>
        </property>
@@ -197,138 +174,26 @@
      </item>
     </layout>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
+   <widget class="QGroupBox" name="verticalGroupBox">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>10</y>
-      <width>200</width>
-      <height>140</height>
+      <x>10</x>
+      <y>220</y>
+      <width>550</width>
+      <height>150</height>
      </rect>
     </property>
     <property name="title">
-     <string>iGMAS测站配置</string>
+     <string>详细说明</string>
     </property>
-    <layout class="QGridLayout" name="gridLayout_3">
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>可用性：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="stationAvailableEdit">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QTextEdit" name="detailEdit">
        <property name="enabled">
         <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
        </property>
        <property name="readOnly">
         <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="stationMemIDEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>MEMID：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QGroupBox" name="groupBox_4">
-    <property name="geometry">
-     <rect>
-      <x>770</x>
-      <y>10</y>
-      <width>200</width>
-      <height>140</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>iGMAS测站登录配置</string>
-    </property>
-    <layout class="QGridLayout" name="gridLayout_4">
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>用户名：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="stationUserNameEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="readOnly">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="stationPasswordEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="echoMode">
-        <enum>QLineEdit::Password</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_10">
-       <property name="text">
-        <string>密码：</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>

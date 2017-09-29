@@ -50,12 +50,12 @@ void StandardStationInfoWidget::timerEvent(QTimerEvent*)
     if (receiverStateSharedBufferPointer != 0) {
         qMemCopy(receiverState,
                  (char*) receiverStateSharedBufferPointer + 4,
-                 RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT * sizeof(ReceiverState));
+                 RECEIVER_MAXITEMCOUNT * sizeof(ReceiverState));
 
         for (int i = 0; i < station->getReceivers().size(); i++) {
             bool isConnected = false;
-            for (quint32 j = 0; j < RECEIVER_STATE_SHAREDBUFFER_MAXITEMCOUNT; j++) {
-                if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMount().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
+            for (quint32 j = 0; j < RECEIVER_MAXITEMCOUNT; j++) {
+                if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMountPoint().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
                     isConnected = true;
                     break;
                 }

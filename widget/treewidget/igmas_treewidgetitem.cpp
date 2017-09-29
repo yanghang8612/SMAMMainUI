@@ -1,6 +1,6 @@
 #include "igmas_treewidgetitem.h"
 
-IGMASTreeWidgetItem::IGMASTreeWidgetItem(QTreeWidgetItem* parent, int type, IGMASStation* station) :
+IGMASTreeWidgetItem::IGMASTreeWidgetItem(QTreeWidgetItem* parent, int type, iGMASStation* station) :
     QTreeWidgetItem(parent, type),
 	station(station)
 {

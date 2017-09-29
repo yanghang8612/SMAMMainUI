@@ -7,7 +7,7 @@
 #include "ui_sharedmemoryinfo_widget.h"
 
 #include "main_component_header.h"
-#include "utilies/shared_buffer.h"
+#include "utilities/shared_buffer.h"
 
 SharedMemoryInfoWidget::SharedMemoryInfoWidget(QWidget *parent) :
     QTabWidget(parent),

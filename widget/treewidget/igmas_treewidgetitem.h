@@ -8,11 +8,11 @@
 class IGMASTreeWidgetItem : public QTreeWidgetItem
 {
 public:
-    IGMASTreeWidgetItem(QTreeWidgetItem* parent, int type, IGMASStation* station);
+    IGMASTreeWidgetItem(QTreeWidgetItem* parent, int type, iGMASStation* station);
     ~IGMASTreeWidgetItem();
 
 private:
-	IGMASStation* station;
+	iGMASStation* station;
 };
 
 #endif // IGMASTREEWIDGETITEM_H

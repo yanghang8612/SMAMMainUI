@@ -2,6 +2,7 @@
 #define SMAMFRAMEWORK_HEADER
 
 #include <QtGlobal>
+#include <QString>
 
 #define MAX_RECEIVER_COUNT 2
 
@@ -15,7 +16,7 @@ struct ReceiverInBuffer {
     float latitude;
     float height;
     char detail[256];
-    char mount[8];
+    char mountPoint[8];
 };
 
 struct StandardStationInBuffer {
@@ -28,31 +29,35 @@ struct StandardStationInBuffer {
 
 struct OtherCenterInBuffer {
     char centerName[64];
-    char userName[64];
-    char password[64];
     char ipAddress[16];
     int port;
+    char username[64];
+    char password[64];
     char detail[256];
-    char mount[8];
+    char mountPoint[8];
 };
 
-struct IGMASStationInBuffer {
+struct iGMASStationInBuffer {
     bool isAvailable;
-    char ipAddress[16];
-    int port;
-    char mount[8];
+    char stationName[64];
+    char mountPoint[8];
     int memID;
     double longitude;
     double latitude;
     double height;
-    char userName[64];
-    char password[64];
+    char detail[256];
 };
 
-struct IGSStationInBuffer {
-    char stationName[64];
-    char ipAddress[16];
-    quint16 port;
+struct iGMASDataCenterInBuffer {
+    bool isAvailable;
+    char centerName[64];
+    char masterIPAddress[16];
+    quint16 masterPort;
+    char slaveIPAddress[16];
+    quint16 slavePort;
+    char username[64];
+    char password[64];
+    char detail[256];
 };
 
 #endif // SMAMFRAMEWORK_HEADER

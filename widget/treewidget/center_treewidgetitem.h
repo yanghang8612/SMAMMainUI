@@ -3,7 +3,7 @@
 
 #include <QTreeWidgetItem>
 
-#include "bean/center/other_center.h"
+#include "bean/other_center.h"
 
 class CenterTreeWidgetItem : public QTreeWidgetItem
 {

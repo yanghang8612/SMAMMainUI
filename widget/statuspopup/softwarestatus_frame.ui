@@ -30,8 +30,8 @@ QPushButton {
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>151</width>
-     <height>201</height>
+     <width>181</width>
+     <height>238</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">

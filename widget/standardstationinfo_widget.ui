@@ -28,7 +28,7 @@
   </property>
   <widget class="QWidget" name="firstStationInfoTab">
    <attribute name="title">
-    <string>基准站信息</string>
+    <string>基准站配置信息</string>
    </attribute>
    <widget class="QGraphicsView" name="stationPicExample">
     <property name="enabled">

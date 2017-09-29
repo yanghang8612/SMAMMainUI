@@ -5,7 +5,7 @@
 
 #include "menu/bj_menu.h"
 #include "menu/xj_menu.h"
-#include "widget/mid/systemmanager_widget.h"
+#include "systemmanager_widget.h"
 
 SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,7 +17,7 @@ SMAMMainWindow::SMAMMainWindow(QWidget *parent) :
 
     menu = new XJMenu(this);
 
-    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::XJ_CENTER, this);
+    SystemManagerWidget* managerWidget = new SystemManagerWidget(DeploymentType::BJ_CENTER, this);
     connect(managerWidget, SIGNAL(closeMessage()), this, SLOT(handleManagerCloseMessage()));
 
     systemManagerSub = ui->mdiArea->addSubWindow(managerWidget);

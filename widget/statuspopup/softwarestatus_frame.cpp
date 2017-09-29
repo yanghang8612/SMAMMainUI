@@ -3,10 +3,11 @@
 
 #include "common.h"
 #include "main_component_header.h"
+#include "utilities/config_helper.h"
 
-SoftwareStatusFrame::SoftwareStatusFrame(QList<int>& componentStateCheckIntervals, QWidget *parent) :
+SoftwareStatusFrame::SoftwareStatusFrame(QWidget *parent) :
 	QFrame(parent),
-    ui(new Ui::SoftwareStatusFrame), componentStateCheckIntervals(componentStateCheckIntervals)
+    ui(new Ui::SoftwareStatusFrame)
 {
 	ui->setupUi(this);
     buttons[0] = ui->mainFrameworkStatus;
@@ -33,7 +34,7 @@ void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
     if (DllStatusReadFunc != 0) {
         DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
         for (int i = 0; i < COMPONENT_COUNT; i++) {
-            if ((++componentStateCheckCountdown[i]) == componentStateCheckIntervals[i]) {
+            if ((++componentStateCheckCountdown[i]) == ConfigHelper::componentStateCheckIntervals[i]) {
                 if (dllStatus[COMPONENT_STATEARRAY_INDEX[i]] == 0) {
                     continue;
                 }

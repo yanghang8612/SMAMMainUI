@@ -3,7 +3,7 @@
 
 #include <QTabWidget>
 
-#include "bean/center/other_center.h"
+#include "bean/other_center.h"
 
 namespace Ui {
     class CenterInfoWidget;

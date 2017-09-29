@@ -3,25 +3,25 @@
 
 #include <QTabWidget>
 
-#include "bean/station/igmas_station.h"
+#include "bean/igmas_station.h"
 
 namespace Ui {
-class IGMASStationInfoWidget;
+class iGMASStationInfoWidget;
 }
 
-class IGMASStationInfoWidget : public QTabWidget
+class iGMASStationInfoWidget : public QTabWidget
 {
     Q_OBJECT
 
 public:
-    explicit IGMASStationInfoWidget(QWidget *parent = 0);
-    ~IGMASStationInfoWidget();
+    explicit iGMASStationInfoWidget(QWidget *parent = 0);
+    ~iGMASStationInfoWidget();
 
-    void setStation(IGMASStation* station);
+    void setStation(iGMASStation* station);
 
 private:
-    Ui::IGMASStationInfoWidget *ui;
-    IGMASStation* station;
+    Ui::iGMASStationInfoWidget *ui;
+    iGMASStation* station;
 };
 
 #endif // IGMASSTATIONINFO_WIDGET_H

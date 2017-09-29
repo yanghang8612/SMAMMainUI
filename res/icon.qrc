@@ -28,9 +28,6 @@
         <file alias="satellite_green">icon/satellite_green.png</file>
         <file alias="satellite_normal">icon/satellite_normal.png</file>
         <file alias="satellite_red">icon/satellite_red.png</file>
-        <file alias="station_green">icon/station_green.png</file>
-        <file alias="station_normal">icon/station_normal.png</file>
-        <file alias="station_red">icon/station_red.png</file>
         <file alias="manager">icon/toolbar_manager.png</file>
         <file alias="monitor">icon/toolbar_monitor.png</file>
         <file alias="hard_drive">icon/hard_drive.png</file>
@@ -50,5 +47,13 @@
         <file alias="users_green">icon/users_green.png</file>
         <file alias="users_normal">icon/users_normal.png</file>
         <file alias="users_red">icon/users_red.png</file>
+        <file alias="datacenter">icon/datacenter.png</file>
+        <file alias="datacenter_root">icon/datacenter_root.png</file>
+        <file alias="station_green">icon/station_green.png</file>
+        <file alias="station_normal">icon/station_normal.png</file>
+        <file alias="station_red">icon/station_red.png</file>
+        <file alias="igmas_node">icon/igmas_node.png</file>
+        <file alias="igmas_node1">icon/igmas_node1.png</file>
+        <file alias="igmas_node2">icon/igmas_node2.png</file>
     </qresource>
 </RCC>

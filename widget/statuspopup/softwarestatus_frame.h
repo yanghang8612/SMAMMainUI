@@ -5,7 +5,7 @@
 #include <QPushButton>
 
 #include "common.h"
-#include "utilies/shared_buffer.h"
+#include "utilities/shared_buffer.h"
 
 namespace Ui {
 	class SoftwareStatusFrame;
@@ -16,7 +16,7 @@ class SoftwareStatusFrame : public QFrame
 	Q_OBJECT
 
 public:
-    explicit SoftwareStatusFrame(QList<int>& componentStateCheckIntervals, QWidget *parent = 0);
+    explicit SoftwareStatusFrame(QWidget *parent = 0);
 	~SoftwareStatusFrame();
 
 protected:
@@ -26,8 +26,7 @@ signals:
     void isEveryComponentNormal(bool);
 
 private:
-	Ui::SoftwareStatusFrame *ui;
-    QList<int>& componentStateCheckIntervals;
+    Ui::SoftwareStatusFrame *ui;
     int dllStatus[DLL_COUNT];
     int preDllStatus[DLL_COUNT];
     int componentStateCheckCountdown[COMPONENT_COUNT];

@@ -15,15 +15,15 @@
   </property>
   <widget class="QWidget" name="tab">
    <attribute name="title">
-    <string>数据中心基本信息</string>
+    <string>数据中心配置信息</string>
    </attribute>
    <widget class="QGroupBox" name="verticalGroupBox">
     <property name="geometry">
      <rect>
-      <x>310</x>
+      <x>330</x>
       <y>10</y>
-      <width>280</width>
-      <height>220</height>
+      <width>300</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="title">
@@ -44,8 +44,8 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>280</width>
-      <height>220</height>
+      <width>300</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="title">

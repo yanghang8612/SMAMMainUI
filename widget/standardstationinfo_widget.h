@@ -3,8 +3,8 @@
 
 #include <QTabWidget>
 
-#include "bean/station/standard_station.h"
 #include "other_component_header.h"
+#include "bean/standard_station.h"
 
 namespace Ui {
 	class StationInfoWidget;
@@ -26,7 +26,7 @@ protected:
 private:
 	Ui::StationInfoWidget *ui;
 	StandardStation* station;
-    ReceiverState receiverState[RECEIVER_SHAREDBUFFER_MAXITEMCOUNT];
+    ReceiverState receiverState[RECEIVER_MAXITEMCOUNT];
 };
 
 #endif // STATIONINFO_WIDGET_H

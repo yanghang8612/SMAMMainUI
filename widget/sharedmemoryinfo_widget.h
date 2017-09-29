@@ -3,7 +3,7 @@
 
 #include <QTabWidget>
 
-#include "utilies/shared_buffer.h"
+#include "utilities/shared_buffer.h"
 
 namespace Ui {
 class SharedMemoryInfoWidget;

@@ -18,7 +18,7 @@
   </property>
   <widget class="QWidget" name="firstReceiverTab">
    <attribute name="title">
-    <string>接收机基本信息</string>
+    <string>接收机配置信息</string>
    </attribute>
    <widget class="QGroupBox" name="infoContainer">
     <property name="geometry">

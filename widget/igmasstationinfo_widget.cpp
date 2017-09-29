@@ -1,29 +1,25 @@
 #include "igmasstationinfo_widget.h"
 #include "ui_igmasstationinfo_widget.h"
 
-IGMASStationInfoWidget::IGMASStationInfoWidget(QWidget *parent) :
+iGMASStationInfoWidget::iGMASStationInfoWidget(QWidget *parent) :
     QTabWidget(parent),
-    ui(new Ui::IGMASStationInfoWidget)
+    ui(new Ui::iGMASStationInfoWidget)
 {
     ui->setupUi(this);
 }
 
-IGMASStationInfoWidget::~IGMASStationInfoWidget()
+iGMASStationInfoWidget::~iGMASStationInfoWidget()
 {
     delete ui;
 }
 
-void IGMASStationInfoWidget::setStation(IGMASStation* station)
+void iGMASStationInfoWidget::setStation(iGMASStation* station)
 {
     this->station = station;
-    ui->stationMountEdit->setText(station->getMount());
-    ui->stationIPEdit->setText(station->getIpAddress());
-    ui->stationPortEdit->setText(QString::number(station->getPort()));
-    ui->stationLongitudeEdit->setText(QString::number(station->getLongitude()));
-    ui->stationLatitudeEdit->setText(QString::number(station->getLatitude()));
-    ui->stationHeightEdit->setText(QString::number(station->getHeight()));
-    ui->stationAvailableEdit->setText((station->getIsAvailable()) ? tr("可用") : tr("不可用"));
-    ui->stationMemIDEdit->setText(QString::number(station->getMemID()));
-    ui->stationUserNameEdit->setText(station->getUserName());
-    ui->stationPasswordEdit->setText(station->getPassword());
+    ui->stationNameEdit->setText(station->getStationName());
+    ui->mountPointEdit->setText(station->getMountPoint());
+    ui->longitudeEdit->setText(QString::number(station->getLongitude()));
+    ui->latitudeEdit->setText(QString::number(station->getLatitude()));
+    ui->heightEdit->setText(QString::number(station->getHeight()));
+    ui->detailEdit->setText(station->getDetail());
 }
