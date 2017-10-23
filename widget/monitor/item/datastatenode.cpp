@@ -9,9 +9,24 @@ DataStateNode::DataStateNode() :
 
 void DataStateNode::flickerOnce()
 {
-    brushColor = Qt::green;
+    preBrushColor = brushColor;
+    brushColor = Qt::white;
     update();
-    QTimer::singleShot(500, this, SLOT(turnIntoNormal()));
+    QTimer::singleShot(80, this, SLOT(turnIntoNormal()));
+}
+
+void DataStateNode::setState(int state)
+{
+    switch (state) {
+        case 0:
+            brushColor = Qt::white;
+            break;
+        case 1:
+            brushColor = Qt::green;
+            break;
+        case -1:
+            brushColor = Qt::red;
+    }
 }
 
 QRectF DataStateNode::boundingRect() const
@@ -28,7 +43,6 @@ void DataStateNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QW
 
 void DataStateNode::turnIntoNormal()
 {
-    brushColor = Qt::white;
+    brushColor = preBrushColor;
     update();
 }
-

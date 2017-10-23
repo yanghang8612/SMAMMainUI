@@ -15,6 +15,8 @@ public:
     explicit DataTransferStateFrame(QWidget *parent = 0);
     ~DataTransferStateFrame();
 
+    void setState(const QString& centerName, bool isMaster);
+
 private:
     Ui::DataTransferStateFrame *ui;
 };

@@ -5,13 +5,14 @@
 #include "other_component_header.h"
 #include "systemmanager_widget.h"
 #include "backend/dllstate_write_thread.h"
+#include "utilities/config_helper.h"
 
-extern DeploymentType::Value deploymentType;
+DeploymentType::Value deploymentType;
 
 void* receiverSharedBufferPointer = 0;
-void* otherCenterSharedBufferPointer = 0;
 void* iGMASStationSharedBufferPointer = 0;
 void* iGMASDataCenterSharedBufferPointer = 0;
+void* otherCenterSharedBufferPointer = 0;
 
 void* componentStateSharedBufferPointer[COMPONENT_COUNT];
 void* receiverStateSharedBufferPointer = 0;
@@ -21,25 +22,20 @@ void* otherCenterStateSharedBufferPointer = 0;
 void* userRegisterInfoSharedBufferPointer = 0;
 void* userRealtimeInfoSharedBufferPointer = 0;
 
+static DllStateWriteThread* dllStateWriteThread = 0;
 static SystemManagerWidget* widget = 0;
 
 extern "C" bool DllMain(int args, char* argv[])
 {
     qDebug() << "SMAMMainUI:" << "DllMain function called";
 
-    DllStateWriteThread* dllStateWriteThread = new DllStateWriteThread();
-    dllStateWriteThread->start();
-
     if (args > 0 && qstrcmp(argv[0], "XJ") == 0) {
+        deploymentType = DeploymentType::XJ_CENTER;
         receiverSharedBufferPointer = FindMemoryInfoFunc(RECEIVER_SHAREDBUFFER_ID,
                                                          RECEIVER_MAXITEMCOUNT * sizeof(ReceiverInBuffer));
-
-        otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
-                                                            OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
-
-        widget = new SystemManagerWidget(DeploymentType::XJ_CENTER);
     }
     else if (args > 0 && qstrcmp(argv[0], "BJ") == 0) {
+        deploymentType = DeploymentType::BJ_CENTER;
         iGMASStationSharedBufferPointer = FindMemoryInfoFunc(IGMASSTATION_SHAREDBUFFER_ID,
                                                       IGMASSTATION_MAXITEMCOUNT * sizeof(iGMASStationInBuffer));
 
@@ -48,20 +44,21 @@ extern "C" bool DllMain(int args, char* argv[])
 
         otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                             OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
-
-        widget = new SystemManagerWidget(DeploymentType::BJ_CENTER);
     }
     else {
         qDebug() << "SMAMMainUI:" << "No appropriate deployment type according to parameter 'argv'";
         return false;
     }
-
+    ConfigHelper::init();
     return true;
 }
 
 extern "C" bool DllInit(int, char*)
 {
     qDebug() << "SMAMMainUI:" << "DllInit function called";
+
+    dllStateWriteThread = new DllStateWriteThread();
+    dllStateWriteThread->start();
 
     for (int i = 0; i < COMPONENT_COUNT; i++) {
         componentStateSharedBufferPointer[i] = FindMemoryInfoFunc(i + 2, 0);
@@ -72,18 +69,6 @@ extern "C" bool DllInit(int, char*)
             receiverStateSharedBufferPointer = FindMemoryInfoFunc(
                                                    RECEIVER_STATE_SHAREDBUFFER_ID,
                                                    RECEIVER_MAXITEMCOUNT * sizeof(ReceiverState) + sizeof(int));
-
-            otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
-                                                      OTHERCENTER_STATE_SHAREDBUFFER_ID,
-                                                      OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
-
-            userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
-                                                      USER_REGISTER_INFO_SHAREDBUFFER_ID,
-                                                      USER_REGISTER_INFO_MAXITEMCOUNT * sizeof(UserBasicInfo) + sizeof(int));
-
-            userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
-                                                      USER_REALTIME_INFO_SHAREDBUFFER_ID,
-                                                      USER_REALTIME_INFO_MAXITEMCOUNT * sizeof(UserLoginInfo) + sizeof(int));
             break;
         case DeploymentType::BJ_CENTER:
             iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
@@ -95,24 +80,35 @@ extern "C" bool DllInit(int, char*)
                                                       OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
             break;
     }
+    userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                              USER_REGISTER_INFO_SHAREDBUFFER_ID,
+                                              USER_REGISTER_INFO_MAXITEMCOUNT * sizeof(UserBasicInfo) + sizeof(int));
+
+    userRealtimeInfoSharedBufferPointer = FindMemoryInfoFunc(
+                                              USER_REALTIME_INFO_SHAREDBUFFER_ID,
+                                              USER_REALTIME_INFO_MAXITEMCOUNT * sizeof(UserLoginInfo) + sizeof(int));
     return true;
 }
 
 extern "C" bool DllStart()
 {
     qDebug() << "SMAMMainUI:" << "DllStart function called";
+    widget = new SystemManagerWidget();
     return true;
 }
 
 extern "C" bool DllStop()
 {
     qDebug() << "SMAMMainUI:" << "DllStop function called";
+    dllStateWriteThread->stop();
     return true;
 }
 
 extern "C" bool DllContraryInit()
 {
     qDebug() << "SMAMMainUI:" << "DllContraryInit function called";
+    delete widget;
+    delete dllStateWriteThread;
     return true;
 }
 

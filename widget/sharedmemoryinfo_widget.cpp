@@ -7,7 +7,6 @@
 #include "ui_sharedmemoryinfo_widget.h"
 
 #include "main_component_header.h"
-#include "utilities/shared_buffer.h"
 
 SharedMemoryInfoWidget::SharedMemoryInfoWidget(QWidget *parent) :
     QTabWidget(parent),
@@ -46,11 +45,10 @@ bool SharedMemoryInfoWidget::eventFilter(QObject* target, QEvent* event)
             scrollBar = ui->memoryCharInfoTable->verticalScrollBar();
         }
         if (target == ui->memoryCharInfoTable->verticalScrollBar()){
-            scrollBar = ui->memoryCharInfoTable->verticalScrollBar();
+            scrollBar = ui->memoryHexInfoTable->verticalScrollBar();
         }
         QWheelEvent *wheelEvent = static_cast<QWheelEvent *>(event);
         scrollBar->setValue(scrollBar->value() - wheelEvent->delta() / 40);
-        return true;
     }
     return QTabWidget::eventFilter(target, event);
 }
@@ -66,12 +64,9 @@ void SharedMemoryInfoWidget::on_viewButton_clicked()
         return;
     }
     else {
-        if (FindMemoryInfoFunc == 0) {
-            return;
-        }
-        sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 100);
+        sharedMemoryPointer = FindMemoryInfoFunc(memoryID, 0);
         if (ui->bufferTypeBox->currentIndex() == 0) {
-            buffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, sharedMemoryPointer);
+            buffer = new SharedBuffer(sharedMemoryPointer);
             if (buffer->getBufferSize() == 0) {
                 QMessageBox::warning(this, tr("提示"), tr("访问了未申请过的共享缓冲区"), QMessageBox::Ok);
                 return;

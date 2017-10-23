@@ -4,13 +4,17 @@
 #include "main_component_header.h"
 
 DllStateWriteThread::DllStateWriteThread() :
-        QThread()
+    QThread(), isRunning(true)
+{}
+
+void DllStateWriteThread::stop()
 {
+    isRunning = false;
 }
 
 void DllStateWriteThread::run()
 {
-    while (true) {
+    while (isRunning) {
         DllStatusWriteFunc(01);
         DllStatusWriteFunc(02);
         DllStatusWriteFunc(03);

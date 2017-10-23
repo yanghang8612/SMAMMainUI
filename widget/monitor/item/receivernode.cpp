@@ -5,8 +5,6 @@
 
 #include "receivernode.h"
 
-#include "edge.h"
-
 ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :
     BaseNode(length),
 	receiver(receiver)
@@ -16,17 +14,6 @@ ReceiverNode::ReceiverNode(Receiver* receiver, quint8 length) :
     for (int i = 1; i <= lineCount; i++) {
         formattedReceiverName.insert(i * 5, '\n');
     }
-
-//    qsrand(QTime(0, 0, 0).msecsTo(QTime::currentTime()));
-//    timer = new QTimer(this);
-//    connect(timer, SIGNAL(timeout()), this, SLOT(doSomething()), Qt::QueuedConnection);
-//    int r = qrand() % 5;
-    //    timer->start((r + 5) * 1000);
-}
-
-QString ReceiverNode::getReceiverMount() const
-{
-    return receiver->getMountPoint();
 }
 
 QRectF ReceiverNode::boundingRect() const
@@ -55,20 +42,5 @@ void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWi
     QTextOption option(Qt::AlignTrailing | Qt::AlignVCenter);
     option.setWrapMode(QTextOption::WordWrap);
     painter->drawText(QRectF(- length / 2 - 40, - length / 2, 40, 40), formattedReceiverName, option);
-}
-
-void ReceiverNode::doSomething()
-{
-    if (getStatus() == 2) {
-        timer->stop();
-        delete timer;
-        timer = 0;
-    }
-    else {
-        foreach (Edge* edge, edgeFromNodeList) {
-            //edge->adjust();
-            edge->addData();
-        }
-    }
 }
 

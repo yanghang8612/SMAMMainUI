@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>OtherCenterEditDialog</class>
  <widget class="QDialog" name="OtherCenterEditDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -32,26 +35,26 @@
     <property name="bottomMargin">
      <number>0</number>
     </property>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="passwordEdit"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="usernameEdit"/>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="label_4">
+    <item row="3" column="0">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>用户名：</string>
+       <string>IP(DEC)：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QLineEdit" name="ipAddressEdit">
-      <property name="styleSheet">
-       <string notr="true"/>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="centerNameEdit"/>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="label_3">
+      <property name="text">
+       <string>密码：</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
@@ -65,41 +68,28 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="label_3">
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="ipAddressEdit">
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_4">
       <property name="text">
-       <string>密码：</string>
+       <string>用户名：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="centerNameEdit"/>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="usernameEdit"/>
     </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>IP(DEC)：</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="label_5">
-      <property name="text">
-       <string>Port(DEC)：</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1">
-     <widget class="QLineEdit" name="portEdit"/>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="passwordEdit"/>
     </item>
    </layout>
   </widget>
@@ -162,7 +152,6 @@
   <tabstop>usernameEdit</tabstop>
   <tabstop>passwordEdit</tabstop>
   <tabstop>ipAddressEdit</tabstop>
-  <tabstop>portEdit</tabstop>
   <tabstop>detailEdit</tabstop>
   <tabstop>confirmButton</tabstop>
   <tabstop>cancelButton</tabstop>

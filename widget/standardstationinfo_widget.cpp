@@ -54,7 +54,7 @@ void StandardStationInfoWidget::timerEvent(QTimerEvent*)
 
         for (int i = 0; i < station->getReceivers().size(); i++) {
             bool isConnected = false;
-            for (quint32 j = 0; j < RECEIVER_MAXITEMCOUNT; j++) {
+            for (int j = 0; j < RECEIVER_MAXITEMCOUNT; j++) {
                 if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMountPoint().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
                     isConnected = true;
                     break;

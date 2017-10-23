@@ -11,8 +11,51 @@
 
 extern "C" bool DllMain(int argc, char* argv[]);
 
+FINDMEMORYINFOFUNC FindMemoryInfoFunc;
+DLLSTATUSREADFUNC  DllStatusReadFunc;
+DLLSTATUSWRITEFUNC DllStatusWriteFunc;
+SOFTWORKSTATUSWRITEFUNC SoftWorkStatusWriteFunc;
+REGISTERSIGNALLISTENER registerSignalListener;
+REGISTERSIGNALSENDER registerSignalSender;
+
+void* find(int memID, uint memLength)
+{
+    static QMap<int, void*> map;
+    if (!map.contains(memID)) {
+        void* pointer = malloc(memLength);
+        qMemSet(pointer, 0, memLength);
+        map.insert(memID, pointer);
+    }
+    return map[memID];
+}
+
+void method1(int*, int)
+{}
+
+bool method2(int)
+{return true;}
+
+bool method3(int,SoftWorkStatus)
+{return true;}
+
+bool method4(QObject*, const char*, const char*)
+{return true;}
+
+bool method5(QObject*)
+{return true;}
+
 int main(int argc, char* argv[])
 {
+    FindMemoryInfoFunc = find;
+    DllStatusReadFunc = method1;
+    DllStatusWriteFunc = method2;
+    SoftWorkStatusWriteFunc = method3;
+    registerSignalListener = method4;
+    registerSignalSender = method5;
+    char* arg[1];
+    arg[0] = "BJ";
+    DllMain(1, arg);
+
     QTextCodec* codec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForLocale(QTextCodec::codecForLocale());
@@ -32,11 +75,7 @@ int main(int argc, char* argv[])
                      QTabWidget QGroupBox::title {top: -7px;left: 10px;}\
                      QDialog QGroupBox {border: 1px solid gray;margin-top: 10px;}\
                      QDialog QGroupBox::title {top: -7px;left: 10px;}\
-                     QDialog {background: rgb(240,240,240);}\
-                     QWidget {font-size: 13px}");
+                     QDialog {background: rgb(240,240,240);}");
     w.show();
-
-    //DllMain(0, 0);
-
     return a.exec();
 }

@@ -3,27 +3,20 @@
 #include <QDebug>
 
 #include "igmasnode.h"
-#include "common.h"
 #include "main_component_header.h"
+#include "utilities/config_helper.h"
 
 iGMASNode::iGMASNode(iGMASStation* station, quint8 length, QWidget* parent) :
     BaseNode(length),
-    station(station), stateNode(new DataStateNode()), stateWidget(new DataTransferStateFrame(parent)),
-    dataReceivingSharedBuffer(0)
+    isConnected(false), station(station),
+    stateNode(new DataStateNode()), stateWidget(new DataTransferStateFrame(parent))
 {
     stateNode->setParentItem(this);
     stateNode->setPos(- length / 2, - length / 2);
     stateWidget->hide();
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(checkDataReceivingState()), Qt::QueuedConnection);
-    timer->start(IGMAS_DATA_RECEIVING_STATE_CHECK_TIMEINTERVAL);
-
-    setAcceptHoverEvents(true);
-}
-
-QString iGMASNode::getStationIPAddress() const
-{
-    return station->getStationName();
+    registerSignalListener(this, "connected(int, int, bool)", "dataCenterConnected(int, int, bool)");
+    registerSignalListener(this, "disconnected(int)", "dataCenterDisconnected(int)");
+    registerSignalListener(this, "receivedData(int)", "dataCenterReceivedData(int)");
 }
 
 QRectF iGMASNode::boundingRect() const
@@ -33,57 +26,45 @@ QRectF iGMASNode::boundingRect() const
 
 void iGMASNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-//    switch (status) {
-//        case 0:
-//            imageName = ":/igmas_node";
-//            break;
-//        case 1:
-//            imageName = ":/igmas_station";
-//            break;
-//        case 2:
-//            imageName = ":/igmas_station";
-//            break;
-//        default:
-//            break;
-//    }
     painter->drawImage(QRectF(- length / 2, - length / 2, length, length), QImage(":/igmas_node"));
     painter->setFont(QFont("Helvetica", 7 + (length / 20)));
     painter->drawText(- length / 2 - 10, length / 2 + 2, length + 20, 15, Qt::AlignCenter, station->getStationName());
 }
 
-void iGMASNode::checkDataReceivingState()
+void iGMASNode::connected(int memID, int centerID, bool isMaster)
 {
-    if (getStatus() == 1) {
-        if (dataReceivingSharedBuffer == 0) {
-            void* pointer = FindMemoryInfoFunc(station->getMemID(), 4096 + 80);
-            dataReceivingSharedBuffer = new SharedBuffer(SharedBuffer::LOOP_BUFFER, SharedBuffer::ONLY_READ, pointer);
-        }
-        else {
-            if (dataReceivingSharedBuffer->getDataWriteState()) {
-                foreach (Edge* edge, edgeFromNodeList) {
-                    //edge->adjust();
-                    edge->setStatus(1);
-                }
-            }
-            else {
-                foreach (Edge* edge, edgeFromNodeList) {
-                    //edge->adjust();
-                    edge->setStatus(2);
-                }
-            }
-        }
+    if (memID == station->getMemID()) {
+        isConnected = true;
+        setAcceptHoverEvents(true);
+        stateNode->setState(1);
+        stateWidget->setState(ConfigHelper::getIGMASDataCenterByCenterID(centerID)->getCenterName(), isMaster);
     }
 }
 
-void iGMASNode::hoverEnterEvent(QGraphicsSceneHoverEvent* event)
+void iGMASNode::disconnected(int memID)
 {
-    stateWidget->setGeometry(this->pos().x() + 300, this->pos().y() + 50, 160, 200);
+    if (memID == station->getMemID()) {
+        isConnected = false;
+        setAcceptHoverEvents(false);
+        stateNode->setState(0);
+    }
+}
+
+void iGMASNode::receivedData(int memID)
+{
+    if (memID == station->getMemID()) {
+        stateNode->flickerOnce();
+    }
+}
+
+void iGMASNode::hoverEnterEvent(QGraphicsSceneHoverEvent*)
+{
+    stateWidget->setGeometry(this->pos().x() + 620, this->pos().y() + 260, 170, 30);
     stateWidget->show();
 }
 
-void iGMASNode::hoverLeaveEvent(QGraphicsSceneHoverEvent* event)
+void iGMASNode::hoverLeaveEvent(QGraphicsSceneHoverEvent*)
 {
-    qDebug() << "bisha";
     stateWidget->hide();
     scene()->update();
 }

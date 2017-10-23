@@ -5,7 +5,6 @@
 #include <QPushButton>
 
 #include "common.h"
-#include "utilities/shared_buffer.h"
 
 namespace Ui {
 	class SoftwareStatusFrame;

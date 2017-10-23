@@ -18,9 +18,23 @@ class SMAMTreeWidget : public QObject
 public:
     SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container);
 
+signals:
+    void iGMASStationAdded(iGMASStationInBuffer* station);
+    void iGMASStationStarted(int memID);
+    void iGMASStationStoped(int memID);
+    void iGMASStationModified(int memID);
+    void iGMASStationDeleted(int memID);
+    void iGMASDataCenterAdded(iGMASDataCenterInBuffer* dataCenter);
+    void iGMASDataCenterModified(int centerID);
+    void iGMASDataCenterDeleted(int centerID);
+    void OtherCenterAdded(OtherCenterInBuffer* center);
+    void OtherCenterModified(int centerID);
+    void OtherCenterDeleted(int centerID);
+
 private slots:
     void showRightMenu(QPoint pos);
-    void addWidgetToContainer(QTreeWidgetItem* item);
+    void handleItemClicked(QTreeWidgetItem* item);
+    void handleItemDoubleClicked(QTreeWidgetItem* item);
 
 	void showAddNewStandardStationDialog();
 	void addNewStandardStation(StandardStation* station);
@@ -40,6 +54,9 @@ private slots:
 
     void showAddNewIGMASStationDialog();
     void addNewIGMASStation(iGMASStation* station);
+
+    void startIGMASStation();
+    void stopIGMASStation();
 
     void showModifyIGMASStationDialog();
     void modifyIGMASStation(iGMASStation* station);

@@ -7,14 +7,14 @@ StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidg
     QPushButton(icon, text, parent)
 {
 	this->setStyleSheet("QPushButton{border-style:none}");
-    statusFrame = new SoftwareStatusFrame(this);
+    statusFrame = new SoftwareStatusFrame(parent);
     statusFrame->hide();
     connect(statusFrame, SIGNAL(isEveryComponentNormal(bool)), this, SLOT(receiveComponentCheckSignal(bool)));
 }
 
 void StatusPushButton::enterEvent(QEvent*)
 {
-    statusFrame->setGeometry(this->pos().x() + 150, this->pos().y() + 30, 160, 200);
+    statusFrame->setGeometry(this->pos().x() + 150, this->pos().y() + 30, 145, 170);
     statusFrame->show();
 }
 

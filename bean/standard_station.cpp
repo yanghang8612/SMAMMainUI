@@ -33,6 +33,16 @@ void StandardStation::setType(const QString& value)
     }
 }
 
+QString StandardStation::getDetail() const
+{
+    return detail;
+}
+
+void StandardStation::setDetail(const QString& value)
+{
+    detail = value;
+}
+
 void StandardStation::addReceiver(Receiver* receiver)
 {
     receivers << receiver;
@@ -55,24 +65,9 @@ StandardStationInBuffer StandardStation::toStandardStationInBuffer()
     qMemCopy(bufferItem.stationName, stationName.toStdString().c_str(), stationName.length());
     qMemCopy(bufferItem.detail, detail.toStdString().c_str(), detail.length());
     bufferItem.deploymentType = (quint8) type;
-    bufferItem.receiverCount = (quint8) receivers.size();
+    bufferItem.receiverCount = receivers.size();
     for (int i = 0; i < receivers.size(); i++) {
         bufferItem.receivers[i] = receivers[i]->toReceiverInBuffer();
     }
     return bufferItem;
 }
-QString StandardStation::getDetail() const
-{
-    return detail;
-}
-
-void StandardStation::setDetail(const QString& value)
-{
-    detail = value;
-}
-
-
-
-
-
-

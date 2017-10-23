@@ -5,14 +5,11 @@
 #include <QGraphicsScene>
 
 #include "other_component_header.h"
-#include "utilities/shared_buffer.h"
-#include "bean/standard_station.h"
-#include "bean/igmas_station.h"
-#include "bean/other_center.h"
 #include "item/receivernode.h"
 #include "item/standardnode.h"
 #include "item/igmasnode.h"
-#include "item/centernode.h"
+#include "item/maincenternode.h"
+#include "item/othercenternode.h"
 #include "item/filenode.h"
 #include "item/harddrivenode.h"
 #include "item/usersnode.h"
@@ -31,27 +28,15 @@ public:
 
     void updateView();
 
-private slots:
-    void updateDeviceConnectState();
-    void updateDeviceTransferState();
-
 private:
     Ui::MainMonitorWidget* ui;
     QGraphicsScene* scene;
     QList<StandardNode*> stationNodeList;
     QList<ReceiverNode*> receiverNodeList;
     QList<iGMASNode*> iGMASNodeList;
-    QList<CenterNode*> otherCenterNodeList;
-    SharedBuffer* receiverStateSharedBuffer;
-    SharedBuffer* iGMASStateSharedBuffer;
-    SharedBuffer* otherCenterStateSharedBuffer;
-    ReceiverState receiverState[RECEIVER_MAXITEMCOUNT];
-    IGMASState iGMASState[IGMASSTATION_MAXITEMCOUNT];
-    OtherCenterState otherCenterState[OTHERCENTER_MAXITEMCOUNT];
+    QList<OtherCenterNode*> otherCenterNodeList;
 
-    QTimer* deviceConnectStateCheckTimer;
-    QTimer* deviceTransferStateCheckTimer;
-
+    void updateDeviceConnectState();
     void updateXJView();
     void updateBJView();
 };

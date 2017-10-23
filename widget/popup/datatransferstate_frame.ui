@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DataTransferStateFrame</class>
+ <widget class="QFrame" name="DataTransferStateFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>170</width>
+    <height>30</height>
+   </rect>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">#DataTransferStateFrame {
+  border: 1px solid gray;
+  background-color: lightgray;
+}</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::Box</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Plain</enum>
+  </property>
+  <property name="lineWidth">
+   <number>0</number>
+  </property>
+  <widget class="QLabel" name="dataCenterIcon">
+   <property name="geometry">
+    <rect>
+     <x>8</x>
+     <y>5</y>
+     <width>20</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="lineWidth">
+    <number>0</number>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="../../res/icon.qrc">:/datacenter3</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="dataCenterNameLabel">
+   <property name="geometry">
+    <rect>
+     <x>36</x>
+     <y>5</y>
+     <width>50</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>授时中心</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="masterRadio">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>5</y>
+     <width>35</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>主</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="slaveRadio">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>5</y>
+     <width>35</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>备</string>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../../res/icon.qrc"/>
+ </resources>
+ <connections/>
+</ui>

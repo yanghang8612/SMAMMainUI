@@ -1,7 +1,7 @@
 #ifndef MAINFRAMEWORK_HEADER
 #define MAINFRAMEWORK_HEADER
 
-#include <QtGlobal>
+#include <QObject>
 #include <ctime>
 
 struct SoftWorkStatus {
@@ -19,6 +19,12 @@ extern FINDMEMORYINFOFUNC FindMemoryInfoFunc;
 extern DLLSTATUSREADFUNC  DllStatusReadFunc;
 extern DLLSTATUSWRITEFUNC DllStatusWriteFunc;
 extern SOFTWORKSTATUSWRITEFUNC SoftWorkStatusWriteFunc;
+
+typedef bool (*REGISTERSIGNALLISTENER)(QObject* listener, const char* slotName, const char* signalName);//信号监听者注册函数指针
+typedef bool (*REGISTERSIGNALSENDER)(QObject* sender);//信号发送者注册函数
+
+extern REGISTERSIGNALLISTENER registerSignalListener;
+extern REGISTERSIGNALSENDER registerSignalSender;
 
 #endif // MAINFRAMEWORK_HEADER
 

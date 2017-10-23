@@ -1,5 +1,6 @@
 #include <QFile>
 #include <QDebug>
+#include <QStringList>
 
 #include "config_helper.h"
 #include "common.h"
@@ -20,10 +21,8 @@ QString ConfigHelper::configFileName;
 QDomDocument ConfigHelper::root;
 QBitArray ConfigHelper::receiverMemIDArray;
 QBitArray ConfigHelper::iGMASStationMemIDArray;
-SharedBuffer* ConfigHelper::receiverSharedBuffer;
-SharedBuffer* ConfigHelper::iGMASStationSharedBuffer;
-SharedBuffer* ConfigHelper::iGMASDataCenterSharedBuffer;
-SharedBuffer* ConfigHelper::otherCenterSharedBuffer;
+qint32 ConfigHelper::maxIGMASDataCenterID = 0;
+qint32 ConfigHelper::maxOtherCenterID = 0;
 
 bool ConfigHelper::init()
 {
@@ -32,27 +31,11 @@ bool ConfigHelper::init()
     switch (deploymentType) {
         case DeploymentType::XJ_CENTER:
             ConfigHelper::configFileName = XJ_CONFIGFILE_PATH;
-            receiverSharedBuffer = (receiverSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                                                                 SharedBuffer::ONLY_WRITE,
-                                                                                 receiverSharedBufferPointer,
-                                                                                 sizeof(ReceiverInBuffer));
             break;
         case DeploymentType::BJ_CENTER:
             ConfigHelper::configFileName = BJ_CONFIGFILE_PATH;
-            iGMASStationSharedBuffer = (iGMASStationSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                                                                        SharedBuffer::ONLY_WRITE,
-                                                                                        iGMASStationSharedBufferPointer,
-                                                                                        sizeof(iGMASStationInBuffer));
-            iGMASStationSharedBuffer = (iGMASDataCenterSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                                                                        SharedBuffer::ONLY_WRITE,
-                                                                                        iGMASDataCenterSharedBufferPointer,
-                                                                                        sizeof(iGMASDataCenterInBuffer));
             break;
     }
-    otherCenterSharedBuffer = (otherCenterSharedBufferPointer == 0) ? 0 : new SharedBuffer(SharedBuffer::COVER_BUFFER,
-                                                                                     SharedBuffer::ONLY_WRITE,
-                                                                                     otherCenterSharedBufferPointer,
-                                                                                     sizeof(OtherCenterInBuffer));
 
     QFile configFile(configFileName);
     if (!configFile.open(QIODevice::ReadOnly | QFile::Text)) {
@@ -103,10 +86,11 @@ bool ConfigHelper::init()
             case DeploymentType::BJ_CENTER:
                 getIGMASStationsFromDOM();
                 getIGMASDataCentersFromDOM();
+                getOtherCentersFromDOM();
                 break;
         }
-        getOtherCentersFromDOM();
-        writeSharedBuffer();
+        maxIGMASDataCenterID = iGMASDataCenters.last()->getCenterID();
+        maxOtherCenterID = otherCenters.last()->getCenterID();
     }
     return true;
 }
@@ -125,12 +109,44 @@ void ConfigHelper::update()
         case DeploymentType::BJ_CENTER:
             setIGMASStationsToDOM();
             setIGMASDataCentersToDOM();
+            setOtherCentersToDOM();
             break;
     }
-    setOtherCentersToDOM();
-
     writeConfigFile();
-    writeSharedBuffer();
+}
+
+iGMASDataCenter* ConfigHelper::getIGMASDataCenterByCenterID(int centerID)
+{
+    for (int i = 0; i < iGMASDataCenters.size(); i++) {
+        if (centerID == iGMASDataCenters[i]->getCenterID()) {
+            return iGMASDataCenters[i];
+        }
+    }
+    return 0;
+}
+
+int ConfigHelper::findFreeReceiverMemID()
+{
+    for (int i = 0; i < RECEIVER_MAXITEMCOUNT; i++) {
+        if (!receiverMemIDArray[i]) {
+            receiverMemIDArray.setBit(i);
+            return i + RECEIVER_MEMID_START_INDEX;
+        }
+    }
+    qDebug() << "SMAMMainUI:" << "Do not find no free receiver memid";
+    return -1;
+}
+
+int ConfigHelper::findFreeIGMASStationMemID()
+{
+    for (int i = 0; i < IGMASSTATION_MAXITEMCOUNT; i++) {
+        if (!iGMASStationMemIDArray[i]) {
+            iGMASStationMemIDArray.setBit(i);
+            return i + IGMASSTATION_MEMID_START_INDEX;
+        }
+    }
+    qDebug() << "SMAMMainUI:" << "Do not find free igmas station memid";
+    return -1;
 }
 
 void ConfigHelper::clearReceiverMemID(int memID)
@@ -141,6 +157,31 @@ void ConfigHelper::clearReceiverMemID(int memID)
 void ConfigHelper::clearIGMASStationMemID(int memID)
 {
     iGMASStationMemIDArray.clearBit(memID - IGMASSTATION_MEMID_START_INDEX);
+}
+
+int ConfigHelper::getNewIGMASDataCenterID()
+{
+    return ++maxIGMASDataCenterID;
+}
+
+int ConfigHelper::getNewOtherCenterID()
+{
+    return ++maxOtherCenterID;
+}
+
+void ConfigHelper::deleteIGMASDataCenter(int centerID)
+{
+    foreach (iGMASStation* station, iGMASStations) {
+        QStringList dataCenterList = station->getDataCenters().split(",", QString::SkipEmptyParts);
+        if (dataCenterList.contains(QString::number(centerID))) {
+            dataCenterList.removeOne(QString::number(centerID));
+            QString newDataCenters = "";
+            for (int i = 0; i < dataCenterList.count(); i++) {
+                newDataCenters += (dataCenterList[i] + ",");
+            }
+            station->setDataCenters(newDataCenters);
+        }
+    }
 }
 
 void ConfigHelper::getComponentStateCheckIntervalsFromDOM()
@@ -212,9 +253,6 @@ void ConfigHelper::setStandardStationsToDOM()
             Receiver* receiver = station->getReceivers()[j];
             QDomElement receiverNode = root.createElement("RECEIVER");
 
-            if (receiver->getMemID() == -1) {
-                receiver->setMemID(findFreeReceiverMemID());
-            }
             receiverNode.appendChild(root.createElement("MEMID"));
             receiverNode.lastChild().appendChild(root.createTextNode(QString::number(receiver->getMemID())));
 
@@ -257,13 +295,15 @@ void ConfigHelper::getIGMASStationsFromDOM()
     QDomNode stationRoot = root.namedItem("BDLSS").namedItem("STATIONS");
     for (QDomNode stationNode = stationRoot.firstChild(); !stationNode.isNull(); stationNode = stationNode.nextSibling()) {
         iGMASStation* station = new iGMASStation();
+        station->setMemID(stationNode.namedItem("MEMID").toElement().text());
+        station->setIsAvailable(stationNode.namedItem("ISAVAILABLE").toElement().text());
         station->setStationName(stationNode.namedItem("STATIONNAME").toElement().text());
         station->setMountPoint(stationNode.namedItem("MOUNTPOINT").toElement().text());
-        station->setMemID(stationNode.namedItem("MEMID").toElement().text());
         station->setLongitude(stationNode.namedItem("LONGITUDE").toElement().text());
         station->setLatitude(stationNode.namedItem("LATITUDE").toElement().text());
         station->setHeight(stationNode.namedItem("HEIGHT").toElement().text());
         station->setDetail(stationNode.namedItem("DETAIL").toElement().text());
+        station->setDataCenters(stationNode.namedItem("DATACENTERS").toElement().text());
         iGMASStationMemIDArray.setBit(station->getMemID() - IGMASSTATION_MEMID_START_INDEX);
         iGMASStations << station;
     }
@@ -276,17 +316,17 @@ void ConfigHelper::setIGMASStationsToDOM()
         iGMASStation* station = iGMASStations[i];
         QDomElement stationNode = root.createElement("STATION");
 
+        stationNode.appendChild(root.createElement("MEMID"));
+        stationNode.lastChild().appendChild(root.createTextNode(QString::number(station->getMemID())));
+
+        stationNode.appendChild(root.createElement("ISAVAILABLE"));
+        stationNode.lastChild().appendChild(root.createTextNode(station->getIsAvailable() ? "true" : "false"));
+
         stationNode.appendChild(root.createElement("STATIONNAME"));
         stationNode.lastChild().appendChild(root.createTextNode(station->getStationName()));
 
         stationNode.appendChild(root.createElement("MOUNTPOINT"));
         stationNode.lastChild().appendChild(root.createTextNode(station->getMountPoint()));
-
-        if (station->getMemID() == -1) {
-            station->setMemID(findFreeIGMASStationMemID());
-        }
-        stationNode.appendChild(root.createElement("MEMID"));
-        stationNode.lastChild().appendChild(root.createTextNode(QString::number(station->getMemID())));
 
         stationNode.appendChild(root.createElement("LONGITUDE"));
         stationNode.lastChild().appendChild(root.createTextNode(QString::number(station->getLongitude())));
@@ -300,6 +340,9 @@ void ConfigHelper::setIGMASStationsToDOM()
         stationNode.appendChild(root.createElement("DETAIL"));
         stationNode.lastChild().appendChild(root.createTextNode(station->getDetail()));
 
+        stationNode.appendChild(root.createElement("DATACENTERS"));
+        stationNode.lastChild().appendChild(root.createTextNode(station->getDataCenters()));
+
         stationRoot.appendChild(stationNode);
     }
     root.namedItem("BDLSS").appendChild(stationRoot);
@@ -310,6 +353,7 @@ void ConfigHelper::getIGMASDataCentersFromDOM()
     QDomNode centerRoot = root.namedItem("BDLSS").namedItem("DATACENTERS");
     for (QDomNode centerNode = centerRoot.firstChild(); !centerNode.isNull(); centerNode = centerNode.nextSibling()) {
         iGMASDataCenter* center = new iGMASDataCenter();
+        center->setCenterID(centerNode.namedItem("CENTERID").toElement().text());
         center->setCenterName(centerNode.namedItem("CENTERNAME").toElement().text());
         center->setMasterIPAddress(centerNode.namedItem("MASTERIP").toElement().text());
         center->setMasterPort(centerNode.namedItem("MASTERPORT").toElement().text());
@@ -328,6 +372,9 @@ void ConfigHelper::setIGMASDataCentersToDOM()
     for (int i = 0; i < iGMASDataCenters.size(); i++) {
         iGMASDataCenter* center = iGMASDataCenters[i];
         QDomElement centerNode = root.createElement("CENTER");
+
+        centerNode.appendChild(root.createElement("CENTERID"));
+        centerNode.lastChild().appendChild(root.createTextNode(QString::number(center->getCenterID())));
 
         centerNode.appendChild(root.createElement("CENTERNAME"));
         centerNode.lastChild().appendChild(root.createTextNode(center->getCenterName()));
@@ -363,9 +410,9 @@ void ConfigHelper::getOtherCentersFromDOM()
     QDomNode centerRoot = root.namedItem("BDLSS").namedItem("OTHERCENTERS");
     for (QDomNode centerNode = centerRoot.firstChild(); !centerNode.isNull(); centerNode = centerNode.nextSibling()) {
         OtherCenter* center = new OtherCenter();
+        center->setCenterID(centerNode.namedItem("CENTERID").toElement().text());
         center->setCenterName(centerNode.namedItem("CENTERNAME").toElement().text());
         center->setIpAddress(centerNode.namedItem("IPADDRESS").toElement().text());
-        center->setPort(centerNode.namedItem("PORT").toElement().text());
         center->setUsername(centerNode.namedItem("USERNAME").toElement().text());
         center->setPassword(centerNode.namedItem("PASSWORD").toElement().text());
         center->setDetail(centerNode.namedItem("DETAIL").toElement().text());
@@ -380,14 +427,14 @@ void ConfigHelper::setOtherCentersToDOM()
         OtherCenter* center = otherCenters[i];
         QDomElement centerNode = root.createElement("CENTER");
 
+        centerNode.appendChild(root.createElement("CENTERID"));
+        centerNode.lastChild().appendChild(root.createTextNode(QString::number(center->getCenterID())));
+
         centerNode.appendChild(root.createElement("CENTERNAME"));
         centerNode.lastChild().appendChild(root.createTextNode(center->getCenterName()));
 
         centerNode.appendChild(root.createElement("IPADDRESS"));
         centerNode.lastChild().appendChild(root.createTextNode(center->getIpAddress()));
-
-        centerNode.appendChild(root.createElement("PORT"));
-        centerNode.lastChild().appendChild(root.createTextNode(QString::number(center->getPort())));
 
         centerNode.appendChild(root.createElement("USERNAME"));
         centerNode.lastChild().appendChild(root.createTextNode(center->getUsername()));
@@ -416,80 +463,8 @@ void ConfigHelper::writeConfigFile()
     }
 }
 
-void ConfigHelper::writeSharedBuffer()
-{
-    switch (deploymentType) {
-        case DeploymentType::XJ_CENTER:
-        {
-            int receiverCount = 0;
-            for (int i = 0; i < standardStations.size(); i++) {
-                receiverCount += standardStations[i]->getReceivers().size();
-            }
-            ReceiverInBuffer receiversInBuffer[receiverCount];
-            for (int i = 0, index = 0; i < standardStations.size(); i++) {
-                for (int j = 0; j < standardStations[i]->getReceivers().size(); j++) {
-                    receiversInBuffer[index++] = standardStations[i]->getReceivers()[j]->toReceiverInBuffer();
-                }
-            }
-            if (receiverSharedBuffer != 0) {
-                receiverSharedBuffer->writeData(&receiversInBuffer, receiverCount);
-            }
-            break;
-        }
-        case DeploymentType::BJ_CENTER:
-        {
-            iGMASStationInBuffer stationsInBuffer[iGMASStations.size()];
-            for (int i = 0; i < iGMASStations.size(); i++) {
-                stationsInBuffer[i] = iGMASStations[i]->toIGMASStationInBuffer();
-            }
-            if (iGMASStationSharedBuffer != 0) {
-                iGMASStationSharedBuffer->writeData(&stationsInBuffer, iGMASStations.size());
-            }
-            iGMASDataCenterInBuffer dataCentersInBuffer[iGMASDataCenters.size()];
-            for (int i = 0; i < iGMASDataCenters.size(); i++) {
-                dataCentersInBuffer[i] = iGMASDataCenters[i]->toIGMASDataCenterInBuffer();
-            }
-            if (iGMASDataCenterSharedBuffer != 0) {
-                iGMASDataCenterSharedBuffer->writeData(&dataCentersInBuffer, iGMASDataCenters.size());
-            }
-            break;
-        }
-    }
-    OtherCenterInBuffer otherCenter[otherCenters.size()];
-    for (int i = 0; i < otherCenters.size(); i++) {
-        otherCenter[i] = otherCenters[i]->toOtherCenterInBuffer();
-    }
-    if (otherCenterSharedBuffer != 0) {
-        otherCenterSharedBuffer->writeData(&otherCenter, otherCenters.size());
-    }
-}
-
-int ConfigHelper::findFreeReceiverMemID()
-{
-    for (int i = 0; i < RECEIVER_MAXITEMCOUNT; i++) {
-        if (!receiverMemIDArray[i]) {
-            receiverMemIDArray.setBit(i);
-            return i + RECEIVER_MEMID_START_INDEX;
-        }
-    }
-    qDebug() << "SMAMMainUI:" << "Do not find no free receiver memid";
-    return -1;
-}
-
-int ConfigHelper::findFreeIGMASStationMemID()
-{
-    for (int i = 0; i < IGMASSTATION_MAXITEMCOUNT; i++) {
-        if (!iGMASStationMemIDArray[i]) {
-            iGMASStationMemIDArray.setBit(i);
-            return i + IGMASSTATION_MEMID_START_INDEX;
-        }
-    }
-    qDebug() << "SMAMMainUI:" << "Do not find free igmas station memid";
-    return -1;
-}
-
 ConfigHelper::ConfigHelper() {}
 
 ConfigHelper::ConfigHelper(const ConfigHelper&) {}
 
-ConfigHelper&ConfigHelper::operator=(const ConfigHelper&) {}
+ConfigHelper& ConfigHelper::operator=(const ConfigHelper&) {}

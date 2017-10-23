@@ -1,6 +1,7 @@
 #ifndef MAINCENTER_H
 #define MAINCENTER_H
 
+#include <QString>
 #include <QList>
 
 #include "other_center.h"

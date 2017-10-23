@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>iGMASDataCenterEditDialog</class>
  <widget class="QDialog" name="iGMASDataCenterEditDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -83,7 +86,7 @@
     <item row="2" column="0">
      <widget class="QLabel" name="label_11">
       <property name="text">
-       <string>用户名：</string>
+       <string>密码：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

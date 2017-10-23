@@ -1,12 +1,15 @@
 #ifndef RECEIVER_H
 #define RECEIVER_H
 
+#include <QString>
+
 #include "smam_component_header.h"
 
 class Receiver
 {
 public:
 	Receiver();
+    ~Receiver();
 
     int getMemID() const;
     void setMemID(int value);
@@ -43,9 +46,11 @@ public:
     QString getDetail() const;
     void setDetail(const QString& value);
 
+    ReceiverInBuffer* getBufferItem();
     ReceiverInBuffer toReceiverInBuffer();
 
 private:
+    ReceiverInBuffer* bufferItem;
     int memID;
     QString receiverName;
     QString password;
@@ -55,7 +60,7 @@ private:
 	float longitude;
 	float latitude;
     float height;
-    QString detail;
+    QString receiverDetail;
 };
 
 #endif // RECEIVER_H

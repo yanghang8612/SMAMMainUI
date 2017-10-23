@@ -17,24 +17,10 @@ QRectF UsersNode::boundingRect() const
 
 void UsersNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    QString imageName;
-    switch (status) {
-        case 0:
-            imageName = ":/users_normal";
-            break;
-        case 1:
-            imageName = ":/users_green";
-            break;
-        case 2:
-            imageName = ":/users_normal";
-            break;
-        default:
-            break;
-    }
     //painter->setRenderHint(QPainter::Antialiasing);
-    painter->drawImage(QRectF(-length / 2, -length / 2, length, length), QImage(imageName));
-    painter->setFont(QFont("Helvetica", 10, QFont::Bold));
-    painter->drawText(-length / 2 - 10, length / 2 - 5, length + 20, 13, Qt::AlignCenter, "用户终端");
+    painter->drawImage(QRectF(-length / 2, -length / 2, length, length), QImage(":/users"));
+    painter->setFont(QFont("Helvetica", 8));
+    painter->drawText(-length / 2 - 10, length / 2, length + 20, 13, Qt::AlignCenter, tr("用户终端"));
 
 }
 

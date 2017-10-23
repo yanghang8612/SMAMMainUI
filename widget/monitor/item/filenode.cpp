@@ -15,21 +15,7 @@ QRectF FileNode::boundingRect() const
 
 void FileNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    QString imageName;
-    switch (status) {
-        case 0:
-            imageName = ":/saved_file_normal";
-            break;
-        case 1:
-            imageName = ":/saved_file_green";
-            break;
-        case 2:
-            imageName = ":/saved_file_normal";
-            break;
-        default:
-            break;
-    }
-    painter->drawImage(QRectF(-length / 2, -length / 2, length, length), QImage(imageName));
-    painter->setFont(QFont("Helvetica", 10, QFont::Bold));
-    painter->drawText(-length / 2 - 10, length / 2 + 2, length + 20, 13, Qt::AlignCenter, "数据存储");
+    painter->drawImage(QRectF(-length / 2, -length / 2, length, length), QImage(":/saved_file"));
+    painter->setFont(QFont("Helvetica", 8));
+    painter->drawText(-length / 2 - 10, length / 2 + 5, length + 20, 13, Qt::AlignCenter, tr("数据存储"));
 }

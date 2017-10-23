@@ -20,7 +20,6 @@ OtherCenterEditDialog::OtherCenterEditDialog(OtherCenter* center, QWidget* paren
     ui->usernameEdit->setText(center->getUsername());
     ui->passwordEdit->setText(center->getPassword());
     ui->ipAddressEdit->setText(center->getIpAddress());
-    ui->portEdit->setText(QString::number(center->getPort()));
     ui->detailEdit->setText(center->getDetail());
     setWindowTitle(tr("编辑数据中心信息"));
 }
@@ -56,19 +55,10 @@ void OtherCenterEditDialog::on_confirmButton_clicked()
         ui->ipAddressEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
-    if (!GeneralFunctions::checkPortString(ui->portEdit->text())) {
-        ui->portEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->portEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     center->setCenterName(ui->centerNameEdit->text());
     center->setUsername(ui->usernameEdit->text());
     center->setPassword(ui->passwordEdit->text());
     center->setIpAddress(ui->ipAddressEdit->text());
-    center->setPort(ui->portEdit->text());
     center->setDetail(ui->detailEdit->toPlainText());
 
     emit confirmButtonClicked(center);

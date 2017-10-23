@@ -9,7 +9,6 @@
 #include "bean/igmas_station.h"
 #include "bean/igmas_datacenter.h"
 #include "bean/other_center.h"
-#include "shared_buffer.h"
 
 class ConfigHelper
 {
@@ -22,8 +21,14 @@ public:
     static QList<iGMASDataCenter*> iGMASDataCenters;
     static QList<OtherCenter*> otherCenters;
 
+    static iGMASDataCenter* getIGMASDataCenterByCenterID(int centerID);
+    static int findFreeReceiverMemID();
+    static int findFreeIGMASStationMemID();
     static void clearReceiverMemID(int memID);
     static void clearIGMASStationMemID(int memID);
+    static int getNewIGMASDataCenterID();
+    static int getNewOtherCenterID();
+    static void deleteIGMASDataCenter(int centerID);
 
 private:
     ConfigHelper();
@@ -41,20 +46,14 @@ private:
     static void getOtherCentersFromDOM();
     static void setOtherCentersToDOM();
     static void writeConfigFile();
-    static void writeSharedBuffer();
-    static int findFreeReceiverMemID();
-    static int findFreeIGMASStationMemID();
 
     static QString configFileName;
     static QDomDocument root;
 
     static QBitArray receiverMemIDArray;
     static QBitArray iGMASStationMemIDArray;
-
-    static SharedBuffer* receiverSharedBuffer;
-    static SharedBuffer* iGMASStationSharedBuffer;
-    static SharedBuffer* iGMASDataCenterSharedBuffer;
-    static SharedBuffer* otherCenterSharedBuffer;
+    static qint32 maxIGMASDataCenterID;
+    static qint32 maxOtherCenterID;
 };
 
 #endif // CONFIGHELPER_H

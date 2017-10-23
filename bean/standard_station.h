@@ -1,6 +1,7 @@
 ﻿#ifndef STANDARDSTATION_H
 #define STANDARDSTATION_H
 
+#include <QString>
 #include <QList>
 
 #include "common.h"
@@ -10,7 +11,7 @@
 class StandardStation
 {
 public:
-	StandardStation();
+    StandardStation();
 
     QString getStationName() const;
     void setStationName(const QString& value);

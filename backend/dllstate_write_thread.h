@@ -9,8 +9,10 @@ class DllStateWriteThread : public QThread
 
 public:
     explicit DllStateWriteThread();
+    void stop();
 
 protected:
+    bool isRunning;
     void run();
 };
 

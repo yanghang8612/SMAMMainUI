@@ -1,8 +1,23 @@
 #include "receiver.h"
+#include "common.h"
 
-Receiver::Receiver()
+extern void* receiverSharedBufferPointer;
+
+Receiver::Receiver() : memID(0)
 {
-    this->memID = -1;
+    ReceiverInBuffer* item = (ReceiverInBuffer*)((char*)receiverSharedBufferPointer + 4);
+    for (int i = 0; i < RECEIVER_MAXITEMCOUNT; i++) {
+        if (item->memID == 0) {
+            bufferItem = item;
+            break;
+        }
+    }
+    (*((int*)receiverSharedBufferPointer))++;
+}
+
+Receiver::~Receiver()
+{
+    (*((int*)receiverSharedBufferPointer))--;
 }
 
 int Receiver::getMemID() const
@@ -13,11 +28,12 @@ int Receiver::getMemID() const
 void Receiver::setMemID(int value)
 {
     memID = value;
+    bufferItem->memID = value;
 }
 
 void Receiver::setMemID(const QString &value)
 {
-    memID = value.toInt();
+    setMemID(value.toInt());
 }
 
 QString Receiver::getReceiverName() const
@@ -28,6 +44,8 @@ QString Receiver::getReceiverName() const
 void Receiver::setReceiverName(const QString& value)
 {
 	receiverName = value;
+    qMemSet(bufferItem->receiverName, 0, sizeof(bufferItem->receiverName));
+    qMemCopy(bufferItem->receiverName, value.toStdString().c_str(), value.length());
 }
 
 QString Receiver::getPassword() const
@@ -38,6 +56,8 @@ QString Receiver::getPassword() const
 void Receiver::setPassword(const QString& value)
 {
     password = value;
+    qMemSet(bufferItem->password, 0, sizeof(bufferItem->password));
+    qMemCopy(bufferItem->password, value.toStdString().c_str(), value.length());
 }
 
 QString Receiver::getIpAddress() const
@@ -48,6 +68,8 @@ QString Receiver::getIpAddress() const
 void Receiver::setIpAddress(const QString& value)
 {
     ipAddress = value;
+    qMemSet(bufferItem->ipAddress, 0, sizeof(bufferItem->ipAddress));
+    qMemCopy(bufferItem->ipAddress, value.toStdString().c_str(), value.length());
 }
 
 quint16 Receiver::getPort() const
@@ -58,11 +80,12 @@ quint16 Receiver::getPort() const
 void Receiver::setPort(const quint16& value)
 {
 	port = value;
+    bufferItem->port = value;
 }
 
 void Receiver::setPort(const QString& value)
 {
-	port = value.toUInt();
+    setPort(value.toUShort());
 }
 
 QString Receiver::getMountPoint() const
@@ -73,6 +96,8 @@ QString Receiver::getMountPoint() const
 void Receiver::setMountPoint(const QString& value)
 {
     mountPoint = value;
+    qMemSet(bufferItem->mountPoint, 0, sizeof(bufferItem->mountPoint));
+    qMemCopy(bufferItem->mountPoint, ("/" + value).toStdString().c_str(), ("/" + value).length());
 }
 
 float Receiver::getLongitude() const
@@ -83,11 +108,12 @@ float Receiver::getLongitude() const
 void Receiver::setLongitude(float value)
 {
 	longitude = value;
+    bufferItem->longitude = value;
 }
 
 void Receiver::setLongitude(const QString& value)
 {
-	longitude = value.toFloat();
+    setLongitude(value.toFloat());
 }
 
 float Receiver::getLatitude() const
@@ -98,11 +124,12 @@ float Receiver::getLatitude() const
 void Receiver::setLatitude(float value)
 {
 	latitude = value;
+    bufferItem->latitude = value;
 }
 
 void Receiver::setLatitude(const QString& value)
 {
-    latitude = value.toFloat();
+    setLatitude(value.toFloat());
 }
 
 float Receiver::getHeight() const
@@ -113,21 +140,29 @@ float Receiver::getHeight() const
 void Receiver::setHeight(float value)
 {
     height = value;
+    bufferItem->height = value;
 }
 
 void Receiver::setHeight(const QString& value)
 {
-    height = value.toFloat();
+    setHeight(value.toFloat());
 }
 
 QString Receiver::getDetail() const
 {
-    return detail;
+    return receiverDetail;
 }
 
 void Receiver::setDetail(const QString& value)
 {
-    detail = value;
+    receiverDetail = value;
+    qMemSet(bufferItem->receiverDetail, 0, sizeof(bufferItem->receiverDetail));
+    qMemCopy(bufferItem->receiverDetail, value.toStdString().c_str(), value.length());
+}
+
+ReceiverInBuffer*Receiver::getBufferItem()
+{
+    return bufferItem;
 }
 
 ReceiverInBuffer Receiver::toReceiverInBuffer()
@@ -143,7 +178,7 @@ ReceiverInBuffer Receiver::toReceiverInBuffer()
     bufferItem.longitude = longitude;
     bufferItem.latitude = latitude;
     bufferItem.height = height;
-    qMemCopy(bufferItem.detail, detail.toStdString().c_str(), detail.length());
+    qMemCopy(bufferItem.receiverDetail, receiverDetail.toStdString().c_str(), receiverDetail.length());
     return bufferItem;
 }
 

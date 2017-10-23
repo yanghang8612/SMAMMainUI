@@ -40,13 +40,7 @@
         <file alias="dmz_green">icon/dmz_green.png</file>
         <file alias="dmz_normal">icon/dmz_normal.png</file>
         <file alias="dmz_red">icon/dmz_red.png</file>
-        <file alias="saved_file_green">icon/saved_file_green.png</file>
-        <file alias="saved_file_normal">icon/saved_file_normal.png</file>
-        <file alias="saved_file_red">icon/saved_file_red.png</file>
         <file alias="status_grey">icon/status_grey.png</file>
-        <file alias="users_green">icon/users_green.png</file>
-        <file alias="users_normal">icon/users_normal.png</file>
-        <file alias="users_red">icon/users_red.png</file>
         <file alias="datacenter">icon/datacenter.png</file>
         <file alias="datacenter_root">icon/datacenter_root.png</file>
         <file alias="station_green">icon/station_green.png</file>
@@ -55,5 +49,11 @@
         <file alias="igmas_node">icon/igmas_node.png</file>
         <file alias="igmas_node1">icon/igmas_node1.png</file>
         <file alias="igmas_node2">icon/igmas_node2.png</file>
+        <file alias="datacenter_icon">icon/datacenter_icon.png</file>
+        <file alias="datacenter1">icon/datacenter1.png</file>
+        <file alias="datacenter2">icon/datacenter2.png</file>
+        <file alias="datacenter3">icon/datacenter3.png</file>
+        <file alias="maincenter">icon/maincenter.png</file>
+        <file alias="othercenter">icon/othercenter.png</file>
     </qresource>
 </RCC>

@@ -5,7 +5,7 @@
 
 iGMASDataCenterEditDialog::iGMASDataCenterEditDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::iGMASDataCenterEditDialog)
+    ui(new Ui::iGMASDataCenterEditDialog), dataCenter(new iGMASDataCenter())
 {
     ui->setupUi(this);
     setWindowTitle(tr("添加iGMAS数据中心"));

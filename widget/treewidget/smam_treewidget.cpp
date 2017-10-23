@@ -57,7 +57,10 @@ SMAMTreeWidget::SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container) :
     currentContentWidget = systemMonitorWidget;
     container->addWidget(currentContentWidget);
     connect(tree, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(showRightMenu(QPoint)));
-    connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(addWidgetToContainer(QTreeWidgetItem*)));
+    connect(tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(handleItemClicked(QTreeWidgetItem*)));
+    connect(tree, SIGNAL(itemDoubleClicked(QTreeWidgetItem*,int)), this, SLOT(handleItemDoubleClicked(QTreeWidgetItem*)));
+
+    registerSignalSender(this);
 }
 
 void SMAMTreeWidget::showRightMenu(QPoint pos)
@@ -112,6 +115,17 @@ void SMAMTreeWidget::showRightMenu(QPoint pos)
         }
         case IGMASSTATIONNODE_TREEITEM_TYPE:
         {
+            int index = tree->currentIndex().row();
+            if (ConfigHelper::iGMASStations[index]->getIsAvailable()) {
+                QAction* stopIGMASStation = new QAction(tr("停止iGMAS测站"), this);
+                connect(stopIGMASStation, SIGNAL(triggered(bool)), this, SLOT(stopIGMASStation()));
+                popMenu->addAction(stopIGMASStation);
+            }
+            else {
+                QAction* startIGMASStation = new QAction(tr("启动iGMAS测站"), this);
+                connect(startIGMASStation, SIGNAL(triggered(bool)), this, SLOT(startIGMASStation()));
+                popMenu->addAction(startIGMASStation);
+            }
             QAction* modifyIGMASStation = new QAction(tr("编辑iGMAS测站"), this);
             connect(modifyIGMASStation, SIGNAL(triggered(bool)), this, SLOT(showModifyIGMASStationDialog()));
             popMenu->addAction(modifyIGMASStation);
@@ -158,9 +172,37 @@ void SMAMTreeWidget::showRightMenu(QPoint pos)
 	popMenu->exec(QCursor::pos());
 }
 
-void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
+void SMAMTreeWidget::handleItemClicked(QTreeWidgetItem* item)
 {
-	if (currentContentWidget) {
+    switch (item->type()) {
+        case STANDARDROOT_TREEITEM_TYPE:
+        case IGMASSTATIONROOT_TREEITEM_TYPE:
+        case IGMASDATACENTERROOT_TREEITEM_TYPE:
+        case CENTERROOT_TREEITEM_TYPE:
+            if (currentContentWidget != systemMonitorWidget) {
+                container->removeWidget(currentContentWidget);
+                delete currentContentWidget;
+            }
+            currentContentWidget = systemMonitorWidget;
+            systemMonitorWidget->show();
+            break;
+        case MEMINFO_TREEITEM_TYPE:
+            if (currentContentWidget != systemMonitorWidget) {
+                container->removeWidget(currentContentWidget);
+                delete currentContentWidget;
+            }
+            systemMonitorWidget->hide();
+            currentContentWidget = new SharedMemoryInfoWidget();
+            container->addWidget(currentContentWidget);
+            break;
+        default:
+            break;
+    }
+}
+
+void SMAMTreeWidget::handleItemDoubleClicked(QTreeWidgetItem* item)
+{
+    if (currentContentWidget) {
         if (currentContentWidget == systemMonitorWidget) {
             systemMonitorWidget->hide();
         }
@@ -172,12 +214,6 @@ void SMAMTreeWidget::addWidgetToContainer(QTreeWidgetItem* item)
 
     int index = tree->currentIndex().row(), parentIndex;
     switch (item->type()) {
-        case STANDARDROOT_TREEITEM_TYPE:
-        case IGMASSTATIONROOT_TREEITEM_TYPE:
-        case IGMASDATACENTERROOT_TREEITEM_TYPE:
-        case CENTERROOT_TREEITEM_TYPE:
-            currentContentWidget = systemMonitorWidget;
-            break;
         case STANDARDNODE_TREEITEM_TYPE:
             currentContentWidget = new StandardStationInfoWidget();
             ((StandardStationInfoWidget*) currentContentWidget)->setStation(ConfigHelper::standardStations[index]);
@@ -254,12 +290,12 @@ void SMAMTreeWidget::deleteStandardStation()
 {
     int index = tree->currentIndex().row();
     StandardStation* station = ConfigHelper::standardStations[index];
-    QString content = tr("确认删除基准站 ") + station->getStationName() + tr(" 吗？");
-    QMessageBox box(QMessageBox::Warning, "提示", content);
-    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    box.setButtonText(QMessageBox::Cancel , "取消");
-    box.setButtonText(QMessageBox::Ok , "确认");
-    if (box.exec() == QMessageBox::Ok) {
+    QString content = tr("确认删除基准站<") + station->getStationName() + tr(">吗？");
+    QMessageBox box(QMessageBox::Warning, tr("提示"), content);
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setButtonText(QMessageBox::No , tr("取消"));
+    box.setButtonText(QMessageBox::Yes , tr("确认"));
+    if (box.exec() == QMessageBox::Yes) {
         ConfigHelper::standardStations.removeAt(index);
         ConfigHelper::update();
         systemMonitorWidget->updateView();
@@ -271,9 +307,9 @@ void SMAMTreeWidget::showAddNewReceiverDialog()
 {
     int index = tree->currentIndex().row();
     if (ConfigHelper::standardStations[index]->getReceivers().size() >= MAX_RECEIVER_COUNT_PERSTATION) {
-        QMessageBox box(QMessageBox::Warning, "提示", "超过最大单个基准站所能容纳接收机数目。");
+        QMessageBox box(QMessageBox::Warning, tr("提示"), tr("超过最大单个基准站所能容纳接收机数目。"));
         box.setStandardButtons(QMessageBox::Ok);
-        box.setButtonText(QMessageBox::Ok , "确认");
+        box.setButtonText(QMessageBox::Ok , tr("确认"));
         box.exec();
     }
     else {
@@ -314,18 +350,12 @@ void SMAMTreeWidget::deleteReceiver()
     int index = tree->currentIndex().row();
     int parentIndex = standardStationTreeRoot->indexOfChild(tree->currentItem()->parent());
     Receiver* receiver = ConfigHelper::standardStations[parentIndex]->getReceivers()[index];\
-    QString content = tr("确认删除接受机 ") + receiver->getReceiverName() + tr(" 吗？");
-    QMessageBox box(QMessageBox::Warning, "提示", content);
-    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    box.setButtonText(QMessageBox::Cancel , "取消");
-    box.setButtonText(QMessageBox::Ok , "确认");
-    if (box.exec() == QMessageBox::Ok) {
-        if (FindMemoryInfoFunc != 0) {
-            SharedBuffer(
-                        SharedBuffer::LOOP_BUFFER,
-                        SharedBuffer::ONLY_READ,
-                        FindMemoryInfoFunc(receiver->getMemID(), 0)).setDirty();
-        }
+    QString content = tr("确认删除接受机<") + receiver->getReceiverName() + tr(">吗？");
+    QMessageBox box(QMessageBox::Warning, tr("提示"), content);
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setButtonText(QMessageBox::No , tr("取消"));
+    box.setButtonText(QMessageBox::Yes , tr("确认"));
+    if (box.exec() == QMessageBox::Yes) {
         ConfigHelper::clearReceiverMemID(receiver->getMemID());
         ConfigHelper::standardStations[parentIndex]->removerReceiver(index);
         ConfigHelper::update();
@@ -337,9 +367,9 @@ void SMAMTreeWidget::deleteReceiver()
 void SMAMTreeWidget::showAddNewIGMASStationDialog()
 {
     if (ConfigHelper::iGMASStations.size() > IGMASSTATION_MAXITEMCOUNT) {
-        QMessageBox box(QMessageBox::Warning, "提示", "超过最大单个中心所能容纳的IGMAS站数目。");
+        QMessageBox box(QMessageBox::Warning, tr("提示"), tr("超过最大单个中心所能容纳的iGMAS站数目。"));
         box.setStandardButtons(QMessageBox::Ok);
-        box.setButtonText(QMessageBox::Ok , "确认");
+        box.setButtonText(QMessageBox::Ok , tr("确认"));
         box.exec();
     }
     else {
@@ -351,10 +381,30 @@ void SMAMTreeWidget::showAddNewIGMASStationDialog()
 
 void SMAMTreeWidget::addNewIGMASStation(iGMASStation* station)
 {
+    station->setMemID(ConfigHelper::findFreeIGMASStationMemID());
     ConfigHelper::iGMASStations << station;
     ConfigHelper::update();
     systemMonitorWidget->updateView();
-    tree->currentItem()->addChild(new CommonTreeItem(IGMASSTATIONNODE_TREEITEM_TYPE, station->getStationName(), ":/igmas_station"));
+    tree->currentItem()->addChild(new CommonTreeItem(IGMASSTATIONNODE_TREEITEM_TYPE, station->getDescription(), ":/igmas_station"));
+    emit iGMASStationAdded(station->getBufferItem());
+}
+
+void SMAMTreeWidget::startIGMASStation()
+{
+    int index = tree->currentIndex().row();
+    iGMASStation* station = ConfigHelper::iGMASStations[index];
+    station->setIsAvailable(true);
+    ConfigHelper::update();
+    emit iGMASStationStarted(station->getMemID());
+}
+
+void SMAMTreeWidget::stopIGMASStation()
+{
+    int index = tree->currentIndex().row();
+    iGMASStation* station = ConfigHelper::iGMASStations[index];
+    station->setIsAvailable(false);
+    ConfigHelper::update();
+    emit iGMASStationStoped(station->getMemID());
 }
 
 void SMAMTreeWidget::showModifyIGMASStationDialog()
@@ -371,38 +421,37 @@ void SMAMTreeWidget::modifyIGMASStation(iGMASStation* station)
     systemMonitorWidget->updateView();
     //addWidgetToContainer(tree->currentItem());
     tree->currentItem()->setText(0, station->getStationName());
+    emit iGMASStationModified(station->getMemID());
 }
 
 void SMAMTreeWidget::deleteIGMASStation()
 {
     int index = tree->currentIndex().row();
     iGMASStation* station = ConfigHelper::iGMASStations[index];
-    QString content = tr("确认删除iGMAS测站 ") + station->getStationName() + tr(" 吗？");
-    QMessageBox box(QMessageBox::Warning, "提示", content);
-    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    box.setButtonText(QMessageBox::Cancel , "取消");
-    box.setButtonText(QMessageBox::Ok , "确认");
-    if (box.exec() == QMessageBox::Ok) {
-        if (FindMemoryInfoFunc != 0) {
-            SharedBuffer(
-                        SharedBuffer::LOOP_BUFFER,
-                        SharedBuffer::ONLY_READ,
-                        FindMemoryInfoFunc(station->getMemID(), 0)).setDirty();
-        }
+    QString content = tr("确认删除iGMAS测站<") + station->getDescription() + tr(">吗？");
+    QMessageBox box(QMessageBox::Warning, tr("提示"), content);
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setButtonText(QMessageBox::No , tr("取消"));
+    box.setButtonText(QMessageBox::Yes , tr("确认"));
+    if (box.exec() == QMessageBox::Yes) {
+
         ConfigHelper::clearIGMASStationMemID(station->getMemID());
         ConfigHelper::iGMASStations.removeAt(index);
         ConfigHelper::update();
         systemMonitorWidget->updateView();
+        emit iGMASStationDeleted(station->getMemID());
         delete tree->currentItem()->parent()->takeChild(index);
+        delete station;
+
     }
 }
 
 void SMAMTreeWidget::showAddNewIGMASDataCenterDialog()
 {
     if (ConfigHelper::iGMASDataCenters.size() > IGMASDATACENTER_MAXITEMCOUNT) {
-        QMessageBox box(QMessageBox::Warning, "提示", "超过最大单个中心所能容纳的iGMAS数据中心数目。");
+        QMessageBox box(QMessageBox::Warning, tr("提示"), tr("超过最大单个中心所能容纳的iGMAS数据中心数目。"));
         box.setStandardButtons(QMessageBox::Ok);
-        box.setButtonText(QMessageBox::Ok , "确认");
+        box.setButtonText(QMessageBox::Ok , tr("确认"));
         box.exec();
     }
     else {
@@ -414,10 +463,12 @@ void SMAMTreeWidget::showAddNewIGMASDataCenterDialog()
 
 void SMAMTreeWidget::addNewIGMASDataCenter(iGMASDataCenter* dataCenter)
 {
+    dataCenter->setCenterID(ConfigHelper::getNewIGMASDataCenterID());
     ConfigHelper::iGMASDataCenters << dataCenter;
     ConfigHelper::update();
     systemMonitorWidget->updateView();
     tree->currentItem()->addChild(new CommonTreeItem(IGMASDATACENTERNODE_TREEITEM_TYPE, dataCenter->getCenterName(), ":/datacenter"));
+    emit iGMASDataCenterAdded(dataCenter->getBufferItem());
 }
 
 void SMAMTreeWidget::showModifyIGMASDataCenterDialog()
@@ -434,31 +485,37 @@ void SMAMTreeWidget::modifyIGMASDataCenter(iGMASDataCenter* dataCenter)
     systemMonitorWidget->updateView();
     //addWidgetToContainer(tree->currentItem());
     tree->currentItem()->setText(0, dataCenter->getCenterName());
+    emit iGMASDataCenterModified(dataCenter->getCenterID());
 }
 
 void SMAMTreeWidget::deleteIGMASDataCenter()
 {
     int index = tree->currentIndex().row();
     iGMASDataCenter* dataCenter = ConfigHelper::iGMASDataCenters[index];
-    QString content = tr("确认删除iGMAS数据中心 ") + dataCenter->getCenterName() + tr(" 吗？");
-    QMessageBox box(QMessageBox::Warning, "提示", content);
-    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    box.setButtonText(QMessageBox::Cancel , "取消");
-    box.setButtonText(QMessageBox::Ok , "确认");
-    if (box.exec() == QMessageBox::Ok) {
+    QString content = tr("移除iGMAS数据中心将导致某些iGMAS测站断线重连！\n确认删除iGMAS数据中心<") + dataCenter->getCenterName() + tr(">吗？");
+    QMessageBox box(QMessageBox::Warning, tr("提示"), content);
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setButtonText(QMessageBox::No , tr("取消"));
+    box.setButtonText(QMessageBox::Yes , tr("确认"));
+    if (box.exec() == QMessageBox::Yes) {
+
         ConfigHelper::iGMASDataCenters.removeAt(index);
+        ConfigHelper::deleteIGMASDataCenter(dataCenter->getCenterID());
         ConfigHelper::update();
         systemMonitorWidget->updateView();
+        emit iGMASDataCenterDeleted(dataCenter->getCenterID());
         delete tree->currentItem()->parent()->takeChild(index);
+        delete dataCenter;
+
     }
 }
 
 void SMAMTreeWidget::showAddNewOtherCenterDialog()
 {
     if (ConfigHelper::otherCenters.size() > OTHERCENTER_MAXITEMCOUNT) {
-        QMessageBox box(QMessageBox::Warning, "提示", "超过最大数据中心数目。");
+        QMessageBox box(QMessageBox::Warning, tr("提示"), tr("超过最大数据中心数目。"));
         box.setStandardButtons(QMessageBox::Ok);
-        box.setButtonText(QMessageBox::Ok , "确认");
+        box.setButtonText(QMessageBox::Ok , tr("确认"));
         box.exec();
     }
     else {
@@ -470,10 +527,12 @@ void SMAMTreeWidget::showAddNewOtherCenterDialog()
 
 void SMAMTreeWidget::addNewOtherCenter(OtherCenter* center)
 {
+    center->setCenterID(ConfigHelper::getNewOtherCenterID());
     ConfigHelper::otherCenters << center;
     ConfigHelper::update();
     systemMonitorWidget->updateView();
     tree->currentItem()->addChild(new CommonTreeItem(CENTERNODE_TREEITEM_TYPE, center->getCenterName(), ":/other_center"));
+    emit OtherCenterAdded(center->getBufferItem());
 }
 
 void SMAMTreeWidget::showModifyOtherCenterDialog()
@@ -490,22 +549,25 @@ void SMAMTreeWidget::modifyOtherCenter(OtherCenter* center)
     systemMonitorWidget->updateView();
     //addWidgetToContainer(tree->currentItem());
     tree->currentItem()->setText(0, center->getCenterName());
+    emit OtherCenterModified(center->getCenterID());
 }
 
 void SMAMTreeWidget::deleteOtherCenter()
 {
     int index = tree->currentIndex().row();
     OtherCenter* center = ConfigHelper::otherCenters[index];
-    QString content = tr("确认删除数据中心 ") + center->getCenterName() + tr(" 吗？");
+    QString content = tr("确认删除数据中心<") + center->getCenterName() + tr(">吗？");
     QMessageBox box(QMessageBox::Warning, "提示", content);
-    box.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
-    box.setButtonText(QMessageBox::Cancel , "取消");
-    box.setButtonText(QMessageBox::Ok , "确认");
-    if (box.exec() == QMessageBox::Ok) {
+    box.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    box.setButtonText(QMessageBox::No , tr("取消"));
+    box.setButtonText(QMessageBox::Yes , tr("确认"));
+    if (box.exec() == QMessageBox::Yes) {
         ConfigHelper::otherCenters.removeAt(index);
         ConfigHelper::update();
         systemMonitorWidget->updateView();
+        emit OtherCenterDeleted(center->getCenterID());
         delete tree->currentItem()->parent()->takeChild(tree->currentIndex().row());
+        delete center;
     }
 }
 
@@ -514,7 +576,7 @@ void SMAMTreeWidget::initAtBJ()
     iGMASStationTreeRoot = new CommonTreeItem(IGMASSTATIONROOT_TREEITEM_TYPE, tr("iGMAS测站"), ":/igmas_root");
     for (int i = 0; i < ConfigHelper::iGMASStations.size(); i++) {
         iGMASStation* station = ConfigHelper::iGMASStations[i];
-        iGMASStationTreeRoot->addChild(new CommonTreeItem(IGMASSTATIONNODE_TREEITEM_TYPE, station->getStationName(), ":/igmas_station"));
+        iGMASStationTreeRoot->addChild(new CommonTreeItem(IGMASSTATIONNODE_TREEITEM_TYPE, station->getDescription(), ":/igmas_station"));
     }
 
     iGMASDataCenterTreeRoot = new CommonTreeItem(IGMASDATACENTERROOT_TREEITEM_TYPE, tr("iGMAS数据中心"), ":/datacenter_root");
