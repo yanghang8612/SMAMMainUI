@@ -1,12 +1,9 @@
-#include <QPainter>
+﻿#include <QPainter>
 
 #include "filenode.h"
 
-FileNode::FileNode(quint8 length) :
-    BaseNode(length)
-{
-    setStatus(1);
-}
+FileNode::FileNode(quint8 length) : BaseNode(length)
+{}
 
 QRectF FileNode::boundingRect() const
 {

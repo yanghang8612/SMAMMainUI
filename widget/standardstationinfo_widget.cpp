@@ -1,13 +1,12 @@
-#include "standardstationinfo_widget.h"
+﻿#include "standardstationinfo_widget.h"
 #include "ui_standardstationinfo_widget.h"
-
-extern void* receiverStateSharedBufferPointer;
 
 StandardStationInfoWidget::StandardStationInfoWidget(QWidget *parent) :
 	QTabWidget(parent),
 	ui(new Ui::StationInfoWidget)
 {
 	ui->setupUi(this);
+    this->hide();
     ui->receiverTable->horizontalHeader()->resizeSection(1, 100);
     ui->receiverTable->horizontalHeader()->resizeSection(2, 250);
 	ui->receiverTable->horizontalHeader()->setFixedHeight(TABLEWIDGET_HORIZONHEADER_HEIGHT);
@@ -36,10 +35,10 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
 	foreach (Receiver* receiver, station->getReceivers()) {
 		ui->receiverTable->setItem(index, 0, new QTableWidgetItem(receiver->getReceiverName()));
 		ui->receiverTable->setItem(index, 1, new QTableWidgetItem("TCP/IP"));
-		ui->receiverTable->setItem(index, 2, new QTableWidgetItem(
-                                       QString::number(receiver->getLongitude()) + tr("° | ") +
-                                       QString::number(receiver->getLatitude()) + tr("° | ") +
-                                       QString::number(receiver->getHeight()) + "m"));
+//		ui->receiverTable->setItem(index, 2, new QTableWidgetItem(
+//                                       QString::number(receiver->getLongitude()) + tr("° | ") +
+//                                       QString::number(receiver->getLatitude()) + tr("° | ") +
+//                                       QString::number(receiver->getHeight()) + "m"));
 		ui->receiverTable->setItem(index, 3, new QTableWidgetItem(tr("离线")));
 		index++;
     }
@@ -47,20 +46,20 @@ void StandardStationInfoWidget::setStation(StandardStation* station)
 
 void StandardStationInfoWidget::timerEvent(QTimerEvent*)
 {
-    if (receiverStateSharedBufferPointer != 0) {
-        qMemCopy(receiverState,
-                 (char*) receiverStateSharedBufferPointer + 4,
-                 RECEIVER_MAXITEMCOUNT * sizeof(ReceiverState));
+//    if (receiverStateSharedBufferPointer != 0) {
+//        qMemCopy(receiverState,
+//                 (char*) receiverStateSharedBufferPointer + 4,
+//                 RECEIVER_MAXITEMCOUNT * sizeof(ReceiverState));
 
-        for (int i = 0; i < station->getReceivers().size(); i++) {
-            bool isConnected = false;
-            for (int j = 0; j < RECEIVER_MAXITEMCOUNT; j++) {
-                if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMountPoint().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
-                    isConnected = true;
-                    break;
-                }
-            }
-            ui->receiverTable->item(i, 3)->setText(isConnected ? "在线" : "离线");
-        }
-    }
+//        for (int i = 0; i < station->getReceivers().size(); i++) {
+//            bool isConnected = false;
+//            for (int j = 0; j < RECEIVER_MAXITEMCOUNT; j++) {
+//                if (receiverState[j].isConnected && qstrcmp(station->getReceivers()[i]->getMountPoint().toStdString().c_str(), receiverState[j].mount + 1) == 0) {
+//                    isConnected = true;
+//                    break;
+//                }
+//            }
+//            ui->receiverTable->item(i, 3)->setText(isConnected ? "在线" : "离线");
+//        }
+//    }
 }

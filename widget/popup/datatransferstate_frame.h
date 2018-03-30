@@ -1,10 +1,10 @@
-#ifndef DATATRANSFERSTATE_FRAME_H
+﻿#ifndef DATATRANSFERSTATE_FRAME_H
 #define DATATRANSFERSTATE_FRAME_H
 
 #include <QFrame>
 
 namespace Ui {
-class DataTransferStateFrame;
+    class DataTransferStateFrame;
 }
 
 class DataTransferStateFrame : public QFrame
@@ -15,7 +15,8 @@ public:
     explicit DataTransferStateFrame(QWidget *parent = 0);
     ~DataTransferStateFrame();
 
-    void setState(const QString& centerName, bool isMaster);
+    void setCurrentDataCenter(const QString& centerName, bool isMaster);
+    void setRcvdDataLength(long rcvdDataLength);
 
 private:
     Ui::DataTransferStateFrame *ui;

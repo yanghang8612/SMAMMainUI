@@ -30,6 +30,11 @@ SystemManagerWidget::SystemManagerWidget(QWidget *parent) :
 	ui->infoOutputTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->infoOutputTable->setSelectionMode(QAbstractItemView::NoSelection);
 
+    if (deploymentType ==  DeploymentType::BJ_CENTER) {
+        ui->totalCountLabel->setText(tr("配置测站数量"));
+        ui->onlineCountLabel->setText(tr("正常测站数量"));
+    }
+
     resourceCheckTimer = new QTimer(this);
     connect(resourceCheckTimer, SIGNAL(timeout()), this, SLOT(checkResource()));
     resourceCheckTimer->start(RESOURCE_CHECK_TIMEINTERVAL);
@@ -38,7 +43,7 @@ SystemManagerWidget::SystemManagerWidget(QWidget *parent) :
         messageBuffers[i] = new SharedBuffer(componentStateSharedBufferPointer[i]);
     }
     messageReceiveTimer = new QTimer(this);
-    connect(messageReceiveTimer, SIGNAL(timeout()), this, SLOT(addMessageToInfoContainer()));
+    connect(messageReceiveTimer, SIGNAL(timeout()), this, SLOT(checkMessage()));
     messageReceiveTimer->start(MESSAGE_CHECK_TIMEINTERVAL);
 
     treeWidget = new SMAMTreeWidget(ui->treeWidget, ui->contentContainer);
@@ -56,26 +61,36 @@ SystemManagerWidget::~SystemManagerWidget()
 
 void SystemManagerWidget::checkResource()
 {
-        QString result = QString(proc->readAllStandardOutput());
-        QStringList lines = result.split(QRegExp("\\n"));
-        if (lines.size() >= 10) {
-            QStringList array = lines[9].split(QRegExp("\\s+"));
-            int startIndex = (array[0] == "") ? 9 : 8;
-            ui->cpuBar->setValue(array[startIndex].toDouble() * 10);
-            ui->cpuValue->setText(array[startIndex] + "%");
-            ui->memBar->setValue(array[startIndex + 1].toDouble() * 10);
-            ui->memValue->setText(array[startIndex + 1] + "%");
-        }
-        ui->diskBar->setValue(getUsedDiskSize());
-        ui->diskValue->setText(QString::number(getTotalDiskSize() - getUsedDiskSize()) + "MB");
-        ui->dateTimeLabel->setText(QDateTime::currentDateTime().toString(DATETIME_FORMAT_STRING));
+    QString result = QString(proc->readAllStandardOutput());
+    QStringList lines = result.split(QRegExp("\\n"));
+    if (lines.size() >= 10) {
+        QStringList array = lines[9].split(QRegExp("\\s+"));
+        int startIndex = (array[0] == "") ? 9 : 8;
+        ui->cpuBar->setValue(array[startIndex].toDouble() * 10);
+        ui->cpuValue->setText(array[startIndex] + "%");
+        ui->memBar->setValue(array[startIndex + 1].toDouble() * 10);
+        ui->memValue->setText(array[startIndex + 1] + "%");
+    }
+    ui->diskBar->setValue(getUsedDiskSize());
+    ui->diskValue->setText(QString::number(getTotalDiskSize() - getUsedDiskSize()) + "MB");
+    ui->dateTimeLabel->setText(QDateTime::currentDateTime().toString(DATETIME_FORMAT_STRING));
 
-        if (userRegisterInfoSharedBufferPointer != 0) {
-            ui->registeredUserCount->display(*((int*) userRegisterInfoSharedBufferPointer));
-        }
-        if (userRealtimeInfoSharedBufferPointer != 0) {
-            ui->onlineUserCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
-        }
+    switch (deploymentType) {
+        case DeploymentType::XJ_CENTER:
+            ui->totalCount->display(*((int*) userRegisterInfoSharedBufferPointer));
+            ui->onlineCount->display(*((int*) userRealtimeInfoSharedBufferPointer));
+            break;
+        case DeploymentType::BJ_CENTER:
+            ui->totalCount->display(ConfigHelper::monitorStations.size());
+            int onlineCount = 0;
+            for (int i = 0; i < ConfigHelper::monitorStations.size(); i++) {
+                if (ConfigHelper::monitorStations[i]->getState() == MonitorStation::NORMAl) {
+                    onlineCount++;
+                }
+            }
+            ui->onlineCount->display(onlineCount);
+            break;
+    }
 }
 
 void SystemManagerWidget::checkMessage()
@@ -113,6 +128,11 @@ void SystemManagerWidget::checkMessage()
             ui->infoOutputTable->setCurrentCell(currentRowCount, 0);
         }
     }
+}
+
+void SystemManagerWidget::changeOnlineStationCount(bool isOnline)
+{
+    ui->onlineCount->display(ui->onlineCount->value() + (isOnline ? 1 : -1));
 }
 
 void SystemManagerWidget::closeEvent(QCloseEvent *closeEvent)

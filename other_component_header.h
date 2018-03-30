@@ -1,4 +1,4 @@
-#ifndef OTHER_COMPONENT_HEADER_H
+﻿#ifndef OTHER_COMPONENT_HEADER_H
 #define OTHER_COMPONENT_HEADER_H
 
 #include <time.h>
@@ -33,16 +33,6 @@ struct ReceiverState {
     bool isConnected;
     char mount[8];
 };//102
-
-struct OtherCenterState {
-    bool isConnected;
-    char ipAddress[16];
-};//103
-
-struct IGMASState {
-    bool isConnected;
-    char ipAddress[16];
-};//107
 
 #endif // OTHER_COMPONENT_HEADER_H
 

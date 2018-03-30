@@ -1,5 +1,6 @@
-#include "receiver.h"
+﻿#include "receiver.h"
 #include "common.h"
+#include "utilities/general_functions.h"
 
 extern void* receiverSharedBufferPointer;
 
@@ -17,6 +18,7 @@ Receiver::Receiver() : memID(0)
 
 Receiver::~Receiver()
 {
+    setMemID(0);
     (*((int*)receiverSharedBufferPointer))--;
 }
 
@@ -43,9 +45,8 @@ QString Receiver::getReceiverName() const
 
 void Receiver::setReceiverName(const QString& value)
 {
-	receiverName = value;
-    qMemSet(bufferItem->receiverName, 0, sizeof(bufferItem->receiverName));
-    qMemCopy(bufferItem->receiverName, value.toStdString().c_str(), value.length());
+    receiverName = value;
+    qstrcpy(bufferItem->receiverName, value.toStdString().c_str());
 }
 
 QString Receiver::getPassword() const
@@ -56,8 +57,7 @@ QString Receiver::getPassword() const
 void Receiver::setPassword(const QString& value)
 {
     password = value;
-    qMemSet(bufferItem->password, 0, sizeof(bufferItem->password));
-    qMemCopy(bufferItem->password, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->password, value.toStdString().c_str());
 }
 
 QString Receiver::getIpAddress() const
@@ -68,8 +68,7 @@ QString Receiver::getIpAddress() const
 void Receiver::setIpAddress(const QString& value)
 {
     ipAddress = value;
-    qMemSet(bufferItem->ipAddress, 0, sizeof(bufferItem->ipAddress));
-    qMemCopy(bufferItem->ipAddress, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->ipAddress, value.toStdString().c_str());
 }
 
 quint16 Receiver::getPort() const
@@ -96,56 +95,52 @@ QString Receiver::getMountPoint() const
 void Receiver::setMountPoint(const QString& value)
 {
     mountPoint = value;
-    qMemSet(bufferItem->mountPoint, 0, sizeof(bufferItem->mountPoint));
-    qMemCopy(bufferItem->mountPoint, ("/" + value).toStdString().c_str(), ("/" + value).length());
+    qstrcpy(bufferItem->mountPoint, ("/" + value).toStdString().c_str());
 }
 
-float Receiver::getLongitude() const
+DMS Receiver::getLongitude() const
 {
     return longitude;
 }
 
-void Receiver::setLongitude(float value)
+void Receiver::setLongitude(const DMS& value)
 {
-	longitude = value;
-    bufferItem->longitude = value;
+    longitude = value;
 }
 
 void Receiver::setLongitude(const QString& value)
 {
-    setLongitude(value.toFloat());
+    setLongitude(GeneralFunctions::convertQStringToDMS(value));
 }
 
-float Receiver::getLatitude() const
+DMS Receiver::getLatitude() const
 {
     return latitude;
 }
 
-void Receiver::setLatitude(float value)
+void Receiver::setLatitude(const DMS& value)
 {
-	latitude = value;
-    bufferItem->latitude = value;
+    latitude = value;
 }
 
 void Receiver::setLatitude(const QString& value)
 {
-    setLatitude(value.toFloat());
+    setLatitude(GeneralFunctions::convertQStringToDMS(value));
 }
 
-float Receiver::getHeight() const
+double Receiver::getHeight() const
 {
     return height;
 }
 
-void Receiver::setHeight(float value)
+void Receiver::setHeight(double value)
 {
     height = value;
-    bufferItem->height = value;
 }
 
 void Receiver::setHeight(const QString& value)
 {
-    setHeight(value.toFloat());
+    setHeight(value.toDouble());
 }
 
 QString Receiver::getDetail() const
@@ -156,8 +151,7 @@ QString Receiver::getDetail() const
 void Receiver::setDetail(const QString& value)
 {
     receiverDetail = value;
-    qMemSet(bufferItem->receiverDetail, 0, sizeof(bufferItem->receiverDetail));
-    qMemCopy(bufferItem->receiverDetail, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->receiverDetail, value.toStdString().c_str());
 }
 
 ReceiverInBuffer*Receiver::getBufferItem()
@@ -168,29 +162,15 @@ ReceiverInBuffer*Receiver::getBufferItem()
 ReceiverInBuffer Receiver::toReceiverInBuffer()
 {
     ReceiverInBuffer bufferItem;
-    qMemSet(&bufferItem, 0, sizeof(ReceiverInBuffer));
     bufferItem.memID = memID;
-    qMemCopy(bufferItem.receiverName, receiverName.toStdString().c_str(), receiverName.length());
-    qMemCopy(bufferItem.password, password.toStdString().c_str(), password.length());
-    qMemCopy(bufferItem.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
+    qstrcpy(bufferItem.receiverName, receiverName.toStdString().c_str());
+    qstrcpy(bufferItem.password, password.toStdString().c_str());
+    qstrcpy(bufferItem.ipAddress, ipAddress.toStdString().c_str());
     bufferItem.port = port;
-    qMemCopy(bufferItem.mountPoint, ("/" + mountPoint).toStdString().c_str(), mountPoint.length() + 1);
+    qstrcpy(bufferItem.mountPoint, ("/" + mountPoint).toStdString().c_str());
     bufferItem.longitude = longitude;
     bufferItem.latitude = latitude;
     bufferItem.height = height;
-    qMemCopy(bufferItem.receiverDetail, receiverDetail.toStdString().c_str(), receiverDetail.length());
+    qstrcpy(bufferItem.receiverDetail, receiverDetail.toStdString().c_str());
     return bufferItem;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

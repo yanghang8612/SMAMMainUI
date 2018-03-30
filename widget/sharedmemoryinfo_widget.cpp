@@ -1,4 +1,4 @@
-#include <QMessageBox>
+﻿#include <QMessageBox>
 #include <QScrollBar>
 #include <QWheelEvent>
 #include <QDebug>
@@ -13,6 +13,7 @@ SharedMemoryInfoWidget::SharedMemoryInfoWidget(QWidget *parent) :
     ui(new Ui::SharedMemoryInfoWidget), buffer(0), hexTableChanging(false), charTableChanging(false)
 {
     ui->setupUi(this);
+    this->hide();
     ui->memoryHexInfoTable->setColumnCount(16);
     ui->memoryHexInfoTable->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
     ui->memoryHexInfoTable->setShowGrid(false);
@@ -40,7 +41,7 @@ bool SharedMemoryInfoWidget::eventFilter(QObject* target, QEvent* event)
 {
     if(event->type() == QEvent::Wheel)
     {
-        QScrollBar* scrollBar;
+        QScrollBar* scrollBar = 0;
         if (target == ui->memoryHexInfoTable->verticalScrollBar()){
             scrollBar = ui->memoryCharInfoTable->verticalScrollBar();
         }

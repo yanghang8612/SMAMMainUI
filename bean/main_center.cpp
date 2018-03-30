@@ -1,6 +1,6 @@
 #include "main_center.h"
 
-MainCenter::MainCenter()
+MainCenter::MainCenter(const QString& centerName) : centerName(centerName)
 {}
 
 void MainCenter::addOtherCenter(OtherCenter* otherCenter)

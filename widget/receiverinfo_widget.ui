@@ -10,6 +10,11 @@
     <height>470</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="tabPosition">
    <enum>QTabWidget::South</enum>
   </property>
@@ -57,12 +62,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="receiverPortEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -83,12 +82,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="receiverNameEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -109,12 +102,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="receiverIPEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -132,11 +119,8 @@
      </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="receiverMountEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -176,12 +160,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="receiverLongitudeEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -199,12 +177,6 @@
      </item>
      <item row="1" column="1">
       <widget class="QLineEdit" name="receiverLatitudeEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -222,12 +194,6 @@
      </item>
      <item row="2" column="1">
       <widget class="QLineEdit" name="receiverHeightEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
@@ -268,9 +234,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
       <widget class="QTextBrowser" name="receiverDetail">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>

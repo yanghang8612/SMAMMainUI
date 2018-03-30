@@ -10,6 +10,11 @@
     <height>170</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="styleSheet">
    <string notr="true">#SoftwareStatusFrame {
   border: 1px solid gray;

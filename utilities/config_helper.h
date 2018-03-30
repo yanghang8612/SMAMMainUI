@@ -1,4 +1,4 @@
-#ifndef CONFIGHELPER_H
+﻿#ifndef CONFIGHELPER_H
 #define CONFIGHELPER_H
 
 #include <QDomDocument>
@@ -6,8 +6,8 @@
 #include <QBitArray>
 
 #include "bean/standard_station.h"
-#include "bean/igmas_station.h"
-#include "bean/igmas_datacenter.h"
+#include "bean/monitor_station.h"
+#include "bean/data_center.h"
 #include "bean/other_center.h"
 
 class ConfigHelper
@@ -17,18 +17,18 @@ public:
     static void update();
     static QList<int> componentStateCheckIntervals;
     static QList<StandardStation*> standardStations;
-    static QList<iGMASStation*> iGMASStations;
-    static QList<iGMASDataCenter*> iGMASDataCenters;
+    static QList<MonitorStation*> monitorStations;
+    static QList<DataCenter*> dataCenters;
     static QList<OtherCenter*> otherCenters;
 
-    static iGMASDataCenter* getIGMASDataCenterByCenterID(int centerID);
+    static DataCenter* getDataCenterByCenterID(int centerID);
     static int findFreeReceiverMemID();
-    static int findFreeIGMASStationMemID();
+    static int findFreeMonitorStationMemID();
     static void clearReceiverMemID(int memID);
-    static void clearIGMASStationMemID(int memID);
-    static int getNewIGMASDataCenterID();
+    static void clearMonitorStationMemID(int memID);
+    static int getNewDataCenterID();
     static int getNewOtherCenterID();
-    static void deleteIGMASDataCenter(int centerID);
+    static void deleteDataCenter(int centerID);
 
 private:
     ConfigHelper();
@@ -39,10 +39,10 @@ private:
     static void setComponentStateCheckIntervalsToDOM();
     static void getStandardStationsFromDOM();
     static void setStandardStationsToDOM();
-    static void getIGMASStationsFromDOM();
-    static void setIGMASStationsToDOM();
-    static void getIGMASDataCentersFromDOM();
-    static void setIGMASDataCentersToDOM();
+    static void getMonitorStationsFromDOM();
+    static void setMonitorStationsToDOM();
+    static void getDataCentersFromDOM();
+    static void setDataCentersToDOM();
     static void getOtherCentersFromDOM();
     static void setOtherCentersToDOM();
     static void writeConfigFile();
@@ -51,8 +51,8 @@ private:
     static QDomDocument root;
 
     static QBitArray receiverMemIDArray;
-    static QBitArray iGMASStationMemIDArray;
-    static qint32 maxIGMASDataCenterID;
+    static QBitArray monitorStationMemIDArray;
+    static qint32 maxDataCenterID;
     static qint32 maxOtherCenterID;
 };
 

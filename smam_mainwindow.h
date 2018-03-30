@@ -5,10 +5,8 @@
 #include <QMdiArea>
 #include <QMdiSubWindow>
 
-#include "menu/base_menu.h"
-
 namespace Ui {
-class SMAMMainWindow;
+    class SMAMMainWindow;
 }
 
 class SMAMMainWindow : public QMainWindow
@@ -21,12 +19,10 @@ public:
 
 private slots:
     void handleManagerCloseMessage();
-
     void on_systemManagerAction_triggered(bool checked);
 
 private:
-	Ui::SMAMMainWindow *ui;
-	BaseMenu* menu;
+    Ui::SMAMMainWindow *ui;
 
     QMdiSubWindow* systemManagerSub;
 };

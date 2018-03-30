@@ -7,19 +7,21 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>720</height>
+    <height>700</height>
    </rect>
   </property>
-  <property name="styleSheet">
-   <string notr="true"/>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
   </property>
   <widget class="QGroupBox" name="verticalGroupBox">
    <property name="geometry">
     <rect>
-     <x>0</x>
-     <y>5</y>
+     <x>5</x>
+     <y>6</y>
      <width>1265</width>
-     <height>720</height>
+     <height>700</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -28,7 +30,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="0,7">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,9">
     <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="styleSheet">
@@ -56,7 +58,7 @@
        <item>
         <layout class="QVBoxLayout" name="registerUserCountLayout">
          <item>
-          <widget class="QLabel" name="registeredUserCountLabel">
+          <widget class="QLabel" name="totalCountLabel">
            <property name="text">
             <string>注册用户数量</string>
            </property>
@@ -66,7 +68,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="registeredUserCount">
+          <widget class="QLCDNumber" name="totalCount">
            <property name="mode">
             <enum>QLCDNumber::Dec</enum>
            </property>
@@ -80,7 +82,7 @@
        <item>
         <layout class="QVBoxLayout" name="onlineUserCountLayout">
          <item>
-          <widget class="QLabel" name="onlineUserCountLabel">
+          <widget class="QLabel" name="onlineCountLabel">
            <property name="text">
             <string>在线用户数量</string>
            </property>
@@ -90,7 +92,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QLCDNumber" name="onlineUserCount">
+          <widget class="QLCDNumber" name="onlineCount">
            <property name="mode">
             <enum>QLCDNumber::Dec</enum>
            </property>
@@ -311,7 +313,7 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="rightSideLayout" stretch="4,1">
+       <layout class="QVBoxLayout" name="rightSideLayout" stretch="3,1">
         <property name="spacing">
          <number>0</number>
         </property>

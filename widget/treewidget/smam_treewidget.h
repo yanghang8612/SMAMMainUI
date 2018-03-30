@@ -9,7 +9,15 @@
 
 #include "common.h"
 #include "utilities/config_helper.h"
-#include "widget/monitor/mainmonitor_widget.h"
+#include "widget/monitor/centermonitor_widget.h"
+#include "widget/monitor/receivermonitor_widget.h"
+#include "widget/monitor/stationmonitor_widget.h"
+#include "widget/centerinfo_widget.h"
+#include "widget/datacenter_widget.h"
+#include "widget/monitorstationinfo_widget.h"
+#include "widget/standardstationinfo_widget.h"
+#include "widget/receiverinfo_widget.h"
+#include "widget/sharedmemoryinfo_widget.h"
 
 class SMAMTreeWidget : public QObject
 {
@@ -17,16 +25,17 @@ class SMAMTreeWidget : public QObject
 
 public:
     SMAMTreeWidget(QTreeWidget* tree, QVBoxLayout* container);
+    ~SMAMTreeWidget();
 
 signals:
-    void iGMASStationAdded(iGMASStationInBuffer* station);
+    void iGMASStationAdded(MonitorStationInBuffer* station);
     void iGMASStationStarted(int memID);
     void iGMASStationStoped(int memID);
     void iGMASStationModified(int memID);
     void iGMASStationDeleted(int memID);
-    void iGMASDataCenterAdded(iGMASDataCenterInBuffer* dataCenter);
-    void iGMASDataCenterModified(int centerID);
-    void iGMASDataCenterDeleted(int centerID);
+    void DataCenterAdded(DataCenterInBuffer* dataCenter);
+    void DataCenterModified(int centerID);
+    void DataCenterDeleted(int centerID);
     void OtherCenterAdded(OtherCenterInBuffer* center);
     void OtherCenterModified(int centerID);
     void OtherCenterDeleted(int centerID);
@@ -34,7 +43,6 @@ signals:
 private slots:
     void showRightMenu(QPoint pos);
     void handleItemClicked(QTreeWidgetItem* item);
-    void handleItemDoubleClicked(QTreeWidgetItem* item);
 
 	void showAddNewStandardStationDialog();
 	void addNewStandardStation(StandardStation* station);
@@ -52,24 +60,24 @@ private slots:
 
 	void deleteReceiver();
 
-    void showAddNewIGMASStationDialog();
-    void addNewIGMASStation(iGMASStation* station);
+    void showAddNewMonitorStationDialog();
+    void addNewMonitorStation(MonitorStation* station);
 
-    void startIGMASStation();
-    void stopIGMASStation();
+    void startMonitorStation();
+    void stopMonitorStation();
 
-    void showModifyIGMASStationDialog();
-    void modifyIGMASStation(iGMASStation* station);
+    void showModifyMonitorStationDialog();
+    void modifyMonitorStation(MonitorStation* station);
 
-    void deleteIGMASStation();
+    void deleteMonitorStation();
 
-    void showAddNewIGMASDataCenterDialog();
-    void addNewIGMASDataCenter(iGMASDataCenter* dataCenter);
+    void showAddNewDataCenterDialog();
+    void addNewDataCenter(DataCenter* dataCenter);
 
-    void showModifyIGMASDataCenterDialog();
-    void modifyIGMASDataCenter(iGMASDataCenter* dataCenter);
+    void showModifyDataCenterDialog();
+    void modifyDataCenter(DataCenter* dataCenter);
 
-    void deleteIGMASDataCenter();
+    void deleteDataCenter();
 
     void showAddNewOtherCenterDialog();
     void addNewOtherCenter(OtherCenter* center);
@@ -82,15 +90,23 @@ private slots:
 private:
     QTreeWidget* tree;
     QTreeWidgetItem* standardStationTreeRoot;
-    QTreeWidgetItem* iGMASStationTreeRoot;
-    QTreeWidgetItem* iGMASDataCenterTreeRoot;
+    QTreeWidgetItem* monitorStationTreeRoot;
+    QTreeWidgetItem* dataCenterTreeRoot;
     QTreeWidgetItem* otherCenterTreeRoot;
     QTreeWidgetItem* memoryTreeRoot;
     QTreeWidgetItem* dmzTreeRoot;
 
     QVBoxLayout* container;
 	QWidget* currentContentWidget;
-    MainMonitorWidget* systemMonitorWidget;
+    CenterMonitorWidget* centerMonitorWidget;
+    ReceiverMonitorWidget* receiverMonitorWidget;
+    StationMonitorWidget* stationMonitorWidget;
+    CenterInfoWidget* centerInfoWidget;
+    DataCenterWidget* dataCenterWidget;
+    MonitorStationInfoWidget* monitorStationInfoWidget;
+    ReceiverInfoWidget* receiverInfoWidget;
+    SharedMemoryInfoWidget* sharedMemoryInfoWidget;
+    StandardStationInfoWidget* standardStationInfoWidget;
 
 	void initAtBJ();
     void initAtXJ();

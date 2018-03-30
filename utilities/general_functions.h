@@ -1,9 +1,10 @@
-#ifndef GENERALFUNCTIONS_H
+﻿#ifndef GENERALFUNCTIONS_H
 #define GENERALFUNCTIONS_H
 
 #include <QRegExp>
 
 #include "common.h"
+#include "smam_component_header.h"
 
 class GeneralFunctions
 {
@@ -32,6 +33,8 @@ public:
     static bool checkUserNameString(const QString& s);
     static bool checkPasswordString(const QString& s);
 
+    static QString convertDMSToQString(const DMS& value);
+    static DMS convertQStringToDMS(const QString& value);
     static void writeMessageToFront(const QString& message);
 };
 

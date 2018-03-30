@@ -1,4 +1,4 @@
-#include "othercenter_edit_dialog.h"
+﻿#include "othercenter_edit_dialog.h"
 #include "ui_othercenter_edit_dialog.h"
 
 #include "utilities/general_functions.h"
@@ -8,7 +8,7 @@ OtherCenterEditDialog::OtherCenterEditDialog(QWidget *parent) :
     ui(new Ui::OtherCenterEditDialog), center(new OtherCenter())
 {
     ui->setupUi(this);
-    setWindowTitle(tr("添加数据中心"));
+    setWindowTitle(tr("添加播发服务分中心"));
 }
 
 OtherCenterEditDialog::OtherCenterEditDialog(OtherCenter* center, QWidget* parent) :
@@ -21,7 +21,7 @@ OtherCenterEditDialog::OtherCenterEditDialog(OtherCenter* center, QWidget* paren
     ui->passwordEdit->setText(center->getPassword());
     ui->ipAddressEdit->setText(center->getIpAddress());
     ui->detailEdit->setText(center->getDetail());
-    setWindowTitle(tr("编辑数据中心信息"));
+    setWindowTitle(tr("编辑播发服务分中心"));
 }
 
 OtherCenterEditDialog::~OtherCenterEditDialog()

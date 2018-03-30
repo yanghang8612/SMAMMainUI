@@ -13,16 +13,10 @@ public:
     void addFromEdge(Edge* e);
     void addToEdge(Edge* e);
 
-    void transformData();
-
-	void setStatus(quint8 status);
-    quint8 getStatus() const;
-
 protected:
     QList<Edge*> edgeFromNodeList;
     QList<Edge*> edgeToNodeList;
     quint8 length;
-    quint8 status;
 };
 
 #endif // BASENODE_H

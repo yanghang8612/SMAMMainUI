@@ -1,4 +1,4 @@
-#ifndef RECEIVER_H
+﻿#ifndef RECEIVER_H
 #define RECEIVER_H
 
 #include <QString>
@@ -31,16 +31,16 @@ public:
     QString getMountPoint() const;
     void setMountPoint(const QString& value);
 
-	float getLongitude() const;
-	void setLongitude(float value);
-	void setLongitude(const QString& value);
+    DMS getLongitude() const;
+    void setLongitude(const DMS& value);
+    void setLongitude(const QString& value);
 
-	float getLatitude() const;
-	void setLatitude(float value);
-	void setLatitude(const QString& value);
+    DMS getLatitude() const;
+    void setLatitude(const DMS& value);
+    void setLatitude(const QString& value);
 
-    float getHeight() const;
-    void setHeight(float value);
+    double getHeight() const;
+    void setHeight(double value);
     void setHeight(const QString& value);
 
     QString getDetail() const;
@@ -57,9 +57,9 @@ private:
     QString ipAddress;
     quint16 port;
     QString mountPoint;
-	float longitude;
-	float latitude;
-    float height;
+    DMS longitude;
+    DMS latitude;
+    double height;
     QString receiverDetail;
 };
 

@@ -1,48 +1,56 @@
-#include <QPainter>
+﻿#include <QPainter>
 #include <QTimer>
+#include <QDebug>
 
 #include "datastatenode.h"
 
-DataStateNode::DataStateNode() :
-    brushColor(Qt::white)
-{}
+DataStateNode::DataStateNode(QWidget* parent) :
+    QFrame(parent),
+    brushColor(Qt::darkGray)
+{
+    this->setStyleSheet("QFrame{border: 0px;}");
+    this->setAttribute(Qt::WA_PaintOnScreen);
+}
 
 void DataStateNode::flickerOnce()
 {
-    preBrushColor = brushColor;
-    brushColor = Qt::white;
-    update();
-    QTimer::singleShot(80, this, SLOT(turnIntoNormal()));
+    if (brushColor == Qt::white) {
+        brushColor = Qt::green;
+        update();
+        QTimer::singleShot(50, this, SLOT(turnIntoNormal()));
+    }
 }
 
 void DataStateNode::setState(int state)
 {
     switch (state) {
         case 0:
-            brushColor = Qt::white;
+            brushColor = Qt::darkGray;
             break;
         case 1:
+            brushColor = Qt::white;
+            break;
+        case 2:
+            brushColor = Qt::red;
+            break;
+        case 3:
             brushColor = Qt::green;
             break;
-        case -1:
-            brushColor = Qt::red;
     }
+    update();
 }
 
-QRectF DataStateNode::boundingRect() const
+void DataStateNode::paintEvent(QPaintEvent*)
 {
-    return QRectF(-2.5, -2.5, 5, 5);
-}
-
-void DataStateNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
-{
-    painter->setPen(Qt::gray);
-    painter->setBrush(brushColor);
-    painter->drawEllipse(-2.5, -2.5, 5, 5);
+    QPainter painter(this);
+    painter.fillRect(this->rect(), QColor(255, 255, 255));
+    painter.setPen(Qt::gray);
+    painter.setBrush(brushColor);
+    painter.drawEllipse(1, 1, 6, 6);
 }
 
 void DataStateNode::turnIntoNormal()
 {
-    brushColor = preBrushColor;
+    brushColor = Qt::white;
     update();
 }

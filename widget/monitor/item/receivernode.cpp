@@ -23,21 +23,7 @@ QRectF ReceiverNode::boundingRect() const
 
 void ReceiverNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    QString imageName;
-    switch (status) {
-        case 0:
-            imageName = ":/receiver_normal";
-            break;
-        case 1:
-            imageName = ":/receiver_green";
-            break;
-        case 2:
-            imageName = ":/receiver_normal";
-            break;
-        default:
-            break;
-    }
-    painter->drawImage(QRectF(- length / 2, - length / 2, length, length), QImage(imageName));
+    painter->drawImage(QRectF(- length / 2, - length / 2, length, length), QImage(":/receiver_normal"));
     painter->setFont(QFont("Helvetica", 7, QFont::Bold));
     QTextOption option(Qt::AlignTrailing | Qt::AlignVCenter);
     option.setWrapMode(QTextOption::WordWrap);

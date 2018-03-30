@@ -1,7 +1,14 @@
-#ifndef SMAMFRAMEWORK_HEADER
+﻿#ifndef SMAMFRAMEWORK_HEADER
 #define SMAMFRAMEWORK_HEADER
 
 #define MAX_RECEIVER_COUNT 2
+
+struct DMS {
+    int degree;
+    int minute;
+    int second;
+    int fractionalPart;
+};
 
 struct ReceiverInBuffer {
     int memID;
@@ -10,9 +17,9 @@ struct ReceiverInBuffer {
     char ipAddress[16];
     unsigned short port;
     char mountPoint[8];
-    float longitude;
-    float latitude;
-    float height;
+    DMS longitude;
+    DMS latitude;
+    double height;
     char receiverDetail[256];
 };
 
@@ -33,19 +40,19 @@ struct OtherCenterInBuffer {
     char centerDetail[256];
 };
 
-struct iGMASStationInBuffer {
+struct MonitorStationInBuffer {
     int memID;
     bool isAvailable;
     char stationName[64];
     char mountPoint[8];
-    double longitude;
-    double latitude;
+    DMS longitude;
+    DMS latitude;
     double height;
     char stationDetail[256];
     char dataCenters[64];
 };
 
-struct iGMASDataCenterInBuffer {
+struct DataCenterInBuffer {
     int centerID;
     char centerName[64];
     char masterIPAddress[16];

@@ -17,7 +17,7 @@ QRectF MainCenterNode::boundingRect() const
 
 void MainCenterNode::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*)
 {
-    painter->drawImage(QRectF(-length / 2, - length / 2 - 10, length, length), QImage(":/maincenter"));
+    painter->drawImage(QRectF(-length / 2, - length / 2 - 10, length, length), QImage(":/maincenter_node"));
     painter->setFont(QFont("Helvetica", 10, QFont::Bold));
     painter->drawText(-length / 2 - 10, length / 2 - 5, length + 20, 13, Qt::AlignCenter, center->getCenterName());
 }

@@ -25,6 +25,7 @@ public:
 private slots:
     void checkResource();
     void checkMessage();
+    void changeOnlineStationCount(bool isOnline);
     void closeEvent(QCloseEvent* closeEvent);
 
 signals:

@@ -1,4 +1,4 @@
-#include "other_center.h"
+﻿#include "other_center.h"
 #include "common.h"
 
 extern void* otherCenterSharedBufferPointer;
@@ -17,7 +17,7 @@ OtherCenter::OtherCenter() : centerID(0)
 
 OtherCenter::~OtherCenter()
 {
-    bufferItem->centerID = 0;
+    setCenterID(0);
     (*((int*)otherCenterSharedBufferPointer))--;
 }
 
@@ -45,8 +45,7 @@ QString OtherCenter::getCenterName() const
 void OtherCenter::setCenterName(const QString& value)
 {
     centerName = value;
-    qMemSet(bufferItem->centerName, 0, sizeof(bufferItem->centerName));
-    qMemCopy(bufferItem->centerName, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->centerName, value.toStdString().c_str());
 }
 
 QString OtherCenter::getIpAddress() const
@@ -57,8 +56,7 @@ QString OtherCenter::getIpAddress() const
 void OtherCenter::setIpAddress(const QString& value)
 {
     ipAddress = value;
-    qMemSet(bufferItem->ipAddress, 0, sizeof(bufferItem->ipAddress));
-    qMemCopy(bufferItem->ipAddress, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->ipAddress, value.toStdString().c_str());
 }
 
 QString OtherCenter::getUsername() const
@@ -69,8 +67,7 @@ QString OtherCenter::getUsername() const
 void OtherCenter::setUsername(const QString& value)
 {
     username = value;
-    qMemSet(bufferItem->username, 0, sizeof(bufferItem->username));
-    qMemCopy(bufferItem->username, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->username, value.toStdString().c_str());
 }
 
 QString OtherCenter::getPassword() const
@@ -81,8 +78,7 @@ QString OtherCenter::getPassword() const
 void OtherCenter::setPassword(const QString& value)
 {
     password = value;
-    qMemSet(bufferItem->password, 0, sizeof(bufferItem->password));
-    qMemCopy(bufferItem->password, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->password, value.toStdString().c_str());
 }
 
 QString OtherCenter::getDetail() const
@@ -93,8 +89,7 @@ QString OtherCenter::getDetail() const
 void OtherCenter::setDetail(const QString& value)
 {
     centerDetail = value;
-    qMemSet(bufferItem->centerDetail, 0, sizeof(bufferItem->centerDetail));
-    qMemCopy(bufferItem->centerDetail, value.toStdString().c_str(), value.length());
+    qstrcpy(bufferItem->centerDetail, value.toStdString().c_str());
 }
 
 OtherCenterInBuffer*OtherCenter::getBufferItem()
@@ -105,13 +100,12 @@ OtherCenterInBuffer*OtherCenter::getBufferItem()
 OtherCenterInBuffer OtherCenter::toOtherCenterInBuffer()
 {
     OtherCenterInBuffer bufferItem;
-    qMemSet(&bufferItem, 0, sizeof(OtherCenterInBuffer));
     bufferItem.centerID = centerID;
-    qMemCopy(bufferItem.centerName, centerName.toStdString().c_str(), centerName.length());
-    qMemCopy(bufferItem.ipAddress, ipAddress.toStdString().c_str(), ipAddress.length());
-    qMemCopy(bufferItem.username, username.toStdString().c_str(), username.length());
-    qMemCopy(bufferItem.password, password.toStdString().c_str(), password.length());
-    qMemCopy(bufferItem.centerDetail, centerDetail.toStdString().c_str(), centerDetail.length());
+    qstrcpy(bufferItem.centerName, centerName.toStdString().c_str());
+    qstrcpy(bufferItem.ipAddress, ipAddress.toStdString().c_str());
+    qstrcpy(bufferItem.username, username.toStdString().c_str());
+    qstrcpy(bufferItem.password, password.toStdString().c_str());
+    qstrcpy(bufferItem.centerDetail, centerDetail.toStdString().c_str());
     return bufferItem;
 }
 

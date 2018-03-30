@@ -6,7 +6,8 @@
 StatusPushButton::StatusPushButton(const QIcon& icon, const QString& text, QWidget* parent) :
     QPushButton(icon, text, parent)
 {
-	this->setStyleSheet("QPushButton{border-style:none}");
+    this->setObjectName("status");
+    this->setStyleSheet("QPushButton#status{border-style:none}");
     statusFrame = new SoftwareStatusFrame(parent);
     statusFrame->hide();
     connect(statusFrame, SIGNAL(isEveryComponentNormal(bool)), this, SLOT(receiveComponentCheckSignal(bool)));

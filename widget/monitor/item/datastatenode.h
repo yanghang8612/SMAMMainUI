@@ -1,26 +1,28 @@
-#ifndef DATASTATENODE_H
+﻿#ifndef DATASTATENODE_H
 #define DATASTATENODE_H
 
-#include <QGraphicsObject>
+#include <QFrame>
 
-class DataStateNode : public QGraphicsObject
+class DataStateNode : public QFrame
 {
     Q_OBJECT
 
 public:
-    DataStateNode();
+    DataStateNode(QWidget *parent = 0);
     void flickerOnce();
     void setState(int state);
 
-    virtual QRectF boundingRect() const;
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+    //virtual QRectF boundingRect() const;
+    //virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = 0);
+
+protected:
+    void paintEvent(QPaintEvent* event);
 
 private slots:
     void turnIntoNormal();
 
 private:
-    Qt::GlobalColor brushColor;
-    Qt::GlobalColor preBrushColor;
+    QColor brushColor;
 };
 
 #endif // DATASTATENODE_H

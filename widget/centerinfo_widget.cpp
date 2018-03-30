@@ -6,6 +6,7 @@ CenterInfoWidget::CenterInfoWidget(QWidget *parent) :
     ui(new Ui::CenterInfoWidget)
 {
     ui->setupUi(this);
+    this->hide();
 }
 
 CenterInfoWidget::~CenterInfoWidget()

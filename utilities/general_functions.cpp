@@ -1,4 +1,5 @@
-#include <QDateTime>
+﻿#include <QDateTime>
+#include <QStringList>
 
 #include "general_functions.h"
 
@@ -103,15 +104,32 @@ bool GeneralFunctions::checkPasswordString(const QString &s)
     return passwordRX.exactMatch(s);
 }
 
+QString GeneralFunctions::convertDMSToQString(const DMS& value)
+{
+    QString result = "";
+    result += QString::number(value.degree) + "°";
+    result += QString::number(value.minute) + "′";
+    result += QString::number(value.second) + ".";
+    result += QString::number(value.fractionalPart) + "″";
+    return result;
+}
+
+DMS GeneralFunctions::convertQStringToDMS(const QString& value)
+{
+    DMS result;
+    QStringList splitResult = value.split(QRegExp("[°.′″]"), QString::SkipEmptyParts);
+    result.degree = splitResult[0].toInt();
+    result.minute = splitResult[1].toInt();
+    result.second = splitResult[2].toInt();
+    result.fractionalPart = splitResult[3].toInt();
+    return result;
+}
+
 void GeneralFunctions::writeMessageToFront(const QString& message)
 {
     SoftWorkStatus status;
     status.messageType = 1;
     status.messageTime = QDateTime::currentDateTime().toTime_t();
-    qMemSet(status.messageContent, 0, sizeof(status.messageContent));
-    qMemCopy(status.messageContent, message.toStdString().c_str(), message.length());
-
-    if (SoftWorkStatusWriteFunc != 0) {
-        SoftWorkStatusWriteFunc(6, status);
-    }
+    qstrcpy(status.messageContent, message.toStdString().c_str());
+    SoftWorkStatusWriteFunc(6, status);
 }

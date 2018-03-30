@@ -10,6 +10,11 @@
     <height>960</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>北斗增强与辅助定位软件</string>
   </property>
@@ -31,7 +36,7 @@
      <x>0</x>
      <y>0</y>
      <width>1440</width>
-     <height>27</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">

@@ -12,6 +12,7 @@
   </property>
   <property name="font">
    <font>
+    <pointsize>10</pointsize>
     <weight>50</weight>
     <italic>false</italic>
     <bold>false</bold>
@@ -61,9 +62,6 @@
     <layout class="QVBoxLayout" name="verticalLayout_5">
      <item>
       <widget class="QTextBrowser" name="stationDetail">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="frameShape">
         <enum>QFrame::NoFrame</enum>
        </property>
@@ -112,12 +110,6 @@
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="stationNameEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="styleSheet">
         <string notr="true"/>
        </property>
@@ -128,12 +120,6 @@
      </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="receiverCountEdit">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
-       <property name="cursor">
-        <cursorShape>ArrowCursor</cursorShape>
-       </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>

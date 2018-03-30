@@ -1,3 +1,5 @@
+﻿#include <QDebug>
+
 #include "softwarestatus_frame.h"
 #include "ui_softwarestatus_frame.h"
 
@@ -28,37 +30,34 @@ SoftwareStatusFrame::~SoftwareStatusFrame()
     delete ui;
 }
 
-void SoftwareStatusFrame::timerEvent(QTimerEvent* event)
+void SoftwareStatusFrame::timerEvent(QTimerEvent*)
 {
-    Q_UNUSED(event);
-    if (DllStatusReadFunc != 0) {
-        DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
-        for (int i = 0; i < COMPONENT_COUNT; i++) {
-            if ((++componentStateCheckCountdown[i]) == ConfigHelper::componentStateCheckIntervals[i]) {
-                if (dllStatus[COMPONENT_STATEARRAY_INDEX[i]] == 0) {
-                    continue;
-                }
-                componentStateCheckCountdown[i] = 0;
-                componentStatus[i] = true;
-                for (int j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
-                    int index = COMPONENT_STATEARRAY_INDEX[i] + j;
-                    if (dllStatus[index] == preDllStatus[index]) {
-                        componentStatus[i] = false;
-                        break;
-                    }
-                }
-                buttons[i]->setIcon(QIcon(componentStatus[i] ? ":/status_green" : ":/status_red"));
-                qMemCopy(
-                        &preDllStatus[COMPONENT_STATEARRAY_INDEX[i]],
-                        &dllStatus[COMPONENT_STATEARRAY_INDEX[i]],
-                        COMPONENT_DLL_COUNT[i] * sizeof(int));
+    DllStatusReadFunc(dllStatus, DLL_COUNT * sizeof(int));
+    for (int i = 0; i < COMPONENT_COUNT; i++) {
+        if ((++componentStateCheckCountdown[i]) == ConfigHelper::componentStateCheckIntervals[i]) {
+            if (dllStatus[COMPONENT_STATEARRAY_INDEX[i]] == 0) {
+                continue;
             }
+            componentStateCheckCountdown[i] = 0;
+            componentStatus[i] = true;
+            for (int j = 0; j < COMPONENT_DLL_COUNT[i]; j++) {
+                int index = COMPONENT_STATEARRAY_INDEX[i] + j;
+                if (dllStatus[index] == preDllStatus[index]) {
+                    componentStatus[i] = false;
+                    break;
+                }
+            }
+            buttons[i]->setIcon(QIcon(componentStatus[i] ? ":/status_green" : ":/status_red"));
+            qMemCopy(
+                    &preDllStatus[COMPONENT_STATEARRAY_INDEX[i]],
+                    &dllStatus[COMPONENT_STATEARRAY_INDEX[i]],
+                    COMPONENT_DLL_COUNT[i] * sizeof(int));
+        }
 
-        }
-        bool status = true;
-        for (int i = 0; i < DLL_COUNT; i++) {
-            status &= componentStatus[i];
-        }
-        emit isEveryComponentNormal(status);
     }
+    bool status = true;
+    for (int i = 0; i < DLL_COUNT; i++) {
+        status &= componentStatus[i];
+    }
+    emit isEveryComponentNormal(status);
 }

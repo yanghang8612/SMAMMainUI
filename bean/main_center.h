@@ -9,7 +9,7 @@
 class MainCenter
 {
 public:
-    MainCenter();
+    MainCenter(const QString& centerName);
 
     void addOtherCenter(OtherCenter* otherCenter);
     QList<OtherCenter*> getOtherCenters() const;

@@ -1,4 +1,4 @@
-#include "receiver_edit_dialog.h"
+﻿#include "receiver_edit_dialog.h"
 #include "ui_receiver_edit_dialog.h"
 
 #include "utilities/general_functions.h"
@@ -21,9 +21,15 @@ ReceiverEditDialog::ReceiverEditDialog(Receiver* receiver, QWidget* parent) :
     ui->ipAddressEdit->setText(receiver->getIpAddress());
     ui->portEdit->setText(QString::number(receiver->getPort()));
     ui->mountPointEdit->setText(receiver->getMountPoint());
-    ui->longitudeEdit->setText(QString::number(receiver->getLongitude()));
-    ui->latitudeEdit->setText(QString::number(receiver->getLatitude()));
-    ui->heightEdit->setText(QString::number(receiver->getHeight()));
+    ui->longitudeDegree->setValue(receiver->getLongitude().degree);
+    ui->longitudeMinute->setValue(receiver->getLongitude().minute);
+    ui->longitudeSecond->setValue(receiver->getLongitude().second);
+    ui->longitudeFractionalPart->setValue(receiver->getLongitude().fractionalPart);
+    ui->latitudeDegree->setValue(receiver->getLatitude().degree);
+    ui->latitudeMinute->setValue(receiver->getLatitude().minute);
+    ui->latitudeSecond->setValue(receiver->getLatitude().second);
+    ui->latitudeFractionalPart->setValue(receiver->getLatitude().fractionalPart);
+    ui->height->setValue(receiver->getHeight());
     ui->detailEdit->setText(receiver->getDetail());
     setWindowTitle(tr("编辑接收机"));
 }
@@ -51,38 +57,24 @@ void ReceiverEditDialog::on_confirmButton_clicked()
         ui->portEdit->setStyleSheet("QLineEdit{border-color:white}");
     }
 
-    if (!GeneralFunctions::checkLongitudeString(ui->longitudeEdit->text())) {
-        ui->longitudeEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->longitudeEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
-    if (!GeneralFunctions::checkLatitudeString(ui->latitudeEdit->text())) {
-        ui->latitudeEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->latitudeEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
-    if (!GeneralFunctions::checkHeightString(ui->heightEdit->text())) {
-        ui->heightEdit->setStyleSheet("QLineEdit{border-color:red}");
-        return;
-    }
-    else {
-        ui->heightEdit->setStyleSheet("QLineEdit{border-color:white}");
-    }
-
     receiver->setReceiverName(ui->receiverNameEdit->text());
     receiver->setPassword(ui->passwordEdit->text());
     receiver->setIpAddress(ui->ipAddressEdit->text());
     receiver->setPort(ui->portEdit->text());
     receiver->setMountPoint(ui->mountPointEdit->text());
-    receiver->setLongitude(ui->longitudeEdit->text());
-    receiver->setLatitude(ui->latitudeEdit->text());
-    receiver->setHeight(ui->heightEdit->text());
+    DMS longitude;
+    longitude.degree = ui->longitudeDegree->value();
+    longitude.minute = ui->longitudeMinute->value();
+    longitude.second = ui->longitudeSecond->value();
+    longitude.fractionalPart = ui->longitudeFractionalPart->value();
+    receiver->setLongitude(longitude);
+    DMS latitude;
+    latitude.degree = ui->latitudeDegree->value();
+    latitude.minute = ui->latitudeMinute->value();
+    latitude.second = ui->latitudeSecond->value();
+    latitude.fractionalPart = ui->latitudeFractionalPart->value();
+    receiver->setLatitude(latitude);
+    receiver->setHeight(ui->height->value());
     receiver->setDetail(ui->detailEdit->toPlainText());
 
     emit confirmButtonClicked(receiver);

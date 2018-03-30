@@ -1,4 +1,4 @@
-#include <QWidget>
+﻿#include <QWidget>
 #include <QDebug>
 
 #include "main_component_header.h"
@@ -10,15 +10,11 @@
 DeploymentType::Value deploymentType;
 
 void* receiverSharedBufferPointer = 0;
-void* iGMASStationSharedBufferPointer = 0;
-void* iGMASDataCenterSharedBufferPointer = 0;
+void* monitorStationSharedBufferPointer = 0;
+void* dataCenterSharedBufferPointer = 0;
 void* otherCenterSharedBufferPointer = 0;
 
 void* componentStateSharedBufferPointer[COMPONENT_COUNT];
-void* receiverStateSharedBufferPointer = 0;
-void* iGMASStateSharedBufferPointer = 0;
-void* otherCenterStateSharedBufferPointer = 0;
-
 void* userRegisterInfoSharedBufferPointer = 0;
 void* userRealtimeInfoSharedBufferPointer = 0;
 
@@ -36,11 +32,11 @@ extern "C" bool DllMain(int args, char* argv[])
     }
     else if (args > 0 && qstrcmp(argv[0], "BJ") == 0) {
         deploymentType = DeploymentType::BJ_CENTER;
-        iGMASStationSharedBufferPointer = FindMemoryInfoFunc(IGMASSTATION_SHAREDBUFFER_ID,
-                                                      IGMASSTATION_MAXITEMCOUNT * sizeof(iGMASStationInBuffer));
+        monitorStationSharedBufferPointer = FindMemoryInfoFunc(MONITORSTATION_SHAREDBUFFER_ID,
+                                                      MONITORSTATION_MAXITEMCOUNT * sizeof(MonitorStationInBuffer));
 
-        iGMASDataCenterSharedBufferPointer = FindMemoryInfoFunc(IGMASDATACENTER_SHAREDBUFFER_ID,
-                                                      IGMASDATACENTER_MAXITEMCOUNT * sizeof(iGMASDataCenterInBuffer));
+        dataCenterSharedBufferPointer = FindMemoryInfoFunc(DATACENTER_SHAREDBUFFER_ID,
+                                                      DATACENTER_MAXITEMCOUNT * sizeof(DataCenterInBuffer));
 
         otherCenterSharedBufferPointer = FindMemoryInfoFunc(OTHERCENTER_SHAREDBUFFER_ID,
                                                             OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterInBuffer));
@@ -64,22 +60,6 @@ extern "C" bool DllInit(int, char*)
         componentStateSharedBufferPointer[i] = FindMemoryInfoFunc(i + 2, 0);
     }
 
-    switch (deploymentType) {
-        case DeploymentType::XJ_CENTER:
-            receiverStateSharedBufferPointer = FindMemoryInfoFunc(
-                                                   RECEIVER_STATE_SHAREDBUFFER_ID,
-                                                   RECEIVER_MAXITEMCOUNT * sizeof(ReceiverState) + sizeof(int));
-            break;
-        case DeploymentType::BJ_CENTER:
-            iGMASStateSharedBufferPointer = FindMemoryInfoFunc(
-                                                IGMAS_STATE_SHAREDBUFFER_ID,
-                                                IGMASSTATION_MAXITEMCOUNT * sizeof(IGMASState) + sizeof(int));
-
-            otherCenterStateSharedBufferPointer = FindMemoryInfoFunc(
-                                                      OTHERCENTER_STATE_SHAREDBUFFER_ID,
-                                                      OTHERCENTER_MAXITEMCOUNT * sizeof(OtherCenterState) + sizeof(int));
-            break;
-    }
     userRegisterInfoSharedBufferPointer = FindMemoryInfoFunc(
                                               USER_REGISTER_INFO_SHAREDBUFFER_ID,
                                               USER_REGISTER_INFO_MAXITEMCOUNT * sizeof(UserBasicInfo) + sizeof(int));
@@ -110,6 +90,11 @@ extern "C" bool DllContraryInit()
     delete widget;
     delete dllStateWriteThread;
     return true;
+}
+
+extern "C" QString getUIName()
+{
+    return QObject::tr("系统监控管理");
 }
 
 extern "C" QWidget* getUIWidget(QWidget* parent = 0)
